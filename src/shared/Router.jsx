@@ -15,17 +15,17 @@ function Router() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="signin" element={<SignInPage/>}/>
-                <Route path="signup" element={<SignUpPage/>}/>
+                <Route path="/signin" element={<SignInPage/>}/>
+                <Route path="/signup" element={<SignUpPage/>}/>
                 <Route path="/mypage" element={<MyPage/>}/>
 
                 <Route path="/" element={<HomePage/>}/>
-                <Route path="main" element={<MainPage/>}/>
-                <Route path="main/:id" element={<MainDetailPage/>}/>
-                <Route path="create" element={<CreatePage/>}/>
-                <Route path="room" element={<RoomPage/>}/>
-                <Route path="auth" element={<AuthPage/>}/>
-                <Route path="auth/:id" element={<AuthResultPage/>}/>
+                <Route path="/main" element={<MainPage/>}/>
+                <Route path="/main/:id" element={<MainDetailPage/>}/>
+                <Route path="/create" element={<CreatePage/>}/>
+                <Route path="/room" element={<RoomPage/>}/>
+                <Route path="/auth" element={<AuthPage/>}/>
+                <Route path="/auth/:id" element={<AuthResultPage/>}/>
             </Routes>
         </BrowserRouter>
     )
