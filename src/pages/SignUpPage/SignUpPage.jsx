@@ -159,9 +159,9 @@ function SignUpPage() {
 
     return (
         <Back>
-            <MainForm  method="POST">
+            <MainForm >
                 <H1>회원가입</H1>
-                <Form>
+                <Form method="POST">
                     <InputBox>
                         <H6>이메일: {message("email")}</H6>
                         <InnerBox>
