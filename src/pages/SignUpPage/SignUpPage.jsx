@@ -130,9 +130,7 @@ function SignUpPage() {
                     password: input.password,
                     nickname: input.nickname,
                 }
-                const response = await api.post("/api/signup", {
-                    body: newUser
-                })
+                const response = await api.post("/api/signup", newUser)
                 console.log(response.data)
                 alert("회원가입이 완료됐습니다.")
                 navigate("/signin")
