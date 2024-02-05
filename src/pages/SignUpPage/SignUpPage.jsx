@@ -159,7 +159,7 @@ function SignUpPage() {
 
     return (
         <Back>
-            <MainForm >
+            <MainForm  method="POST">
                 <H1>회원가입</H1>
                 <Form>
                     <InputBox>
