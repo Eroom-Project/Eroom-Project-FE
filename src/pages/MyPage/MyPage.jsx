@@ -33,7 +33,7 @@ function MyPage() {
     const emailCheck = async () => {
         try {
             const res = await api.get("/api/signup/email",{
-                nickname: input.email
+                email: input.email
             })
 
             if (res.data.message === "사용 가능한 email입니다.") {
