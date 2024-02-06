@@ -27,7 +27,7 @@ export const MainForm = styled.div`
     border-radius: 10px;
 `
 
-export const Form = styled.form`
+export const Form = styled.div`
     width: 100%;
 `
 export const H1 = styled.div`
