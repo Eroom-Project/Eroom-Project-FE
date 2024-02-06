@@ -17,28 +17,46 @@ import {
 
 function SignUpPage() {
 
+    const [input, setInput] = useState({
+        email: '',
+        password: '',
+        nickname: '',
+    })
+
     // 중복확인 주소 확인하기
     // 이메일 중복확인
     const emailCheck = async () => {
         try {
-            const res = await api.post("")
-            res.data.email === input.email ? 
-            setCheck({ ...check, email: true })
-            : alert("이미 존재하는 이메일입니다.")
+            const res = await api.get("/api/signup/email",{
+                email: input.email
+            })
+
+            if (res.data.message === "사용 가능한 email입니다.") {
+                setCheck({ ...check, email: true })
+                alert(res.data.message)
+            } else {
+                alert("이미 존재하는 이메일입니다.")
+            }
         } catch (error) {
-            console.log(`이메일 중복 에러: ${error}`)
+            console.log(`서버 에러: ${error}`)
         }
     }
+
     // 닉네임 중복확인
     const nickNameCheck = async () => {
         try {
-            const res = await api.post("")
-            res.data.nickname === input.nickname ? 
-            setCheck({ ...check, nickname: true })
-            : alert("이미 존재하는 닉네임입니다.")
+            const res = await api.get("/api/signup/nickname", {
+                nickname: input.nickname
+            })
+            if (res.data.message === "사용 가능한 닉네임입니다.") {
+                setCheck({ ...check, nickname: true })
+                alert(res.data.message)
+            } else {
+                alert("이미 존재하는 닉네임입니다.")
+            }
 
         } catch (error) {
-            console.log(`닉네임 중복 에러: ${error}`)
+            console.log(`서버 에러: ${error}`)
         }
     }
 
@@ -47,6 +65,7 @@ function SignUpPage() {
         email: false,
         nickname: false
     })
+    console.log(check)
 
     // massage state
     const navigate = useNavigate();
@@ -71,11 +90,6 @@ function SignUpPage() {
     }
 
     // 유효성 검사
-    const [input, setInput] = useState({
-        email: '',
-        password: '',
-        nickname: '',
-    })
 
     const handleInputChange = (e) => {
         setInput({
