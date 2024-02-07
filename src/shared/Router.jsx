@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SignInPage from '../pages/SignInPage/SignInPage'
 import SignUpPage from '../pages/SignUpPage/SignUpPage'
+import Redirection from '../pages/SignInPage/Redirection'
 import MyPage from '../pages/MyPage/MyPage'
 import HomePage from '../pages/HomePage/HomePage'
 import MainPage from '../pages/MainPage/MainPage'
@@ -17,6 +18,7 @@ function Router() {
             <Routes>
                 <Route path="/signin" element={<SignInPage/>}/>
                 <Route path="/signup" element={<SignUpPage/>}/>
+                <Route path="/auth/callback/kakao" element={<Redirection/>}/>
                 <Route path="/mypage" element={<MyPage/>}/>
 
                 <Route path="/" element={<HomePage/>}/>
