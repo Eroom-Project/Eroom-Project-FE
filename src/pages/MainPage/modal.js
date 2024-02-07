@@ -14,14 +14,21 @@ const Modal = ({ children, isOpen, onClose }) => {
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      
     }}>
       <div style={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
         position: 'relative', 
         backgroundColor: 'white',
         padding: '20px',
-        borderRadius: '5px',
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)'
+        borderRadius: '12px',
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
+        width:'438px',
+        height:'600px',
+        
       }}>
         <button 
           onClick={onClose}
