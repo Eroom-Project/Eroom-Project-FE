@@ -11,6 +11,7 @@ import CreatePage from '../pages/CreatePage/CreatePage'
 import RoomPage from '../pages/RoomPage/RoomPage'
 import AuthPage from '../pages/AuthPage/AuthPage'
 import AuthResultPage from '../pages/AuthResultPage/AuthResultPage'
+import NavBar from '../components/Common/NavBar'
 
 function Router() {
     return (
