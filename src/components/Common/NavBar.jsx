@@ -1,49 +1,72 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { getCookie } from '../../services/Cookie'
 function NavBar() {
-    const cookie = getCookie("Authorization")
+
+const [cookie, setCookie] =useState({
+    cookies: false,
+    cookiesR: false
+})
+
+        const cookies = getCookie("Authorization");
+        if (cookies) {
+            console.log("Authorization cookie:", cookie);
+            setCookie({
+                ...cookie,
+                cookie: true
+            })
+        } else {
+            console.log("Authorization cookie not found");
+        }
+        
+        const cookiesR = getCookie("Refresh-token");
+        if (cookiesR) {
+            console.log("Refresh-token cookie:", cookiesR);
+            setCookie({
+                ...cookie,
+                cookieR: true
+            })
+        } else {
+            console.log("Refresh-token cookie not found");
+        }
+
+
     const currentUrl = window.location.href
     console.log(currentUrl)
     return (
         <>
             {
-
-            currentUrl !== "http://localhost:3000/signin" && 
-            currentUrl !== "http://localhost:3000/signup" &&
-            currentUrl !== "https://www.eroom-challenge.com/signin" && 
-            currentUrl !== "https://eroom-challenge/signup"&&
-            currentUrl !== "http://localhost:3000/signIn" && 
-            currentUrl !== "http://localhost:3000/signUp" &&
-            currentUrl !== "https://www.eroom-challenge/signIn" && 
-            currentUrl !== "https://www.eroom-challenge.com/signUp"
-            ?
-            <MainBox>
-                <Main>
-                    <Info>
-                        <Span> <a href='/'>E-Room</a></Span>
-                        <Span> <a href='/main'>챌린지 리스트 </a></Span>
-                        <Span> <a href='/create'>챌린지 생성하기</a> </Span>
-                    </Info>
-                    <SignIn>
-                        {
-                            cookie ?
-                                <Span><a href='/mypage'>마이페이지</a></Span>
-                                :
-                                <Span><a href='/signin'>로그인</a></Span>
-                        }
-                        {
-                            cookie ?
-                                <Span>로그아웃</Span>
-                                :
-                                ""
-                        }
-                    </SignIn>
-                </Main>
-                <Hr />
-            </MainBox>
-            :
-            ""
+                currentUrl !== "http://localhost:3000/signin" &&
+                    currentUrl !== "http://localhost:3000/signup" &&
+                    currentUrl !== "https://eroom-project-fe.vercel.app/signin" &&
+                    currentUrl !== "https://eroom-project-fe.vercel.app/signup"
+                    ?
+                    <MainBox>
+                        <Main>
+                            <Info>
+                                <Span> <a href='/'>E-Room</a></Span>
+                                <Span> <a href='/main'>챌린지 리스트 </a></Span>
+                                <Span> <a href='/create'>챌린지 생성하기</a> </Span>
+                            </Info>
+                            <SignIn>
+                                {
+                                    cookie.cookies && cookie.cookiesR?
+                                        <Span><a href='/mypage'>마이페이지</a></Span>
+                                        :
+                                        ""
+                                }
+                                {
+                                    cookie.cookies && cookie.cookiesR ?
+                                        <Span>로그아웃</Span>
+                                        :
+                                        <Span><a href='/signin'>로그인</a></Span>
+                                }
+                            </SignIn>
+                        </Main>
+                        <Hr />
+                    </MainBox>
+                    :
+                    ""
             }
         </>
     )
