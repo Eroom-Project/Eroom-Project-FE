@@ -11,7 +11,7 @@ function MyPage() {
 
 
     const profileData = useQuery('getProfile', getProfile)
-    
+
     if(profileData.isLoading){
         console.log("로딩중입니다.")
     }
@@ -34,9 +34,9 @@ function MyPage() {
                 email: input.email
             })
             console.log(res)
-            if (res.data.message === "사용 가능한 email입니다.") {
+            if (res.data === "사용 가능한 email입니다.") {
                 setCheck({ ...check, email: true })
-                alert(res.data.message)
+                alert(res.data)
             } else {
                 alert("이미 존재하는 이메일입니다.")
             }
@@ -52,9 +52,9 @@ function MyPage() {
                 nickname: input.nickname
             })
             console.log(res)
-            if (res.data.message === "사용 가능한 닉네임입니다.") {
+            if (res.data === "사용 가능한 닉네임입니다.") {
                 setCheck({ ...check, nickname: true })
-                alert(res.data.message)
+                alert(res.data)
             } else {
                 alert("이미 존재하는 닉네임입니다.")
             }
