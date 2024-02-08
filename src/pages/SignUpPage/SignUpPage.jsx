@@ -27,8 +27,8 @@ function SignUpPage() {
     // 이메일 중복확인
     const emailCheck = async () => {
         try {
-            const res = await api.get("/api/auth/signup/email",{
-                email: input.email
+            const res = await api.get("/api/signup/email",{
+                params:{email: input.email}
             })
             console.log(res)
             if (res.data.message === "사용 가능한 email입니다.") {
@@ -45,8 +45,8 @@ function SignUpPage() {
     // 닉네임 중복확인
     const nickNameCheck = async () => {
         try {
-            const res = await api.get("/api/auth/signup/nickname", {
-                nickname: input.nickname
+            const res = await api.get("/api/signup/nickname", {
+                params:{nickname: input.nickname}
             })
             console.log(res)
             if (res.data.message === "사용 가능한 닉네임입니다.") {
