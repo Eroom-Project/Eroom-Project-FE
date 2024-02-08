@@ -168,7 +168,7 @@ function MainPage() {
       onError: () => alert('참여 신청 실패!'),
     }
   );
-
+  
   const categoryMap = {
     IT: 'IT',
     인문: 'HUMANITIES',

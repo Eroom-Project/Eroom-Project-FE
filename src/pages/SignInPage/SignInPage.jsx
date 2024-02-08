@@ -103,6 +103,7 @@ function SignInPage() {
     }
 
     const message = (name) => {
+
         return (auth[name] ?
             <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
             :
