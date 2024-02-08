@@ -149,7 +149,7 @@ function SignInPage() {
                     <Hr />
                     <KakaoSignForm>
                         <KakaoSignIn />
-                        <SignUp>아직 이룸 회원이 아니신가요? <a href='/signUp'><Bold>회원가입</Bold></a></SignUp>
+                        <SignUp>아직 이룸 회원이 아니신가요? <a href='/signup'><Bold>회원가입</Bold></a></SignUp>
                     </KakaoSignForm>
                 </Form>
             </MainForm>
