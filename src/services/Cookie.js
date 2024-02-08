@@ -16,6 +16,6 @@ export const getCookie = async (name) => {
 };
 
 // 구글 정책 바뀜 로그아웃 api로 요청하기
-// export const removeCookie = (name, option) => {
-//     return cookies.remove(name, { ...option });
-// };
+export const removeCookie = async (name, option) => {
+    return await cookies.remove(name, { ...option });
+};

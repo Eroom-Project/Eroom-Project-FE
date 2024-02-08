@@ -1,35 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getCookie } from '../../services/Cookie'
+import { getCookie, removeCookie } from '../../services/Cookie'
+import { useNavigate } from 'react-router-dom'
 function NavBar() {
+    const [cookie, setCookie] = useState({
+        cookies: false,
+        cookiesR: false
+    })
 
-const [cookie, setCookie] =useState({
-    cookies: false,
-    cookiesR: false
-})
+    console.log(cookie)
 
-        const cookies = getCookie("Authorization");
-        if (cookies) {
-            console.log("Authorization cookie:", cookie);
+    const isCookie = async() => {
+        const cookies = await getCookie("Authorization");
+        const cookiesR = await getCookie("Refresh-Token");
+        if (cookies && cookiesR) {
+            console.log("Authorization cookie:", cookies);
+            console.log("Authorization cookie:", cookiesR);
             setCookie({
                 ...cookie,
-                cookie: true
+                cookies: true,
+                cookiesR: true
             })
         } else {
             console.log("Authorization cookie not found");
         }
-        
-        const cookiesR = getCookie("Refresh-token");
-        if (cookiesR) {
-            console.log("Refresh-token cookie:", cookiesR);
-            setCookie({
-                ...cookie,
-                cookieR: true
-            })
-        } else {
-            console.log("Refresh-token cookie not found");
-        }
+    }
 
+    useEffect(() => {
+        isCookie()
+    }, [])
+
+
+    const removeCookies = () => {
+        removeCookie("Authorization")
+        removeCookie("Refresh-Token")
+        window.location.href= "https://eroom-project-fe.vercel.app/home"
+    }
 
     const currentUrl = window.location.href
     console.log(currentUrl)
@@ -51,13 +57,10 @@ const [cookie, setCookie] =useState({
                             <SignIn>
                                 {
                                     cookie.cookies && cookie.cookiesR?
-                                        <Span><a href='/mypage'>마이페이지</a></Span>
-                                        :
-                                        ""
-                                }
-                                {
-                                    cookie.cookies && cookie.cookiesR ?
-                                        <Span>로그아웃</Span>
+                                        <>
+                                            <Span><a href='/mypage'>마이페이지</a></Span>
+                                            <Span onClick={removeCookies}>로그아웃</Span>
+                                        </>
                                         :
                                         <Span><a href='/signin'>로그인</a></Span>
                                 }
@@ -112,4 +115,5 @@ const SignIn = styled.div`
 
 const Span = styled.span`
     margin: 0px 5px;
+    cursor: pointer;
 `
