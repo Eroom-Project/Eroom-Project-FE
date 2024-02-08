@@ -10,8 +10,14 @@ import { useQuery } from 'react-query'
 function MyPage() {
 
 
-    const profileData = useQuery('getProfile', getProfile())
-
+    const profileData = useQuery('getProfile', getProfile)
+    
+    if(profileData.isLoading){
+        console.log("로딩중입니다.")
+    }
+    if(profileData.isError){
+        console.log("에러!")
+    }
 
     const [input, setInput] = useState({
         email: '',
@@ -27,7 +33,7 @@ function MyPage() {
             const res = await api.get("/api/signup/email", {
                 email: input.email
             })
-
+            console.log(res)
             if (res.data.message === "사용 가능한 email입니다.") {
                 setCheck({ ...check, email: true })
                 alert(res.data.message)
@@ -45,6 +51,7 @@ function MyPage() {
             const res = await api.get("/api/signup/nickname", {
                 nickname: input.nickname
             })
+            console.log(res)
             if (res.data.message === "사용 가능한 닉네임입니다.") {
                 setCheck({ ...check, nickname: true })
                 alert(res.data.message)
@@ -248,7 +255,7 @@ function MyPage() {
                                     <Input
                                         type="text"
                                         name="email"
-                                        placeholder = {profileData.data.email}
+                                        // placeholder = {profileData.data.email}
                                         onFocus={() => { handlerFocus("email") }}
                                         onBlur={() => { handlerBlur("email") }}
                                         value={input.email}
@@ -268,7 +275,7 @@ function MyPage() {
                                     <Input
                                         type="text"
                                         name="nickname"
-                                        placeholder= {profileData.data.nickname}
+                                        // placeholder= {profileData.data.nickname}
                                         onFocus={() => { handlerFocus("nickname") }}
                                         onBlur={() => { handlerBlur("nickname") }}
                                         value={input.nickname}
@@ -287,7 +294,7 @@ function MyPage() {
                                 <Input
                                     type="password"
                                     name="password"
-                                    placeholder= {profileData.data.password}
+                                    // placeholder= {profileData.data.password}
                                     onFocus={() => { handlerFocus("password") }}
                                     onBlur={() => { handlerBlur("password") }}
                                     value={input.password}
