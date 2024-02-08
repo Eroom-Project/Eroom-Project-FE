@@ -11,12 +11,12 @@ function NavBar() {
 
             currentUrl !== "http://localhost:3000/signin" && 
             currentUrl !== "http://localhost:3000/signup" &&
-            currentUrl !== "https://eroom-challenge/signin" && 
+            currentUrl !== "https://www.eroom-challenge.com/signin" && 
             currentUrl !== "https://eroom-challenge/signup"&&
             currentUrl !== "http://localhost:3000/signIn" && 
             currentUrl !== "http://localhost:3000/signUp" &&
-            currentUrl !== "https://eroom-challenge/signIn" && 
-            currentUrl !== "https://eroom-challenge/signUp"
+            currentUrl !== "https://www.eroom-challenge/signIn" && 
+            currentUrl !== "https://www.eroom-challenge.com/signUp"
             ?
             <MainBox>
                 <Main>
