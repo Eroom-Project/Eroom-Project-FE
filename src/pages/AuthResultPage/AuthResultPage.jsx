@@ -16,9 +16,7 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
     };
 
     if (!isOpen) return null;
-    if (isLoading) return <div>로딩 중...</div>;
-    if (error) return <div>오류 발생: {error.message}</div>;
-
+    
     return ReactDOM.createPortal(
         <div style={{
             position: 'fixed',
@@ -42,9 +40,10 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '20px',
-                alignItems: 'flex-start',
+                
                 position: 'relative',
             }}>
+                
                 <button onClick={onClose} style={{
                     position: 'absolute',
                     top: '10px',
@@ -63,6 +62,30 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
                     fontWeight: '700',
                     marginBottom: '10px'
                 }}>인증 확인하기</div>
+                {isLoading && <div style={{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        justifyContent:'center',
+        fontSize:'20px',
+        fontWeight:'500',
+        marginTop: '100px',
+        gap:'10px'
+        }}>
+        <img src='/icon (5).png' alt='로딩이미지'/>
+        로딩중입니다.</div>}
+      {error && <div style={{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        justifyContent:'center',
+        fontSize:'20px',
+        fontWeight:'500',
+        marginTop: '100px',
+        gap:'10px'
+        }}>
+        <img src='/icon (6).png' alt='에러이미지'/>
+        오류가 발생했습니다.</div>}
                 {data?.map((item, index) => (
     <div key={index} style={{
         display: 'flex',
@@ -85,7 +108,7 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
                 display: 'flex',
                 alignItems: 'center'
             }}>
-                <img src={item.authImageUrl} alt="" style={{
+                <img src={item?.authImageUrl} alt="" style={{
                     width: '60px',
                     height: '60px',
                     borderRadius: '8px',
@@ -96,11 +119,11 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
                         fontSize: '16px',
                         fontWeight: '700',
                         marginBottom: '10px',
-                    }}>{item.authContents}</div>
+                    }}>{item?.authContents}</div>
                     <div style={{
                         fontSize: '12px',
                         color: '#A5A5A5'
-                    }}>{item.authId}</div>
+                    }}>{item?.authId}</div>
                 </div>
             </div>
             <div style={{
