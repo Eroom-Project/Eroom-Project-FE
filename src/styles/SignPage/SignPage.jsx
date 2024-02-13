@@ -22,13 +22,12 @@ export const MainForm = styled.div`
     align-items: flex-start;
     justify-content: center;
     background-color: #FFFF;
-    width: 440px;
     padding: 34px 32px;
     border-radius: 10px;
 `
 
 export const Form = styled.div`
-    width: 100%;
+    width: 440px;
 `
 export const H1 = styled.div`
     margin-right: auto;
@@ -44,6 +43,7 @@ export const InputBox = styled.div`
 
 export const InnerBox = styled.div`
     display: flex;
+    width: 100%;
 `
 export const AuthButton = styled.button`
     width: 60px;
@@ -80,6 +80,7 @@ export const Input = styled.input`
     width: 100%;
     height: 48px;
     border: none;
+    box-sizing: border-box;
     border-radius: 10px;
     background-color: #F2F2F2;
     transition: background-color 5000s ease-in-out 0s;

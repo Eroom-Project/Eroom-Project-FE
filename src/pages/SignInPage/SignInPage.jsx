@@ -132,6 +132,7 @@ function SignInPage() {
                             onBlur={() => { handlerBlur("email") }}
                             value={input.email}
                             onChange={(e) => { handleInputChange(e) }}
+                            placeholder='example@naver.com'
                         />
                     </InputBox>
                     <InputBox>
@@ -143,6 +144,7 @@ function SignInPage() {
                             onBlur={() => { handlerBlur("password") }}
                             value={input.password}
                             onChange={(e) => { handleInputChange(e) }}
+                            placeholder='********'
                         />
                     </InputBox>
                     {button()}
