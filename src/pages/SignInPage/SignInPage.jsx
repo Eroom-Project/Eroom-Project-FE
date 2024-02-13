@@ -94,7 +94,7 @@ function SignInPage() {
                 //     httpyOnly: true,
                 //     secure: true
                 // })
-                navigate("/")
+                navigate("/home")
             } catch (error) {
                 alert("로그인 에러")
                 console.log("Login failed:", error)
@@ -132,6 +132,7 @@ function SignInPage() {
                             onBlur={() => { handlerBlur("email") }}
                             value={input.email}
                             onChange={(e) => { handleInputChange(e) }}
+                            placeholder='example@naver.com'
                         />
                     </InputBox>
                     <InputBox>
@@ -143,6 +144,7 @@ function SignInPage() {
                             onBlur={() => { handlerBlur("password") }}
                             value={input.password}
                             onChange={(e) => { handleInputChange(e) }}
+                            placeholder='********'
                         />
                     </InputBox>
                     {button()}

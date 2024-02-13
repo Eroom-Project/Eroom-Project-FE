@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import api from '../../services/api'
 import styled from 'styled-components'
-import Isometric from '../../components/Common/Isometric'
+import Isometric from '../../components/MyPage/Isometric'
 import { getProfile } from '../../services/Query'
 import { useQuery } from 'react-query'
 
@@ -12,10 +12,10 @@ function MyPage() {
 
     const profileData = useQuery('getProfile', getProfile)
 
-    if(profileData.isLoading){
+    if (profileData.isLoading) {
         console.log("로딩중입니다.")
     }
-    if(profileData.isError){
+    if (profileData.isError) {
         console.log("에러!")
     }
 
@@ -241,12 +241,37 @@ function MyPage() {
             <H1Box>
                 <H1>마이 페이지</H1>
             </H1Box>
-            <Hr/>
+            <Hr />
             <ProfileBox>
                 <Profile>
-                    <Img>
+                    {
+                        readOnly === false ?
+                            <>
 
-                    </Img>
+                                <ImgLabel backColor={"#636363"} color={"#FFFF"}for="file">
+                                    프로필 변경하기
+                                </ImgLabel>
+                                <ImgInput
+                                    type='file'
+                                    value=''
+                                    id="file"
+                                />
+                                <Img />
+                            </>
+                            :
+                            <>
+                                <ImgLabel backColor={"#FFFF"} color={"#636363"}>
+                                    프로필
+                                </ImgLabel>
+                                <ImgInput
+                                    type='file'
+                                    value=''
+                                    id="file"
+                                />
+                                <Img />
+                            </>
+                    }
+
                     <MainForm>
                         <Form>
                             <InputBox>
@@ -355,22 +380,37 @@ const MainBox = styled.div`
 `
 const ProfileBox = styled.div`
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     max-width: 1200px;
+    gap: 60px;
 `
 const Profile = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+`
+
+const ImgLabel = styled.label`
+    margin-right: auto;
+    border-radius: 7px;
+    color: ${(props)=>props.color};
+    padding: 10px;
+    background-color: ${(props)=>props.backColor};
+    cursor: pointer;
+    transition: 1s;
+    &:hover{
+    background-color: #444444;
+    }
+`
+const ImgInput = styled.input`
+    display: none;
 `
 const Img = styled.div`
     overflow: hidden;
-    height: 100px;
-    width: 100px;
+    width: 150px;
+    padding-bottom: 150px;
     border: 1px solid gray;
     border-radius: 100%;
 `
@@ -388,12 +428,13 @@ const MainForm = styled.div`
     align-items: flex-start;
     justify-content: center;
     background-color: #FFFF;
-    width: 400px;
     border-radius: 10px;
+    width: 100%;
 `
 
 const Form = styled.div`
     width: 100%;
+    min-width: 440px;
 `
 const H1Box = styled.div`
     display: flex;
@@ -458,6 +499,7 @@ const Input = styled.input`
     background-color: #F2F2F2;
     transition: background-color 5000s ease-in-out 0s;
     &:focus{outline: none;}
+    box-sizing: border-box;
     
 `
 const Button = styled.button`
@@ -512,11 +554,11 @@ const ContentsGrid = styled.div`
     margin: 0 auto;
     width: 100%;
     margin-top: 40px;
-    gap: 10px 0px;
+    gap: 10px 10px;
 `
 const Contents = styled.div`
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    padding-bottom: 100%;
     border: 1px solid gray;
     justify-self: center;
 `
