@@ -1,3 +1,5 @@
+//날짜가 지난 데이터는 보여주지 않는다.
+
 import React, { useState } from 'react';
 import { getChallenge, entryChallenge } from '../../services/mainaxios';
 import { useMutation, useQuery } from 'react-query';
@@ -81,7 +83,7 @@ const FrequencyText = styled.div`
 
 const TitleText = styled.div`
   
-  width:270px;
+  width:230px;
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -93,6 +95,7 @@ const TitleText = styled.div`
   `;
 
 const MoreButton = styled.button`
+  font-family: 'Noto Sans KR', sans-serif;
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
@@ -107,6 +110,7 @@ const MoreButton = styled.button`
 `;
 
 const FilterButton = styled.div`
+  font-family: 'Noto Sans KR', sans-serif;
   display: flex;
   justify-content : center;
   width : 40px;
@@ -164,10 +168,14 @@ function MainPage() {
   const mutation = useMutation(
     (challengeId) => entryChallenge(challengeId),
     {
-      onSuccess: () => alert('참여 신청 성공!'),
-      onError: () => alert('참여 신청 실패!'),
+      onSuccess: () => alert('챌린지 신청 성공'),
+      onError: (error) => {
+        const errorMessage = error.response?.data?.message || '참여 신청 실패!';
+        alert(errorMessage);
+      }
     }
   );
+  
 
   const categoryMap = {
     IT: 'IT',
