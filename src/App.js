@@ -14,7 +14,7 @@ function App() {
         <GlobalStyle/>
         <NavBar/>
         <Router />
-        <Footer/>
+        {/* <Footer/> */}
       </QueryClientProvider>
     </>
   );

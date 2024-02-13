@@ -103,6 +103,7 @@ function SignInPage() {
     }
 
     const message = (name) => {
+
         return (auth[name] ?
             <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
             :
@@ -148,7 +149,7 @@ function SignInPage() {
                     <Hr />
                     <KakaoSignForm>
                         <KakaoSignIn />
-                        <SignUp>아직 이룸 회원이 아니신가요? <a href='/signUp'><Bold>회원가입</Bold></a></SignUp>
+                        <SignUp>아직 이룸 회원이 아니신가요? <a href='/signup'><Bold>회원가입</Bold></a></SignUp>
                     </KakaoSignForm>
                 </Form>
             </MainForm>

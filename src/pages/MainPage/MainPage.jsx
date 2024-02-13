@@ -176,7 +176,6 @@ function MainPage() {
     }
   );
   
-
   const categoryMap = {
     IT: 'IT',
     인문: 'HUMANITIES',
