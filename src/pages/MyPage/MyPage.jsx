@@ -12,10 +12,10 @@ function MyPage() {
 
     const profileData = useQuery('getProfile', getProfile)
 
-    if(profileData.isLoading){
+    if (profileData.isLoading) {
         console.log("로딩중입니다.")
     }
-    if(profileData.isError){
+    if (profileData.isError) {
         console.log("에러!")
     }
 
@@ -241,12 +241,37 @@ function MyPage() {
             <H1Box>
                 <H1>마이 페이지</H1>
             </H1Box>
-            <Hr/>
+            <Hr />
             <ProfileBox>
                 <Profile>
-                    <Img>
+                    {
+                        readOnly === false ?
+                            <>
 
-                    </Img>
+                                <ImgLabel backColor={"#636363"} color={"#FFFF"}for="file">
+                                    프로필 변경하기
+                                </ImgLabel>
+                                <ImgInput
+                                    type='file'
+                                    value=''
+                                    id="file"
+                                />
+                                <Img />
+                            </>
+                            :
+                            <>
+                                <ImgLabel backColor={"#FFFF"} color={"#636363"}>
+                                    프로필
+                                </ImgLabel>
+                                <ImgInput
+                                    type='file'
+                                    value=''
+                                    id="file"
+                                />
+                                <Img />
+                            </>
+                    }
+
                     <MainForm>
                         <Form>
                             <InputBox>
@@ -365,6 +390,22 @@ const Profile = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
+`
+
+const ImgLabel = styled.label`
+    margin-right: auto;
+    border-radius: 7px;
+    color: ${(props)=>props.color};
+    padding: 10px;
+    background-color: ${(props)=>props.backColor};
+    cursor: pointer;
+    transition: 1s;
+    &:hover{
+    background-color: #444444;
+    }
+`
+const ImgInput = styled.input`
+    display: none;
 `
 const Img = styled.div`
     overflow: hidden;

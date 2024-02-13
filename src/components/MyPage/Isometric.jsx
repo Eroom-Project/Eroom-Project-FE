@@ -4,9 +4,9 @@ import styled from 'styled-components'
 function Isometric() {
     return (
         <MainBox>
-            <BottomBox>
+            <Block>
                 벽돌 공간
-            </BottomBox>
+            </Block>
             <H6>My-Room</H6>
             <MyRoom>
                 <Img src="/img/r3.jpg" alt="" />
@@ -32,12 +32,11 @@ const MyRoom = styled.div`
     border: 1px solid gray;
     overflow: hidden;
 `
-const BottomBox = styled.div`
+const Block = styled.div`
     width: 100%;
     min-width: 440px;
-    height: 150px;
+    height: 182px;
     border: 1px solid gray;
-    
 `
 const Img = styled.img`
     width: 100%;
