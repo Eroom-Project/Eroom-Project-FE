@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import api from '../../services/api'
 import styled from 'styled-components'
-import Isometric from '../../components/Common/Isometric'
+import Isometric from '../../components/MyPage/Isometric'
 import { getProfile } from '../../services/Query'
 import { useQuery } from 'react-query'
 
@@ -355,22 +355,21 @@ const MainBox = styled.div`
 `
 const ProfileBox = styled.div`
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     max-width: 1200px;
+    gap: 60px;
 `
 const Profile = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
 `
 const Img = styled.div`
     overflow: hidden;
-    height: 100px;
-    width: 100px;
+    width: 150px;
+    padding-bottom: 150px;
     border: 1px solid gray;
     border-radius: 100%;
 `
@@ -388,12 +387,13 @@ const MainForm = styled.div`
     align-items: flex-start;
     justify-content: center;
     background-color: #FFFF;
-    width: 400px;
     border-radius: 10px;
+    width: 100%;
 `
 
 const Form = styled.div`
     width: 100%;
+    min-width: 440px;
 `
 const H1Box = styled.div`
     display: flex;
@@ -458,6 +458,7 @@ const Input = styled.input`
     background-color: #F2F2F2;
     transition: background-color 5000s ease-in-out 0s;
     &:focus{outline: none;}
+    box-sizing: border-box;
     
 `
 const Button = styled.button`
@@ -512,11 +513,11 @@ const ContentsGrid = styled.div`
     margin: 0 auto;
     width: 100%;
     margin-top: 40px;
-    gap: 10px 0px;
+    gap: 10px 10px;
 `
 const Contents = styled.div`
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    padding-bottom: 100%;
     border: 1px solid gray;
     justify-self: center;
 `
