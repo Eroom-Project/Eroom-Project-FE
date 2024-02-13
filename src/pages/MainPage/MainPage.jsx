@@ -113,7 +113,7 @@ const FilterButton = styled.div`
   font-family: 'Noto Sans KR', sans-serif;
   display: flex;
   justify-content : center;
-  width : 40px;
+  width : 80px;
   font-size: 14px;
   background-color: rgba(169, 169, 169, 0.3); 
   color: #000; 
@@ -214,9 +214,6 @@ function MainPage() {
     setVisibleItems((prev) => prev + 12);
   };
 
-  if (isLoading) return <h1>로딩중입니다.....!</h1>;
-  if (isError) return <h1>오류가 발생하였습니다.</h1>;
-
   return (
     <>
       <div>
@@ -255,8 +252,32 @@ function MainPage() {
           </div>
         ))}
       </OptionsContainer>
+      {isLoading && <div style={{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        justifyContent:'center',
+        fontSize:'20px',
+        fontWeight:'500',
+        marginTop: '100px',
+        gap:'10px'
+        }}>
+        <img src='/icon (5).png' alt='로딩이미지'/>
+        로딩중입니다.</div>}
+      {isError && <div style={{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        justifyContent:'center',
+        fontSize:'20px',
+        fontWeight:'500',
+        marginTop: '100px',
+        gap:'10px'
+        }}>
+        <img src='/icon (6).png' alt='에러이미지'/>
+        오류가 발생했습니다.</div>}
       <CardsContainer>
-      {data?.slice(0, visibleItems).map((item, index) => (
+            {data?.slice(0, visibleItems).map((item, index) => (
   <Card key={index} onClick={() => openModal(item)}>
     <CardImage src={item.image} alt={item.title} />
     
@@ -270,7 +291,7 @@ function MainPage() {
 ))}
       </CardsContainer>
 
-      {visibleItems < data.length && (
+      {visibleItems < data?.length && (
         <MoreButton onClick={handleShowMore}>더보기</MoreButton>
       )}
 

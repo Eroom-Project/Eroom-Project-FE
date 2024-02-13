@@ -18,7 +18,6 @@ function RoomPage() {
             <div style={{
                 position: 'absolute',
                 left: '50%',
-                bottom: '100px',
                 transform: 'translate(-50%, 0)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -26,14 +25,12 @@ function RoomPage() {
                 
             }}>
                 <img src='/iso1.jpg' style={{
-                    maxWidth: '100%',
                     maxHeight: '80vh',
                     objectFit: 'contain',
                 }}/>
                 <div style={{
                     display: 'flex',
                     gap: '10px', 
-                    marginTop: '20px',
                 }}>
                     <button onClick={() => setIsAuthOpen(true)} style={{
                         fontFamily:'Noto Sans KR, sans-serif',

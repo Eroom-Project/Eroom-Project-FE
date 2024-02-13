@@ -87,6 +87,7 @@ const MainBox = styled.div`
     background-color: white;
     width: 100%;
     margin-bottom: 50px;
+    z-index:1000;
 `
 const Main = styled.div`
     display: flex;
