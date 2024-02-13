@@ -86,6 +86,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
         </div>
            
             <button onClick={() => applyForChallenge(selectedItem?.challengeId)} style={{
+                fontFamily:'Noto Sans KR, sans-serif',
                 width:'430px',
                 height:'48px',
                 marginTop:'10px',
@@ -94,7 +95,8 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                 color: 'white',
                 fontSize:'15px',
                 borderRadius: '4px',
-                fontWeight:'700'
+                fontWeight:'500',
+                cursor: 'pointer'
             }}>참여 신청하기</button>
         </Modal>
     );

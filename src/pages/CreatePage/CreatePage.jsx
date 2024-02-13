@@ -111,7 +111,7 @@ function CreatePage() {
 
   const { mutate, isLoading, isError } = useMutation(createChallenge, {
     onSuccess: () => {
-      alert('챌린지가 성공적으로 저장되었습니다!');
+      alert('챌린지 이룸 생성 성공');
       resetTitle();
       resetCategory();
       resetDescription();
@@ -123,7 +123,7 @@ function CreatePage() {
       resetImage();
     },
     onError: () => {
-      alert('챌린지 저장에 실패했습니다.');
+      alert('챌린지 생성에 실패했습니다.');
     },
   });
 
@@ -174,7 +174,7 @@ function CreatePage() {
                 border: '1px solid #C3C3C3',
                 borderRadius: '6px',
                 width: '590px',
-                height: '40px',
+                height: '44.95px',
                 fontStyle: 'normal',
                 fontWeight: '400',
                 fontSize: '14px'
@@ -209,6 +209,7 @@ function CreatePage() {
                   key={option}
                   onClick={(event) => handleFrequencyChange(event, option)}
                   style={{
+                    fontFamily:'Noto Sans KR, sans-serif',
                     width: '105px',
                     height: '48px',
                     backgroundColor: selectedFrequency === option ? '#626262' : '#FFFFFF',
@@ -265,8 +266,12 @@ function CreatePage() {
           </div>
 
           <div {...getRootProps()} style={{
+            display:'flex',
+            alignItems:'center',
+            justifyContent:'center',
+            width:'1200px',
+            height:'97px',
             border: '2px dashed #C3C3C3',
-            padding: '20px',
             textAlign: 'center',
             borderRadius: '10px',
             backgroundColor: ' #F9F9F9'
@@ -301,6 +306,7 @@ function CreatePage() {
             justifyContent: 'center'
           }}>
             <button type="submit" style={{
+              fontFamily:'Noto Sans KR, sans-serif',
               width: '344px',
               height: '48px',
               border: '1px solid #626262',

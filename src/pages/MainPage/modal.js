@@ -33,10 +33,15 @@ const Modal = ({ children, isOpen, onClose }) => {
         <button 
           onClick={onClose}
           style={{
-            position: 'absolute', 
-            top: '10px', 
-            right: '10px', 
-            cursor: 'pointer'
+            fontFamily:'Noto Sans KR, sans-serif',
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            cursor: 'pointer',
+            backgroundColor: 'white',
+            border: 'none',
+            fontSize: '20px',
+            color:'#C3C3C3'
           }}
         >
           X
