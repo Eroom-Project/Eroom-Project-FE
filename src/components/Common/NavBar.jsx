@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getCookie, removeCookie } from '../../services/Cookie'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 function NavBar() {
+    const navigate=useNavigate()
+
     const [cookie, setCookie] = useState({
         cookies: false,
         cookiesR: false
@@ -10,7 +12,7 @@ function NavBar() {
 
     console.log(cookie)
 
-    const isCookie = async() => {
+    const isCookie = async () => {
         const cookies = await getCookie("Authorization");
         const cookiesR = await getCookie("Refresh-Token");
         if (cookies && cookiesR) {
@@ -34,43 +36,33 @@ function NavBar() {
     const removeCookies = () => {
         removeCookie("Authorization")
         removeCookie("Refresh-Token")
-        window.location.href= "https://eroom-project-fe.vercel.app/home"
+        navigate("/home")
     }
 
-    const currentUrl = window.location.href
-    console.log(currentUrl)
     return (
         <>
-            {
-                currentUrl !== "http://localhost:3000/signin" &&
-                    currentUrl !== "http://localhost:3000/signup" &&
-                    currentUrl !== "https://eroom-project-fe.vercel.app/signin" &&
-                    currentUrl !== "https://eroom-project-fe.vercel.app/signup"
-                    ?
-                    <MainBox>
-                        <Main>
-                            <Info>
-                                <Span> <a href='/'>E-Room</a></Span>
-                                <Span> <a href='/main'>챌린지 리스트 </a></Span>
-                                <Span> <a href='/create'>챌린지 생성하기</a> </Span>
-                            </Info>
-                            <SignIn>
-                                {
-                                    cookie.cookies && cookie.cookiesR?
-                                        <>
-                                            <Span><a href='/mypage'>마이페이지</a></Span>
-                                            <Span onClick={removeCookies}>로그아웃</Span>
-                                        </>
-                                        :
-                                        <Span><a href='/signin'>로그인</a></Span>
-                                }
-                            </SignIn>
-                        </Main>
-                        <Hr />
-                    </MainBox>
-                    :
-                    ""
-            }
+            <MainBox>
+                <Main>
+                    <Info>
+                        <Link to="/"><Span> E-Room</Span></Link>
+                        <Link to="/main"><Span> 챌린지 리스트</Span></Link>
+                        <Link to="/create"><Span> 챌린지 생성하기</Span></Link>
+                    </Info>
+                    <SignIn>
+                        {
+                            cookie.cookies && cookie.cookiesR ?
+                                <>
+                                    <Link to="/mypage"><Span> 마이페이지</Span></Link>
+                                    <Span onClick={removeCookies}>로그아웃</Span>
+                                </>
+                                :
+                                <Link to="/signin"><Span> 로그인</Span></Link>
+                        }
+                    </SignIn>
+                </Main>
+                <Hr />
+            </MainBox>
+
         </>
     )
 }
@@ -87,6 +79,7 @@ const MainBox = styled.div`
     background-color: white;
     width: 100%;
     margin-bottom: 50px;
+    z-index: 1000;
 `
 const Main = styled.div`
     display: flex;
