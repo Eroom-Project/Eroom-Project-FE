@@ -14,7 +14,7 @@ function NavBar() {
 
     const isCookie = async () => {
         const cookies = await getCookie("Authorization");
-        const cookiesR = await getCookie("Refresh-Token");
+        const cookiesR = await getCookie("Refresh-token");
         if (cookies && cookiesR) {
             console.log("Authorization cookie:", cookies);
             console.log("Authorization cookie:", cookiesR);
@@ -31,7 +31,6 @@ function NavBar() {
     useEffect(() => {
         isCookie()
     }, [])
-
 
     const removeCookies = () => {
         removeCookie("Authorization")
