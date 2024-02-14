@@ -246,7 +246,7 @@ function MyPage() {
     const handleFalseReadOnly = () => {
         if (readOnly === false) {
             // console.log(readOnly)
-            // changeData()
+            changeData()
             setInput({
                 ...input,
                 email: '',
@@ -561,6 +561,7 @@ const ImgBox = styled.div`
         to{
             width: 150px;
             height: 150px;
+            transform: rotate( 360deg )
         }
     }
 `
@@ -584,6 +585,7 @@ const ImgBox2 = styled.div`
         to{
             width: 250px;
             height: 250px;
+            transform: rotate( 360deg )
         }
     }
 `
