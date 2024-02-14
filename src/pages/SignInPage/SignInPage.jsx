@@ -94,7 +94,7 @@ function SignInPage() {
                 //     httpyOnly: true,
                 //     secure: true
                 // })
-                navigate("/home")
+                navigate("/")
             } catch (error) {
                 alert("로그인 에러")
                 console.log("Login failed:", error)

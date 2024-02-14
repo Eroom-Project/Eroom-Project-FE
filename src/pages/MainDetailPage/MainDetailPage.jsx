@@ -84,7 +84,6 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                 </div>
         </div>
         </div>
-           
             <button onClick={() => applyForChallenge(selectedItem?.challengeId)} style={{
                 fontFamily:'Noto Sans KR, sans-serif',
                 width:'430px',
