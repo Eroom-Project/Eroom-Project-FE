@@ -44,7 +44,7 @@ function NavBar() {
             <MainBox>
                 <Main>
                     <Info>
-                        <Link to="/home"><Span> E-Room</Span></Link>
+                        <Link to="/"><Span> E-Room</Span></Link>
                         <Link to="/main"><Span> 챌린지 리스트</Span></Link>
                         <Link to="/create"><Span> 챌린지 생성하기</Span></Link>
                     </Info>
