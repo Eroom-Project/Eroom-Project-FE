@@ -87,12 +87,13 @@ function SignInPage() {
                     password: input.password
                 }
                 const res = await api.post("/api/login", newUser)
-                console.log(res.data)
-                // res.data.token && setCookie("token", `JWT ${res.data.token}`, {
-                //     path: "/",
-                //     httpyOnly: true,
-                //     secure: true
-                // })
+                console.log(res.status)
+                res.status === 200 &&
+                    setCookie("localaccess", `localaccess`, {
+                        path: "/",
+                        httpyOnly: true,
+                        secure: true
+                    })
                 navigate("/")
             } catch (error) {
                 alert("로그인 에러")
