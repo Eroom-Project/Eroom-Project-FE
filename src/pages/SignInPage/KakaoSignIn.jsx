@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 function KakaoSignIn() {
     const CLIENT_ID = "8fdb806fb9ab6efe73c78638a985c28b"
-    const REDIRECT_URI = " https://eroom-challenge.com/auth/callback/kakao"
+    const REDIRECT_URI = "https://eroom-challenge.com/auth/callback/kakao"
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
     const kakaoLoginBtn = () => {
