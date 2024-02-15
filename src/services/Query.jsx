@@ -6,4 +6,5 @@ const getProfile = async() => {
     return res.data
 }
 
+
 export {getProfile}

@@ -19,7 +19,6 @@ import {
     Bold,
 } from '../../styles/SignPage/SignPage'
 
-
 function SignInPage() {
     const navigate = useNavigate()
     const [focusState, setFocusState] = useState({
@@ -117,7 +116,7 @@ function SignInPage() {
             :
             <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
     }
-
+    
     return (
         <Back>
             <MainForm>
