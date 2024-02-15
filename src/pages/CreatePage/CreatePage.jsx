@@ -71,7 +71,7 @@ function CreatePage() {
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
-
+  
   const countMap = {
     '매일': '매일',
     '평일 매일': '평일 매일',
@@ -129,20 +129,19 @@ function CreatePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('category', category);
-    formData.append('description', description);
-    formData.append('frequency', frequency);
-    formData.append('limitAttendance', limitAttendance);
-    formData.append('authExplanation', authExplanation);
-    formData.append('startDate', startDate);
-    formData.append('dueDate', dueDate);
-    if (thumbnailImageUrl) formData.append('thumbnailImageUrl', thumbnailImageUrl);
-
-    mutate(formData);
-  };
-
+    var challengeCreateData = new FormData();
+    challengeCreateData.append('title', title);
+    challengeCreateData.append('category', category);
+    challengeCreateData.append('description', description);
+    challengeCreateData.append('frequency', frequency);
+    challengeCreateData.append('limitAttendance', limitAttendance);
+    challengeCreateData.append('authExplanation', authExplanation);
+    challengeCreateData.append('startDate', startDate);
+    challengeCreateData.append('dueDate', dueDate);
+    if (thumbnailImageUrl) challengeCreateData.append('thumbnailImageUrl', thumbnailImageUrl);
+    mutate(challengeCreateData);
+   };
+ 
   return (
     <>
       <div style={{
