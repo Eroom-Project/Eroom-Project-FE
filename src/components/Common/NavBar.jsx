@@ -7,24 +7,20 @@ function NavBar() {
 
     const [cookieState, setCookieState] = useState({
         cookies: false,
-        cookiesR: false
     })
 
-    const isCookie = async () => {
-        const cookies = await getCookie("Authorization");
-        const cookiesR = await getCookie("Refresh-token");
-        if (cookies && cookiesR) {
-            console.log("Authorization cookie:", cookies);
-            console.log("Authorization cookie:", cookiesR);
-            return (
+    const isCookie = async() => {
+        const cookies = await getCookie("localaccess");
+        if (cookies) {
+            (
                 setCookieState({
                     ...cookieState,
                     cookies: true,
-                    cookiesR: true
                 })
             )
         } else {
-            return console.log("Authorization cookie not found");
+            console.log("localaccess cookie not found");
+
         }
     }
 
@@ -35,8 +31,11 @@ function NavBar() {
     console.log(cookieState)
 
     const removeCookies = () => {
-        removeCookie("Authorization")
-        removeCookie("Refresh-token")
+        removeCookie("localaccess")
+        setCookieState({
+            ...cookieState,
+            cookies: false,
+        })
         navigate("/")
     }
 
@@ -51,7 +50,7 @@ function NavBar() {
                     </Info>
                     <SignIn>
                         {
-                            cookieState.cookies && cookieState.cookiesR ?
+                            cookieState.cookies?
                                 <>
                                     <Link to="/mypage"><Span> 마이페이지</Span></Link>
                                     <Span onClick={removeCookies}>로그아웃</Span>
