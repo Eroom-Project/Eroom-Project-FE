@@ -9,14 +9,18 @@ import { useQuery } from 'react-query'
 function MyPage() {
 
 
-    // const profileData = useQuery('getProfile', getProfile)
+    const profileData = useQuery('getProfile', getProfile)
+    
+    if(profileData.data){
+        console.log(`profileData => ${profileData.data }`)
+    }
 
-    // if (profileData.isLoading) {
-    //     console.log("로딩중입니다.")
-    // }
-    // if (profileData.isError) {
-    //     console.log("에러!")
-    // }
+    if (profileData.isLoading) {
+        console.log("로딩중입니다.")
+    }
+    if (profileData.isError) {
+        console.log("에러!")
+    }
 
     // img state
 

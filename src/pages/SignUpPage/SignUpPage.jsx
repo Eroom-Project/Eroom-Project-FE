@@ -31,7 +31,7 @@ function SignUpPage() {
                 params:{email: input.email}
             })
             console.log(res)
-            if (res.data === "사용 가능한 email입니다.") {
+            if (res.data.message === "사용 가능한 email입니다.") {
                 setCheck({ ...check, email: true })
                 alert(res.data)
             } else {
