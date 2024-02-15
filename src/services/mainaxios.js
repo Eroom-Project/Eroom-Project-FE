@@ -47,7 +47,7 @@ const authResult = async (challengeId) =>{
 }
 
 const postAuthStatus = async (authId, authStatus,challengeId) =>{
-  const response = await api.post(`/api/challenge/${challengeId}/leader/auth/${authId}`,authId,authStatus)
+  const response = await api.post(`/api/challenge/${challengeId}/leader/auth/${authId}`,authStatus)
   return response.data;
 }
 
