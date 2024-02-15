@@ -21,13 +21,13 @@ const entryChallenge = async (challengeId) => {
   return response.data;
 };
 
-const createChallenge = async (formData) => {
+const createChallenge = async (challengeCreateData) => {
   const config = {
     headers: {
       'Content-Type': 'multipart/form-data'
     }};
   // const response = await api.post('/challenges', formData, config); // 이거 지우고 아래꺼 살리기
-  const response = await api.post(`/api/challenge`, formData, config);
+  const response = await api.post(`/api/challenge`, challengeCreateData, config);
   return response.data;
 };
 
