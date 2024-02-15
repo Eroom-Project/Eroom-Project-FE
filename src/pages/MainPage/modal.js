@@ -26,8 +26,8 @@ const Modal = ({ children, isOpen, onClose }) => {
         padding: '20px',
         borderRadius: '12px',
         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
-        width:'438px',
-        height:'600px',
+        width:'478px',
+        height:'640px',
         
       }}>
         <button 

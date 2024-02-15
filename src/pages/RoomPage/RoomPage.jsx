@@ -24,7 +24,7 @@ function RoomPage() {
                 // alignItems: 'center',
                 
             }}>
-                <img src='/iso1.jpg' style={{
+                <img src='img/iso1.jpg' style={{
                     maxHeight: '80vh',
                     objectFit: 'contain',
                 }}/>

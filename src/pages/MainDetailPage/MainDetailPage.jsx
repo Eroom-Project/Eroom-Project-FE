@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import Modal from '../MainPage/modal';
+import { detailchallenge } from '../../services/mainaxios'; 
 
 const categoryMap = {
     IT: 'IT',
@@ -10,18 +10,28 @@ const categoryMap = {
     ARTS_AND_PHYSICAL_EDUCATION: '예체능',
     FOREIGN_LANGUAGE: '외국어',
     ETC: '기타',
-  };
-  
+};
 
 function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
-    
-    const translatedCategory = categoryMap[selectedItem?.category] 
+    const [challengeDetail, setChallengeDetail] = useState(null);
+
+    useEffect(() => {
+        if (selectedItem?.challengeId) {
+            detailchallenge(selectedItem.challengeId).then(data => {
+                setChallengeDetail(data);
+            }).catch(error => {
+                console.error("챌린지를 불러오는데 실패했습니다.", error);
+            });
+        }
+    }, [selectedItem]);
+
+    const translatedCategory = categoryMap[challengeDetail?.category] || '';
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <img 
-                src={selectedItem?.image} 
-                alt={selectedItem?.title}
+                src={challengeDetail?.thumbnailImageUrl} 
+                alt={challengeDetail?.title}
                 style={{ 
                     maxWidth: '430px', 
                     maxHeight: '220px',
@@ -34,57 +44,59 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
             />
             
             <div style={{ width:'430px' }}>
-            <div style={{
-                fontSize:'20px',
-                fontWeight:'800',
-                marginBottom:'5px'
-            }}
-            >{selectedItem?.title}</div>
-            <div style={{
-                fontSize:'14px',
-                color:'#626262',
-                marginBottom:'20px'
-            }}
-            > {translatedCategory}</div>
-            
-            <div style={{
-                height:'65px',
-                fontSize:'14px',
-                marginBottom:'25px',
-                lineHeight:'1.5'
-            }}>
-            {selectedItem?.description}
-            </div>
-                        
-            <div style={{
-                height:'124px',
-                backgroundColor:'#F2F2F2',
-                display:'flex',
-                alignItems:'center',
-                padding:'0 20px',
-                borderRadius:'4px',
-                
-            }}>
                 <div style={{
-                    marginRight:'20px',
+                    fontSize:'20px',
+                    fontWeight:'800',
+                    marginBottom:'5px'
+                }}>
+                    {challengeDetail?.title}
+                </div>
+                <div style={{
                     fontSize:'14px',
-                    fontWeight:'700'                    
+                    color:'#626262',
+                    marginBottom:'20px'
+                }}>
+                    {translatedCategory}
+                </div>
+                
+                <div style={{
+                    height:'65px',
+                    fontSize:'14px',
+                    marginBottom:'25px',
+                    lineHeight:'1.5'
+                }}>
+                    {challengeDetail?.description}
+                </div>
+                            
+                <div style={{
+                    height:'124px',
+                    backgroundColor:'#F2F2F2',
+                    display:'flex',
+                    alignItems:'center',
+                    padding:'0 20px',
+                    borderRadius:'4px',
+                }}>
+                    <div style={{
+                        marginRight:'20px',
+                        fontSize:'14px',
+                        fontWeight:'700'                    
                     }}>
-                    <div style={{marginBottom:'10px',}}>참여기간</div>
-                    <div style={{marginBottom:'10px',}}>운영횟수</div>
-                    <div style={{marginBottom:'10px',}}>참여인원</div>
-                    <div>인증방식</div>
+                        <div style={{marginBottom:'10px',}}>참여기간</div>
+                        <div style={{marginBottom:'10px',}}>운영횟수</div>
+                        <div style={{marginBottom:'10px',}}>참여인원</div>
+                        <div>인증방식</div>
                     </div>
 
-                <div style={{fontSize:'14px', color:'#626262'}}>
-                    <div  style={{marginBottom:'10px',}}>{selectedItem?.startDate} ~ {selectedItem?.dueDate}</div>
-                    <div  style={{marginBottom:'10px',}}>{selectedItem?.frequency}</div>
-                    <div  style={{marginBottom:'10px',}}>{selectedItem?.currentAttendance}명 / {selectedItem?.limitAttendance}명</div>
-                    <div>{selectedItem?.authExplanation}</div>
+                    <div style={{fontSize:'14px', color:'#626262'}}>
+                        <div style={{marginBottom:'10px',}}>{challengeDetail?.startDate} ~ {challengeDetail?.dueDate}</div>
+                        <div style={{marginBottom:'10px',}}>{challengeDetail?.frequency}</div>
+                        <div style={{marginBottom:'10px',}}>{challengeDetail?.currentAttendance}명 / {challengeDetail?.limitAttendance}명</div>
+                        <div>{challengeDetail?.authExplanation}</div>
+                    </div>
                 </div>
-        </div>
-        </div>
-            <button onClick={() => applyForChallenge(selectedItem?.challengeId)} style={{
+            </div>
+               
+            <button onClick={() => applyForChallenge(challengeDetail?.challengeId)} style={{
                 fontFamily:'Noto Sans KR, sans-serif',
                 width:'430px',
                 height:'48px',
