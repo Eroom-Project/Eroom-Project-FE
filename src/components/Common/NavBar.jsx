@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getCookie, removeCookie } from '../../services/Cookie'
+import { getCookie, removeCookie, setCookie } from '../../services/Cookie'
 import { Link, useNavigate } from 'react-router-dom'
 function NavBar() {
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
-    const [cookie, setCookie] = useState({
+    const [cookieState, setCookieState] = useState({
         cookies: false,
         cookiesR: false
     })
-
-    console.log(cookie)
 
     const isCookie = async () => {
         const cookies = await getCookie("Authorization");
@@ -18,13 +16,15 @@ function NavBar() {
         if (cookies && cookiesR) {
             console.log("Authorization cookie:", cookies);
             console.log("Authorization cookie:", cookiesR);
-            setCookie({
-                ...cookie,
-                cookies: true,
-                cookiesR: true
-            })
+            return (
+                setCookieState({
+                    ...cookieState,
+                    cookies: true,
+                    cookiesR: true
+                })
+            )
         } else {
-            console.log("Authorization cookie not found");
+            return console.log("Authorization cookie not found");
         }
     }
 
@@ -32,10 +32,12 @@ function NavBar() {
         isCookie()
     }, [])
 
+    console.log(cookieState)
+
     const removeCookies = () => {
         removeCookie("Authorization")
-        removeCookie("Refresh-Token")
-        navigate("/home")
+        removeCookie("Refresh-token")
+        navigate("/")
     }
 
     return (
@@ -49,7 +51,7 @@ function NavBar() {
                     </Info>
                     <SignIn>
                         {
-                            cookie.cookies && cookie.cookiesR ?
+                            cookieState.cookies && cookieState.cookiesR ?
                                 <>
                                     <Link to="/mypage"><Span> 마이페이지</Span></Link>
                                     <Span onClick={removeCookies}>로그아웃</Span>
