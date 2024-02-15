@@ -162,7 +162,7 @@ function MainPage() {
   const { isLoading, isError, data } = useQuery(
     ['challenge', show, searchQuery],
     () => getChallenge(show, searchQuery),
-    { refetchOnWindowFocus: false, refetchInterval: 30000 }
+    { refetchOnWindowFocus: false}
   );
 
   const mutation = useMutation(
@@ -262,7 +262,7 @@ function MainPage() {
         marginTop: '100px',
         gap:'10px'
         }}>
-        <img src='/icon (5).png' alt='로딩이미지'/>
+        <img src='img/icon (5).png' alt='로딩이미지'/>
         로딩중입니다.</div>}
       {isError && <div style={{
         display:'flex',
@@ -274,12 +274,12 @@ function MainPage() {
         marginTop: '100px',
         gap:'10px'
         }}>
-        <img src='/icon (6).png' alt='에러이미지'/>
+        <img src='img/icon (6).png' alt='에러이미지'/>
         오류가 발생했습니다.</div>}
       <CardsContainer>
-            {data?.slice(0, visibleItems).map((item, index) => (
-  <Card key={index} onClick={() => openModal(item)}>
-    <CardImage src={item.image} alt={item.title} />
+            {data?.slice(0, visibleItems).map((item, challengeId) => (
+  <Card key={challengeId} onClick={() => openModal(item)}>
+    <CardImage src={item.thumbnailImageUrl} alt={item.title} />
     
     <AttendanceText>
       {item.currentAttendance} / {item.limitAttendance} 명

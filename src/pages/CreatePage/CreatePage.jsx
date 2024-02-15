@@ -71,7 +71,16 @@ function CreatePage() {
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
-
+  const [createData, setCreateData] = useState({
+    title,
+    category,
+    description,
+    frequency,
+    limitAttendance,
+    authExplanation,
+    startDate,
+    dueDate    
+  })
   const countMap = {
     '매일': '매일',
     '평일 매일': '평일 매일',
@@ -131,15 +140,15 @@ function CreatePage() {
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('category', category);
-    formData.append('description', description);
-    formData.append('frequency', frequency);
-    formData.append('limitAttendance', limitAttendance);
-    formData.append('authExplanation', authExplanation);
-    formData.append('startDate', startDate);
-    formData.append('dueDate', dueDate);
+    // formData.append('category', category);
+    // formData.append('description', description);
+    // formData.append('frequency', frequency);
+    // formData.append('limitAttendance', limitAttendance);
+    // formData.append('authExplanation', authExplanation);
+    // formData.append('startDate', startDate);
+    // formData.append('dueDate', dueDate);
     if (thumbnailImageUrl) formData.append('thumbnailImageUrl', thumbnailImageUrl);
-
+    
     mutate(formData);
   };
 

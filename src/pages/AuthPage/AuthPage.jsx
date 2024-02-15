@@ -9,7 +9,7 @@ const AuthPage = ({ isOpen, onClose }) => {
   const [authImageUrl, setAuthImageUrl] = useState(null);
   const [authVideoUrl, setAuthVideoUrl] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
-  const [authStatus,setAauthStatus] = useState(false);
+  const [authStatus,setAauthStatus] = useState('WAITING');
 
   const onDrop = useCallback(acceptedFiles => {
     setAuthImageUrl(acceptedFiles[0]);
@@ -27,7 +27,7 @@ const AuthPage = ({ isOpen, onClose }) => {
       setAuthImageUrl('');
       setAuthVideoUrl('');
       setUploadedFileName('');
-      setAauthStatus(false);
+      setAauthStatus('WAITING');
       onClose();
     },
     onError: (error) => {
@@ -114,7 +114,8 @@ const AuthPage = ({ isOpen, onClose }) => {
           }}>인증내용</div>
         <input
           type="text"
-          placeholder="내용을 입력하세요."
+          maxLength ='200'
+          placeholder="내용을 입력하세요.(200자 이내)"
           value={authContent}
           onChange={(e) => setAuthContent(e.target.value)}
           style={{ 
