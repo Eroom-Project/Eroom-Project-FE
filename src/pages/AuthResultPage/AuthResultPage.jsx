@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authResult, postAuthStatus, updateAuthStatus, deleteAuthStatus } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
 
-const AuthResult = ({ isOpen, onClose, challengerId }) => {
+const AuthResult = ({ isOpen, onClose, challengeId }) => {
    
     // 상태 초기화
    const [uploadedFileName, setUploadedFileName] = useState('');
