@@ -4,13 +4,13 @@ import styled from 'styled-components'
 function Isometric() {
     return (
         <MainBox>
-            <Block>
-                벽돌 공간
-            </Block>
             <H6>My-Room</H6>
             <MyRoom>
                 <Img src="/img/r3.jpg" alt="" />
             </MyRoom>
+            <H6>My-Brick</H6>
+            <Brick>
+            </Brick>
         </MainBox>
     )
 }
@@ -28,18 +28,23 @@ const MyRoom = styled.div`
     align-items: center;
     width: 100%;
     min-width: 440px;
-    height: 440px;
+    height: 450px;
     border: 1px solid gray;
+    border-radius: 8px;
+    margin-bottom: 25px;
+
     overflow: hidden;
 `
-const Block = styled.div`
+const Brick = styled.div`
     width: 100%;
     min-width: 440px;
-    height: 182px;
+    height: 150px;
     border: 1px solid gray;
+    border-radius: 8px;
+    
 `
 const Img = styled.img`
-    width: 100%;
+    object-fit: cover;
 `
 
 const H6 = styled.div`
@@ -48,5 +53,5 @@ const H6 = styled.div`
     align-items: flex-start;
     justify-content: flex-start;
     font-size: 12px;
-    margin: 20px 0px 10px 0px;
+    margin: 0px 0px 10px 0px;
 `

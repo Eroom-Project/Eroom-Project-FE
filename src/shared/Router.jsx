@@ -21,7 +21,7 @@ function Router() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/auth/callback/kakao" element={<Redirection />} />
                 <Route path='/' element={<Layout/>}>
-                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/mypage" element={<MyPage />} />
                     <Route path="/main" element={<MainPage />} />
                     <Route path="/main/:id" element={<MainDetailPage />} />

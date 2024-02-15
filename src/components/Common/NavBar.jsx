@@ -14,7 +14,7 @@ function NavBar() {
 
     const isCookie = async () => {
         const cookies = await getCookie("Authorization");
-        const cookiesR = await getCookie("Refresh-Token");
+        const cookiesR = await getCookie("Refresh-token");
         if (cookies && cookiesR) {
             console.log("Authorization cookie:", cookies);
             console.log("Authorization cookie:", cookiesR);
@@ -32,7 +32,6 @@ function NavBar() {
         isCookie()
     }, [])
 
-
     const removeCookies = () => {
         removeCookie("Authorization")
         removeCookie("Refresh-Token")
@@ -44,7 +43,7 @@ function NavBar() {
             <MainBox>
                 <Main>
                     <Info>
-                        <Link to="/home"><Span> E-Room</Span></Link>
+                        <Link to="/"><Span> E-Room</Span></Link>
                         <Link to="/main"><Span> 챌린지 리스트</Span></Link>
                         <Link to="/create"><Span> 챌린지 생성하기</Span></Link>
                     </Info>
