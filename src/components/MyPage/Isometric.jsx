@@ -8,8 +8,8 @@ function Isometric() {
             <MyRoom>
                 <Img src="/img/r3.jpg" alt="" />
             </MyRoom>
+            <H6>My-Brick</H6>
             <Brick>
-                벽돌 공간
             </Brick>
         </MainBox>
     )
@@ -31,15 +31,17 @@ const MyRoom = styled.div`
     height: 450px;
     border: 1px solid gray;
     border-radius: 8px;
+    margin-bottom: 25px;
+
     overflow: hidden;
 `
 const Brick = styled.div`
     width: 100%;
     min-width: 440px;
-    height: 182px;
+    height: 150px;
     border: 1px solid gray;
     border-radius: 8px;
-    margin-top: 15px;
+    
 `
 const Img = styled.img`
     object-fit: cover;
