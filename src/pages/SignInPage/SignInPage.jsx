@@ -120,12 +120,17 @@ function SignInPage() {
             :
             <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
     }
+
+    let day = new Date();
+    let today = (`${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`)
+    console.log(today)
+    
     
     return (
         <Back>
             <MainForm>
-                <H1>로그인</H1>
                 <Form>
+                <H1>로그인</H1>
                     <InputBox>
                         <H6>이메일: {message("email")}</H6>
                         <Input

@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { getProfile } from '../../services/Query'
+import { getChallengeDetail, getProfile } from '../../services/Query'
 import { useQuery } from 'react-query'
+import { useNavigate } from 'react-router-dom'
 
 function Chellange() {
 
     const chellangeData = useQuery('chellangeData', getProfile)
 
     if (chellangeData.data) {
-        console.log(`profileData => ${chellangeData.data}`)
+        // console.log(chellangeData.data)
     }
-
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")
     }
@@ -18,33 +18,116 @@ function Chellange() {
         console.log("에러!")
     }
 
+    const [chellangeState, setChellangeState] = useState({
+        create: false,
+        finish: false
+    })
+
+    const navigate = useNavigate();
+
+    const chellange = () => {
+        // console.log(chellangeData.data)
+        // console.log(currunt)
+        if (chellangeData.data) {
+            if (chellangeState.create === true) {
+                return (
+                    chellangeData.data.challengeList
+                        .filter((value) => value.challengerRole === "LEADER")
+                        .map((value) => {
+                            return (
+                                <Contents key={value.challengeId}
+                                onClick ={()=>{navigate(`/mypage/${value.challengeId}`)}}
+                                >
+                                    <ContentsTop>
+                                        <Img src={value.thumbnailImageUrl} alt="img" />
+                                        <CurrentUsers>
+                                            {value.currentAttendance}/{value.limitAttendance}
+                                        </CurrentUsers>
+                                    </ContentsTop>
+                                    <ContentsBottom>
+                                        <Title>
+                                            {value.title}
+                                        </Title>
+                                        <Day>
+                                            {value.frequency}
+                                        </Day>
+                                    </ContentsBottom>
+                                </Contents>
+                            )
+                        })
+                )
+            }
+            if (chellangeState.finish === true) {
+                return(
+                    chellangeData.data.challengeList
+                        .filter((value) => {
+                            let currunt = new Date();
+                            let limite = new Date(value.dueDate)
+                            return limite < currunt
+                        })
+                        .map((value) => {
+                            return (
+                                <Contents key={value.challengeId}
+                                onClick ={()=>{navigate(`/mypage/${value.challengeId}`)}}
+                                >
+                                    <ContentsTop>
+                                        <Img src={value.thumbnailImageUrl} alt="img" />
+                                        <CurrentUsers>
+                                            {value.currentAttendance}/{value.limitAttendance}
+                                        </CurrentUsers>
+                                    </ContentsTop>
+                                    <ContentsBottom>
+                                        <Title>
+                                            {value.title}
+                                        </Title>
+                                        <Day>
+                                            {value.frequency}
+                                        </Day>
+                                    </ContentsBottom>
+                                </Contents>
+                            )
+                        })
+                )
+            } else {
+                return(
+                    chellangeData.data.challengeList
+                        .map((value) => {
+                            return (
+                                <Contents key={value.challengeId}
+                                onClick ={()=>{navigate(`/mypage/${value.challengeId}`)}}
+                                >
+                                    <ContentsTop>
+                                        <Img src={value.thumbnailImageUrl} alt="img" />
+                                        <CurrentUsers>
+                                            {value.currentAttendance}/{value.limitAttendance}
+                                        </CurrentUsers>
+                                    </ContentsTop>
+                                    <ContentsBottom>
+                                        <Title>
+                                            {value.title}
+                                        </Title>
+                                        <Day>
+                                            {value.frequency}
+                                        </Day>
+                                    </ContentsBottom>
+                                </Contents>
+                            )
+                        })
+                )
+            }
+        }
+    }
+
     return (
         <>
             <SortBox>
-                <H3>진행중 챌린지</H3>
-                <H3>생성한 챌린지</H3>
-                <H3>종료된 챌린지</H3>
+                <H3 onClick={() => { setChellangeState({ ...chellangeState, create: false,  finish: false }) }}>진행중 챌린지</H3>
+                <H3 onClick={() => { setChellangeState({ ...chellangeState, create: true, finish: false }) }}>생성한 챌린지</H3>
+                <H3 onClick={() => { setChellangeState({ ...chellangeState, finish: true, create: false }) }}>종료된 챌린지</H3>
             </SortBox>
             <ContentsBox>
                 <ContentsGrid>
-                    <Contents>
-                        <ContentsTop>
-                            <Img src="/img/r3.jpg" alt="img" />
-                            <CurrentUsers>
-                                3/6명
-                            </CurrentUsers>
-                        </ContentsTop>
-                        <ContentsBottom>
-                            <Title>
-                                <p>제목입니다.</p>
-                            </Title>
-                            <Day>
-                                <p>주 3회</p>
-                            </Day>
-                        </ContentsBottom>
-                    </Contents>
-
-
+                    {chellangeData.data && chellange()}
                 </ContentsGrid>
             </ContentsBox>
         </>
@@ -53,10 +136,11 @@ function Chellange() {
 
 export default Chellange
 
-const H3 =styled.div`
+const H3 = styled.div`
     font-size: 14px;
     font-weight: 500;
     margin-right: 26px;
+    cursor: pointer;
 `
 const SortBox = styled.div`
     display: flex;
@@ -87,6 +171,7 @@ const Contents = styled.div`
     border: 1px solid #636363;
     justify-self: center;
     border-radius: 10px;
+    cursor: pointer;
 `
 const ContentsTop = styled.div`
     width: 100%;

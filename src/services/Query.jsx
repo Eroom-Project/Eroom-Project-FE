@@ -2,9 +2,12 @@ import api from "./api";
 
 const getProfile = async() => {
     const res = await api.get("/api/mypage")
-    console.log(`res => ${res}`)
-    return res.data
+    return res.data.data
+}
+const getChallengeDetail = async(challengeId) => {
+    const res = await api.get(`/api/challenge/${challengeId}`)
+    return res.data.data
 }
 
 
-export {getProfile}
+export {getProfile, getChallengeDetail}
