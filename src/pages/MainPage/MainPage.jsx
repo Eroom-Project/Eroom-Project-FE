@@ -8,6 +8,7 @@ import MainDetailPage from '../MainDetailPage/MainDetailPage';
 import { BiSearch } from 'react-icons/bi';
 
 // 스타일 컴포넌트 정의
+
 const Line = styled.hr`
   width: 100%;
   border: none;
@@ -149,6 +150,16 @@ const SearchButton = styled.button`
   padding: 0 10px;
 `;
 
+const FeedbackContainer = styled.div`
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:20px;
+  font-weight:500;
+  margin-top: 100px;
+  gap:10px;
+`;
+
 
 function MainPage() {
   // 상태 및 훅 사용
@@ -162,13 +173,15 @@ function MainPage() {
   const { isLoading, isError, data } = useQuery(
     ['challenge', show, searchQuery],
     () => getChallenge(show, searchQuery),
-    { refetchOnWindowFocus: false}
+    { refetchOnWindowFocus: false }
   );
+  
 
   const mutation = useMutation(
     (challengeId) => entryChallenge(challengeId),
     {
-      onSuccess: () => alert('챌린지 신청 성공'),
+      onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
+      alert(successMessage);},
       onError: (error) => {
         const errorMessage = error.response?.data?.message || '참여 신청 실패!';
         alert(errorMessage);
@@ -252,32 +265,14 @@ function MainPage() {
           </div>
         ))}
       </OptionsContainer>
-      {isLoading && <div style={{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
-        fontSize:'20px',
-        fontWeight:'500',
-        marginTop: '100px',
-        gap:'10px'
-        }}>
+      {isLoading && <FeedbackContainer>
         <img src='img/icon (5).png' alt='로딩이미지'/>
-        로딩중입니다.</div>}
-      {isError && <div style={{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
-        fontSize:'20px',
-        fontWeight:'500',
-        marginTop: '100px',
-        gap:'10px'
-        }}>
+        로딩중입니다.</FeedbackContainer>}
+      {isError && <FeedbackContainer>
         <img src='img/icon (6).png' alt='에러이미지'/>
-        오류가 발생했습니다.</div>}
+        오류가 발생했습니다.</FeedbackContainer>}
       <CardsContainer>
-            {data?.slice(0, visibleItems).map((item, challengeId) => (
+      {Array.isArray(data) && data?.slice(0, visibleItems).map((item, challengeId) => (
   <Card key={challengeId} onClick={() => openModal(item)}>
     <CardImage src={item.thumbnailImageUrl} alt={item.title} />
     
