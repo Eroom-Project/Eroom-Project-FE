@@ -14,11 +14,11 @@ function Redirection() {
     // Authorization: Bearer <token>
     const postKakao = async () => {
         try {
-            const res = await api.post("", code)
+            const res = await api.post("/auth/kakao/login", {code})
             console.log(res.data.token)
             res.data.token && setCookie("oToken", `JWT ${res.data.token}`, {
                 path: "/",
-                httpyOnly: true,
+                httpOnly: true,
                 secure: true
             })
             navigate("/")

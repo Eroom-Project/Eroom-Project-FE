@@ -9,10 +9,10 @@ import { useQuery } from 'react-query'
 function MyPage() {
 
 
-    const profileData = useQuery('getProfile', getProfile)
-    
-    if(profileData.data){
-        console.log(`profileData => ${profileData.data }`)
+    const profileData = useQuery('profileData', getProfile)
+
+    if (profileData.data) {
+        console.log(`profileData => ${profileData.data}`)
     }
 
     if (profileData.isLoading) {
@@ -332,152 +332,152 @@ function MyPage() {
 
     return (
         <>
-                    <Profile>
-                        <MainForm>
-                            {
-                                readOnly === false ?
-                                    <>
-                                        <ImgLabel backColor={"#636363"} color={"#FFFF"} padding={"10px"} hover={"#444444"} cursor={"pointer"} for="file">
-                                            이미지 변경하기
-                                        </ImgLabel>
-                                        <ImgInput
-                                            id="file"
-                                            type='file'
-                                            name='url'
-                                            accept='image/jpg, image/jpeg, image/png'
-                                            onChange={(e) => handleImg(e)}
-                                        />
-                                    </>
-                                    :
-                                    <>
-                                        <ImgLabel backColor={"#FFFF"} color={"#636363"} padding={"10px 10px 10px 0px"} hover={"#FFFF"} cursor={""}>
-                                            프로필 이미지
-                                        </ImgLabel>
-                                        <ImgInput
-                                            type='file'
-                                            id="file"
-                                        />
-                                    </>
-                            }
-                            <Form>
+            <Profile>
+                <MainForm>
+                    {
+                        readOnly === false ?
+                            <>
+                                <ImgLabel backColor={"#636363"} color={"#FFFF"} padding={"10px"} hover={"#444444"} cursor={"pointer"} for="file">
+                                    이미지 변경하기
+                                </ImgLabel>
+                                <ImgInput
+                                    id="file"
+                                    type='file'
+                                    name='url'
+                                    accept='image/jpg, image/jpeg, image/png'
+                                    onChange={(e) => handleImg(e)}
+                                />
+                            </>
+                            :
+                            <>
+                                <ImgLabel backColor={"#FFFF"} color={"#636363"} padding={"10px 10px 10px 0px"} hover={"#FFFF"} cursor={""}>
+                                    프로필 이미지
+                                </ImgLabel>
+                                <ImgInput
+                                    type='file'
+                                    id="file"
+                                />
+                            </>
+                    }
+                    <Form>
+                        {
+                            readOnly === false ?
+                                <ImgBox>
+                                    <Img src={
+                                        input.url ? input.url : "/img/icon (2).png"
+                                    } alt="미리보기" />
+                                </ImgBox>
+                                :
+                                <ImgBox2>
+                                    <Img src={
+                                        input.url ? input.url : "/img/icon (2).png"
+                                    } alt="미리보기" />
+                                </ImgBox2>
+                        }
+                        <InputBox>
+                            <H6>이메일: {message("email")}</H6>
+                            <InnerBox>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    // placeholder = {profileData.data.email}
+                                    onFocus={() => { handlerFocus("email") }}
+                                    onBlur={() => { handlerBlur("email") }}
+                                    value={input.email}
+                                    onChange={(e) => { handleInputChange(e) }}
+                                    ref={emailRef}
+                                    readOnly
+                                />
                                 {
                                     readOnly === false ?
-                                        <ImgBox>
-                                            <Img src={
-                                                input.url ? input.url : "/img/icon (2).png"
-                                            } alt="미리보기" />
-                                        </ImgBox>
+                                        <AuthButton opacity={"1"} width={"60px"} onClick={emailCheck}>
+                                            중복<br />
+                                            확인
+                                        </AuthButton>
                                         :
-                                        <ImgBox2>
-                                            <Img src={
-                                                input.url ? input.url : "/img/icon (2).png"
-                                            } alt="미리보기" />
-                                        </ImgBox2>
+                                        <AuthButton opacity={"0"} width={"0px"} onClick={emailCheck}>
+                                        </AuthButton>
                                 }
-                                <InputBox>
-                                    <H6>이메일: {message("email")}</H6>
-                                    <InnerBox>
-                                        <Input
-                                            type="text"
-                                            name="email"
-                                            // placeholder = {profileData.data.email}
-                                            onFocus={() => { handlerFocus("email") }}
-                                            onBlur={() => { handlerBlur("email") }}
-                                            value={input.email}
-                                            onChange={(e) => { handleInputChange(e) }}
-                                            ref={emailRef}
-                                            readOnly
-                                        />
-                                        {
-                                            readOnly === false ?
-                                                <AuthButton opacity={"1"} width={"60px"} onClick={emailCheck}>
-                                                    중복<br />
-                                                    확인
-                                                </AuthButton>
-                                                :
-                                                <AuthButton opacity={"0"} width={"0px"} onClick={emailCheck}>
-                                                </AuthButton>
-                                        }
-                                    </InnerBox>
-                                </InputBox>
-                                <InputBox>
-                                    <H6>닉네임: {message("nickname")}</H6>
-                                    <InnerBox>
-                                        <Input
-                                            type="text"
-                                            name="nickname"
-                                            // placeholder= {profileData.data.nickname}
-                                            onFocus={() => { handlerFocus("nickname") }}
-                                            onBlur={() => { handlerBlur("nickname") }}
-                                            value={input.nickname}
-                                            onChange={(e) => { handleInputChange(e) }}
-                                            ref={nameRef}
-                                            readOnly
-                                        />
-                                        {
-                                            readOnly === false ?
-                                                <AuthButton opacity={"1"} width={"60px"} onClick={nickNameCheck}>
-                                                    중복<br />
-                                                    확인
-                                                </AuthButton>
-                                                :
-                                                <AuthButton opacity={"0"} width={"0px"} onClick={nickNameCheck}>
-                                                </AuthButton>
-                                        }
+                            </InnerBox>
+                        </InputBox>
+                        <InputBox>
+                            <H6>닉네임: {message("nickname")}</H6>
+                            <InnerBox>
+                                <Input
+                                    type="text"
+                                    name="nickname"
+                                    // placeholder= {profileData.data.nickname}
+                                    onFocus={() => { handlerFocus("nickname") }}
+                                    onBlur={() => { handlerBlur("nickname") }}
+                                    value={input.nickname}
+                                    onChange={(e) => { handleInputChange(e) }}
+                                    ref={nameRef}
+                                    readOnly
+                                />
+                                {
+                                    readOnly === false ?
+                                        <AuthButton opacity={"1"} width={"60px"} onClick={nickNameCheck}>
+                                            중복<br />
+                                            확인
+                                        </AuthButton>
+                                        :
+                                        <AuthButton opacity={"0"} width={"0px"} onClick={nickNameCheck}>
+                                        </AuthButton>
+                                }
 
-                                    </InnerBox>
-                                </InputBox>
-                                <InputBox>
-                                    <H6>비밀번호: {message("password")}</H6>
+                            </InnerBox>
+                        </InputBox>
+                        <InputBox>
+                            <H6>비밀번호: {message("password")}</H6>
+                            <Input
+                                type="password"
+                                name="password"
+                                // placeholder= {profileData.data.password}
+                                onFocus={() => { handlerFocus("password") }}
+                                onBlur={() => { handlerBlur("password") }}
+                                value={input.password}
+                                onChange={(e) => { handleInputChange(e) }}
+                                ref={passwordRef}
+                                readOnly
+                            />
+                        </InputBox>
+
+                        {
+                            readOnly === false ?
+                                <InputBox1>
+                                    <H62>비밀번호 확인: {message("checkPassword")}</H62>
                                     <Input
                                         type="password"
-                                        name="password"
-                                        // placeholder= {profileData.data.password}
-                                        onFocus={() => { handlerFocus("password") }}
-                                        onBlur={() => { handlerBlur("password") }}
-                                        value={input.password}
+                                        name="checkPassword"
+                                        placeholder='비밀번호를 확인해주세요.'
+                                        onFocus={() => { handlerFocus("checkPassword") }}
+                                        onBlur={() => { handlerBlur("checkPassword") }}
+                                        value={input.checkPassword}
                                         onChange={(e) => { handleInputChange(e) }}
-                                        ref={passwordRef}
+                                        ref={checkRef}
+                                    />
+                                </InputBox1>
+                                :
+                                <InputBox2>
+                                    <H63>비밀번호 확인: {message("checkPassword")}</H63>
+                                    <Input
+                                        type="password"
+                                        name="checkPassword"
+                                        placeholder='비밀번호를 확인해주세요.'
+                                        onFocus={() => { handlerFocus("checkPassword") }}
+                                        onBlur={() => { handlerBlur("checkPassword") }}
+                                        value={input.checkPassword}
+                                        onChange={(e) => { handleInputChange(e) }}
+                                        ref={checkRef}
                                         readOnly
                                     />
-                                </InputBox>
+                                </InputBox2>
+                        }
+                    </Form>
+                    {button()}
+                </MainForm>
+            </Profile>
 
-                                {
-                                    readOnly === false ?
-                                        <InputBox1>
-                                            <H62>비밀번호 확인: {message("checkPassword")}</H62>
-                                            <Input
-                                                type="password"
-                                                name="checkPassword"
-                                                placeholder='비밀번호를 확인해주세요.'
-                                                onFocus={() => { handlerFocus("checkPassword") }}
-                                                onBlur={() => { handlerBlur("checkPassword") }}
-                                                value={input.checkPassword}
-                                                onChange={(e) => { handleInputChange(e) }}
-                                                ref={checkRef}
-                                            />
-                                        </InputBox1>
-                                        :
-                                        <InputBox2>
-                                            <H63>비밀번호 확인: {message("checkPassword")}</H63>
-                                            <Input
-                                                type="password"
-                                                name="checkPassword"
-                                                placeholder='비밀번호를 확인해주세요.'
-                                                onFocus={() => { handlerFocus("checkPassword") }}
-                                                onBlur={() => { handlerBlur("checkPassword") }}
-                                                value={input.checkPassword}
-                                                onChange={(e) => { handleInputChange(e) }}
-                                                ref={checkRef}
-                                                readOnly
-                                            />
-                                        </InputBox2>
-                                }
-                            </Form>
-                            {button()}
-                        </MainForm>
-                    </Profile>
-                    
         </>
     )
 }

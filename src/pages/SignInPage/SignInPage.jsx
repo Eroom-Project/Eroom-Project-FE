@@ -19,8 +19,6 @@ import {
     Bold,
 } from '../../styles/SignPage/SignPage'
 
-
-
 function SignInPage() {
 
     
@@ -92,14 +90,13 @@ function SignInPage() {
                     password: input.password
                 }
                 const res = await api.post("/api/login", newUser)
-                console.log('이거',res)
-                // res.data.token && setCookie("token", `JWT ${res.data.token}`, {
-                //     path: "/",
-                //     httpyOnly: true,
-                //     secure: true
-                // })
-
-
+                console.log(res.status)
+                res.status === 200 &&
+                    setCookie("localaccess", `localaccess`, {
+                        path: "/",
+                        httpyOnly: true,
+                        secure: true
+                    })
                 navigate("/")
             } catch (error) {
                 alert("로그인 에러")
@@ -123,7 +120,7 @@ function SignInPage() {
             :
             <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
     }
-
+    
     return (
         <Back>
             <MainForm>
