@@ -127,21 +127,44 @@ function CreatePage() {
     },
   });
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    var challengeCreateData = new FormData();
-    challengeCreateData.append('title', title);
-    challengeCreateData.append('category', category);
-    challengeCreateData.append('description', description);
-    challengeCreateData.append('frequency', frequency);
-    challengeCreateData.append('limitAttendance', limitAttendance);
-    challengeCreateData.append('authExplanation', authExplanation);
-    challengeCreateData.append('startDate', startDate);
-    challengeCreateData.append('dueDate', dueDate);
-    if (thumbnailImageUrl) challengeCreateData.append('thumbnailImageUrl', thumbnailImageUrl);
-    mutate(challengeCreateData);
-   };
- 
+  
+   
+    if (!title || !category || !description || !frequency || !limitAttendance || !authExplanation || !startDate || !dueDate) {
+      alert('모든 내용을 작성해주세요.');
+      return; 
+    }
+
+    if (new Date(startDate) > new Date(dueDate)) {
+      alert('시작일은 종료일보다 이전이어야 합니다.');
+      return; 
+    }
+  
+    const challengeCreateData = {
+      title,
+      category,
+      description,
+      frequency,
+      limitAttendance,
+      authExplanation,
+      startDate,
+      dueDate,
+    };
+  
+    const form = new FormData();
+  
+    form.append('challengeCreateData', new Blob([JSON.stringify(challengeCreateData)], { type: "application/json" }));
+  
+    if (thumbnailImageUrl) {
+      form.append('thumbnailImageUrl', thumbnailImageUrl);
+    }
+  
+    mutate(form);
+  };
+
+
   return (
     <>
       <div style={{
@@ -180,11 +203,12 @@ function CreatePage() {
               }}>
                 <option value="">주제를 선택하세요</option>
                 <option value="IT">IT</option>
-                <option value="인문">인문</option>
-                <option value="수학">수학</option>
-                <option value="과학">과학</option>
-                <option value="예체능">예체능</option>
-                <option value="기타">기타</option>
+                <option value="HUMANITIES">인문</option>
+                <option value="MATH">수학</option>
+                <option value="SCIENCE">과학</option>
+                <option value="ARTS_AND_PHYSICAL_EDUCATION">예체능</option>
+                <option value="FOREIGN_LANGUAGE">외국어</option>
+                <option value="ETC">기타</option>
               </select>
             </div>
           </div>

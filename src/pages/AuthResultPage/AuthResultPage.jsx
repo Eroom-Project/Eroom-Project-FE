@@ -4,80 +4,49 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authResult, postAuthStatus, updateAuthStatus, deleteAuthStatus } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
 
-const AuthResult = ({ isOpen, onClose, challengerId }) => {
-    // 상태 초기화
-    const [data2, setData2] = useState({
-        authResponseDtoList: [
-          {
-            authId: 3,
-            nickname: "User1",
-            authContents: "내용이 아마 겁나 많아 지면 이거 어떻게 처리해내용이 아마 겁나 많아 지면 이거 어떻게 처리해내 겁나 많아 지면 이거 어떻게 처리해내용이 아마 겁나 많아 지면 이거 어떻게 처리해내용이 아마 겁나 많아 지면 이거 어떻게 처리해내용이 아마 겁나 많아 지면 이거 어떻게 처리해 겁나 많아 지면 이거 어떻게 처리해이 아마 겁나 많아 지면 이거 어떻게 처리해..",
-            authImageUrl: "https://private-user-images.githubusercontent.com/39895634/304624916-32d75a1d-36cc-4bcc-9d61-ab5c99771192.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDc5MDA4ODQsIm5iZiI6MTcwNzkwMDU4NCwicGF0aCI6Ii8zOTg5NTYzNC8zMDQ2MjQ5MTYtMzJkNzVhMWQtMzZjYy00YmNjLTlkNjEtYWI1Yzk5NzcxMTkyLmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMTQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjE0VDA4NDk0NFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNiODJiMWVkNTU1ODMwOTQxYjZlZjlhYWRmNjkxODU5ZjE5MWM5MjU1ZDdkZjUyZDEzNTlhZTg0M2VjMDI4YWMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.jIyfBK5F96SCR9jaRRLrvxeCFTNSPB1Xl9t9W9qEuR8",
-            authVideoUrl: "https://example.com/video1.mp4",
-            authStatus: "WAITING",
-            createdAt: "2024-02-14T12:34:56.789Z",
-            challengeId: 101,
-            memberId: 10
-          },
-          {
-            authId: 2,
-            nickname: "User2",
-            authContents: "Auth content 2",
-            authImageUrl: "https://private-user-images.githubusercontent.com/39895634/304624916-32d75a1d-36cc-4bcc-9d61-ab5c99771192.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDc5MDA4ODQsIm5iZiI6MTcwNzkwMDU4NCwicGF0aCI6Ii8zOTg5NTYzNC8zMDQ2MjQ5MTYtMzJkNzVhMWQtMzZjYy00YmNjLTlkNjEtYWI1Yzk5NzcxMTkyLmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMTQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjE0VDA4NDk0NFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNiODJiMWVkNTU1ODMwOTQxYjZlZjlhYWRmNjkxODU5ZjE5MWM5MjU1ZDdkZjUyZDEzNTlhZTg0M2VjMDI4YWMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.jIyfBK5F96SCR9jaRRLrvxeCFTNSPB1Xl9t9W9qEuR8",
-            authVideoUrl: "https://example.com/video2.mp4",
-            authStatus: "APPROVED",
-            createdAt: "2024-02-15T12:34:56.789Z",
-            challengeId: 102,
-            memberId: 20
-          }
-        ],
-        memberInfoResponseDto: {
-          loginChallengeEnum: "LEADER",
-          loginMemberId: 10
-        }
-      });
-    
-    // 더미데이터
+const AuthResult = ({ isOpen, onClose, challengeId }) => {
    
-    const [uploadedFileName, setUploadedFileName] = useState(''); // 업로드된 파일명
-    const [expandedIndex, setExpandedIndex] = useState(null); // 확장된 항목의 인덱스
-    const [editMode, setEditMode] = useState(null); // 수정 모드 여부
-    const [editedContent, setEditedContent] = useState(''); // 수정된 내용
-    const [editImage, setEditImage] = useState(null); // 수정된 이미지
+    // 상태 초기화
+   const [uploadedFileName, setUploadedFileName] = useState('');
+    const [expandedIndex, setExpandedIndex] = useState(null); 
+    const [editMode, setEditMode] = useState(null); 
+    const [editedContent, setEditedContent] = useState('');
+    const [editImage, setEditImage] = useState(null); 
+    
 
     // React Query 및 파일 업로드 훅 사용
     const queryClient = useQueryClient();
-    const { data, isLoading, error } = useQuery('authResult', () => authResult(challengerId), {
+    const { data, isLoading, error } = useQuery('authResult', () => authResult(challengeId), {
         enabled: isOpen,
     });
     
 
     // Mutation 훅 사용
-    const updateMutation = useMutation(({ challengerId, authId, formData }) => updateAuthStatus({ challengerId, authId, formData }), {
+    const updateMutation = useMutation(({ challengeId, authId, formData }) => updateAuthStatus({ challengeId, authId, formData }), {
         onSuccess: () => {
             queryClient.invalidateQueries('authResult'); // 쿼리 갱신
             setEditMode(null); // 수정 모드 종료
         }
     });
 
-    const deleteMutation = useMutation((challengerId, authId) => deleteAuthStatus(challengerId, authId), {
+    const deleteMutation = useMutation((challengeId, authId) => deleteAuthStatus(challengeId, authId), {
         onSuccess: () => {
             queryClient.invalidateQueries('authResult'); // 쿼리 갱신
         }
     });
     
-    const mutation = useMutation(({ challengerId, authId, authStatus }) => 
-        postAuthStatus(authId, authStatus, challengerId), {
+    const mutation = useMutation(({ challengeId, authId, authStatus }) => 
+        postAuthStatus(authId, authStatus, challengeId), {
         onSuccess: () => {
             queryClient.invalidateQueries('authResult'); // 쿼리 갱신
         },
     });
 
     // 인증 상태 변경 핸들러
-    const handleAuthStatusChange = (e, authId, authStatus, challengerId) => {
+    const handleAuthStatusChange = (e, authId, authStatus, challengeId) => {
         e.preventDefault();
         e.stopPropagation();
-        mutation.mutate({ authId, authStatus,challengerId });
+        mutation.mutate({ authId, authStatus, challengeId });
     };
 
     // 항목 확장/축소 토글 핸들러
@@ -106,13 +75,13 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
     };
 
     // 수정 내용 저장 핸들러
-    const handleUpdate = (authId, challengerId) => {
+    const handleUpdate = (authId, challengeId) => {
         const formData = new FormData();
         formData.append('authContents', editedContent);
         if (editImage) {
             formData.append('authImage', editImage, editImage.name);
         }
-        updateMutation.mutate({ authId, challengerId, formData });
+        updateMutation.mutate({ authId, challengeId, formData });
     };
 
     // 삭제 핸들러
@@ -121,7 +90,7 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
     };
 
     // 리더 여부 확인
-    const isLeader = data2?.memberInfoResponseDto?.loginChallengeEnum === 'LEADER';
+    const isLeader = data?.memberInfoResponseDto?.loginChallengeEnum === 'LEADER';
 
     // 모달이 열려있지 않으면 null 반환
     if (!isOpen) return null;
@@ -195,8 +164,8 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
                     <img src='img/icon (6).png' alt='에러이미지' />
                     오류가 발생했습니다.</div>}
     
-                {data2?.authResponseDtoList?.map((item, index) => {
-                    const isWriter = item.memberId === data2.memberInfoResponseDto.loginMemberId;
+                {data?.authResponseDtoList?.map((item, index) => {
+                    const isWriter = item.memberId === data.memberInfoResponseDto.loginMemberId;
                     const showApprovalButtons = isLeader && item.authStatus === 'WAITING';
                     const isEditing = editMode === item.authId;
                     
@@ -247,7 +216,7 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
             alignItems: 'center',
             gap: '10px',
         }}>
-            <button onClick={(e) => handleAuthStatusChange(e, item.authId, 'APPROVED')}
+            <button onClick={(e) => handleAuthStatusChange(e, item.authStatus, 'APPROVED')}
                 type='button'
                 style={{
                     fontFamily: 'Noto Sans KR, sans-serif',
@@ -259,7 +228,7 @@ const AuthResult = ({ isOpen, onClose, challengerId }) => {
                     width: '66px',
                     height: '40px'
                 }}>승인</button>
-            <button onClick={(e) => handleAuthStatusChange(e, item.authId, 'DENIED')}
+            <button onClick={(e) => handleAuthStatusChange(e, item.authStatus, 'DENIED')}
                 type='button'
                 style={{
                     fontFamily: 'Noto Sans KR, sans-serif',

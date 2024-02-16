@@ -1,33 +1,28 @@
 import api from './api';
 
 const getChallenge = async (show, searchQuery) => {
-  // let url = '/challenge'; // 이거 지우고 아래꺼 살리기
   let url = '/api/challenge';
   if (['IT', 'FOREIGN_LANGUAGE', 'MATH', 'SCIENCE', 'HUMANITIES', 'ARTS_AND_PHYSICAL_EDUCATION', 'ETC'].includes(show)) {
     url += `?category=${show}`;
   }
   if (['LATEST', 'POPULAR'].includes(show)) {
-    url += `?sort=${show}`;
+    url += `?sortBy=${show}`;
   }
   if (searchQuery) {
     url += `?query=${searchQuery}`;
   }
   const response = await api.get(url);
-  return response.data;
-};
+    return response.data.data;
+  };
 
 const entryChallenge = async (challengeId) => {
   const response = await api.post(`/api/challenge/${challengeId}`);
+  console.log(response);
   return response.data;
 };
 
-const createChallenge = async (challengeCreateData) => {
-  const config = {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }};
-  // const response = await api.post('/challenges', formData, config); // 이거 지우고 아래꺼 살리기
-  const response = await api.post(`/api/challenge`, challengeCreateData, config);
+const createChallenge = async (form) => {
+  const response = await api.post(`/api/challenge`, form);
   return response.data;
 };
 
@@ -41,20 +36,19 @@ const challengeAuth = async (formData, challengeId) => {
 };
 
 const authResult = async (challengeId) =>{
-  // const response = await api.get(`/auth`) // 이거 지우고 아래꺼 살리기
-  const response = await api.get(`/api/challenge/${challengeId}/auth`)
+    const response = await api.get(`/api/challenge/${challengeId}/auth`)
   return response.data;
 }
 
 const postAuthStatus = async (authId, authStatus,challengeId) =>{
-  const response = await api.post(`/api/challenge/${challengeId}/leader/auth/${authId}`,authId,authStatus)
+  const response = await api.put(`/api/challenge/${challengeId}/leader/auth/${authId}`,authStatus)
   return response.data;
 }
 
 const detailchallenge = async(challengeId) =>{
-  // const response = await api.get(`/challenge/${challengeId}`)
   const response = await api.get(`/api/challenge/${challengeId}`)
-  return response.data;
+  console.log(response.data)
+  return response.data.data;
 }
 
 const updateAuthStatus = async ({ challengeId, authId, formData }) => {
