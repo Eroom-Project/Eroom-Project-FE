@@ -20,7 +20,11 @@ import {
 } from '../../styles/SignPage/SignPage'
 
 
+
 function SignInPage() {
+
+    
+
     const navigate = useNavigate()
     const [focusState, setFocusState] = useState({
         email: false,
@@ -88,12 +92,14 @@ function SignInPage() {
                     password: input.password
                 }
                 const res = await api.post("/api/login", newUser)
-                console.log(res.data)
+                console.log('이거',res)
                 // res.data.token && setCookie("token", `JWT ${res.data.token}`, {
                 //     path: "/",
                 //     httpyOnly: true,
                 //     secure: true
                 // })
+
+
                 navigate("/")
             } catch (error) {
                 alert("로그인 에러")
