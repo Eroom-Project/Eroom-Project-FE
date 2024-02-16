@@ -41,6 +41,6 @@ const KakaoBtn = styled.button`
 `
 
 const Img = styled.img`
-    height: 35%;
+    width: 5%;
     margin-right: 8px;
 `
