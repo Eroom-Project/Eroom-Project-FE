@@ -12,7 +12,7 @@ function MyPage() {
     const profileData = useQuery('profileData', getProfile)
 
     if (profileData.data) {
-        console.log(`profileData => ${profileData.data}`)
+        console.log(`memberInfo => ${profileData.data.memberInfo.profileImageUrl}`)
     }
 
     if (profileData.isLoading) {
@@ -34,6 +34,7 @@ function MyPage() {
                     url: e.target.result
                 })
             }
+            
             reader.readAsDataURL(e.target.files[0])
         } else {
             setInput({
@@ -43,16 +44,13 @@ function MyPage() {
         }
     }
 
-
-
-
     // input value
     const [input, setInput] = useState({
         email: '',
         password: '',
         nickname: '',
         checkPassword: '',
-        url: "",
+        url: '',
     })
 
     // url 유효성 검사
@@ -63,6 +61,7 @@ function MyPage() {
                 ...auth,
                 url: true
             })
+            console.log(input.url)
         }
     }, [input.url])
 
@@ -72,12 +71,12 @@ function MyPage() {
     const emailCheck = async () => {
         try {
             const res = await api.get("/api/signup/email", {
-                email: input.email
+                params:{email: input.email}
             })
             console.log(res)
-            if (res.data === "사용 가능한 email입니다.") {
+            if (res.data.message === "사용 가능한 email입니다.") {
                 setCheck({ ...check, email: true })
-                alert(res.data)
+                alert(res.data.message)
             } else {
                 alert("이미 존재하는 이메일입니다.")
             }
@@ -90,12 +89,12 @@ function MyPage() {
     const nickNameCheck = async () => {
         try {
             const res = await api.get("/api/signup/nickname", {
-                nickname: input.nickname
+                params:{nickname: input.nickname}
             })
             console.log(res)
-            if (res.data === "사용 가능한 닉네임입니다.") {
+            if (res.data.message === "사용 가능한 닉네임입니다.") {
                 setCheck({ ...check, nickname: true })
-                alert(res.data)
+                alert(res.data.message)
             } else {
                 alert("이미 존재하는 닉네임입니다.")
             }
@@ -182,10 +181,10 @@ function MyPage() {
     const changeData = async () => {
         try {
             const newUser = {
-                email: auth.email ? input.email : "쿼리 원래 데이터 넣기",
-                password: auth.password ? input.password : "쿼리 원래 데이터 넣기",
-                nickname: auth.nickname ? input.nickname : "쿼리 원래 데이터 넣기",
-                url: auth.url ? input.url : "쿼리 원래 데이터 넣기",
+                email: auth.email ? input.email : profileData.data.memberInfo.email ,
+                password: auth.password ? input.password : profileData.data.memberInfo.password,
+                nickname: auth.nickname ? input.nickname : profileData.data.memberInfo.nickname,
+                url: auth.url ? input.url : profileData.data.memberInfo.profileImageUrl,
             }
             const response = await api.put("/api/member/profile", newUser)
             console.log(response.data)
@@ -329,7 +328,6 @@ function MyPage() {
             return <Button color={"#636363"} bcolor={"#444444"} type='button' onClick={handleTrueReadOnly}>수정하기</Button>
         }
     }
-
     return (
         <>
             <Profile>
@@ -364,30 +362,33 @@ function MyPage() {
                             readOnly === false ?
                                 <ImgBox>
                                     <Img src={
-                                        input.url ? input.url : "/img/icon (2).png"
+                                        input.url && profileData.data ? input.url : "/img/icon (2).png"
                                     } alt="미리보기" />
                                 </ImgBox>
                                 :
                                 <ImgBox2>
                                     <Img src={
-                                        input.url ? input.url : "/img/icon (2).png"
+                                        input.url && profileData.data?  input.url : "/img/icon (2).png"
                                     } alt="미리보기" />
                                 </ImgBox2>
                         }
                         <InputBox>
                             <H6>이메일: {message("email")}</H6>
                             <InnerBox>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    // placeholder = {profileData.data.email}
-                                    onFocus={() => { handlerFocus("email") }}
-                                    onBlur={() => { handlerBlur("email") }}
-                                    value={input.email}
-                                    onChange={(e) => { handleInputChange(e) }}
-                                    ref={emailRef}
-                                    readOnly
-                                />
+                                {
+                                    profileData.data &&
+                                    <Input
+                                        type="text"
+                                        name="email"
+                                        placeholder={profileData.data.memberInfo.email}
+                                        onFocus={() => { handlerFocus("email") }}
+                                        onBlur={() => { handlerBlur("email") }}
+                                        value={input.email}
+                                        onChange={(e) => { handleInputChange(e) }}
+                                        ref={emailRef}
+                                        readOnly
+                                    />
+                                }
                                 {
                                     readOnly === false ?
                                         <AuthButton opacity={"1"} width={"60px"} onClick={emailCheck}>
@@ -403,17 +404,20 @@ function MyPage() {
                         <InputBox>
                             <H6>닉네임: {message("nickname")}</H6>
                             <InnerBox>
-                                <Input
-                                    type="text"
-                                    name="nickname"
-                                    // placeholder= {profileData.data.nickname}
-                                    onFocus={() => { handlerFocus("nickname") }}
-                                    onBlur={() => { handlerBlur("nickname") }}
-                                    value={input.nickname}
-                                    onChange={(e) => { handleInputChange(e) }}
-                                    ref={nameRef}
-                                    readOnly
-                                />
+                                {
+                                    profileData.data &&
+                                    <Input
+                                        type="text"
+                                        name="nickname"
+                                        placeholder= {profileData.data.memberInfo.nickname}
+                                        onFocus={() => { handlerFocus("nickname") }}
+                                        onBlur={() => { handlerBlur("nickname") }}
+                                        value={input.nickname}
+                                        onChange={(e) => { handleInputChange(e) }}
+                                        ref={nameRef}
+                                        readOnly
+                                    />
+                                }
                                 {
                                     readOnly === false ?
                                         <AuthButton opacity={"1"} width={"60px"} onClick={nickNameCheck}>
@@ -432,7 +436,7 @@ function MyPage() {
                             <Input
                                 type="password"
                                 name="password"
-                                // placeholder= {profileData.data.password}
+                                placeholder="*******"
                                 onFocus={() => { handlerFocus("password") }}
                                 onBlur={() => { handlerBlur("password") }}
                                 value={input.password}

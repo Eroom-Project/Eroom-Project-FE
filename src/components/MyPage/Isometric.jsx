@@ -1,12 +1,27 @@
 import React from 'react'
+import { useQuery } from 'react-query'
 import styled from 'styled-components'
+import { getProfile } from '../../services/Query'
 
 function Isometric() {
+    const chellangeData = useQuery('chellangeData', getProfile)
+    if (chellangeData.data) {
+        console.log(chellangeData.data.myroomInfo.floor)
+    }
+    if (chellangeData.isLoading) {
+        console.log("로딩중입니다.")
+    }
+    if (chellangeData.isError) {
+        console.log("에러!")
+    }
     return (
         <MainBox>
             <H6>My-Room</H6>
             <MyRoom>
-                <Img src="/img/r3.jpg" alt="" />
+                {
+                chellangeData.data&&
+                <Img src={chellangeData.data.myroomInfo.floor} alt="" />
+                }
             </MyRoom>
             <H6>My-Brick</H6>
             <Brick>
