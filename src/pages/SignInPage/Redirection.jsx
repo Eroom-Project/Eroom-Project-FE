@@ -14,7 +14,8 @@ function Redirection() {
     // Authorization: Bearer <token>
     const postKakao = async () => {
         try {
-            const res = await api.post("/auth/callback/kakao", {code})
+            const res = await api.get("/auth/callback/kakao", 
+            {params:{code}})
             console.log(res.data.token)
             res.data.token && setCookie("oToken", `JWT ${res.data.token}`, {
                 path: "/",
