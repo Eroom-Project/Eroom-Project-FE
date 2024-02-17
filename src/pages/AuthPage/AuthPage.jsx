@@ -9,7 +9,7 @@ const AuthPage = ({ isOpen, onClose }) => {
   const [authImageUrl, setAuthImageUrl] = useState(null);
   const [authVideoUrl, setAuthVideoUrl] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
-  const [authStatus,setAauthStatus] = useState('WAITING');
+  const [authStatus,setAuthStatus] = useState('WAITING');
 
   const onDrop = useCallback(acceptedFiles => {
     setAuthImageUrl(acceptedFiles[0]);
@@ -22,19 +22,21 @@ const AuthPage = ({ isOpen, onClose }) => {
 
   const mutation = useMutation(formData => challengeAuth(formData), {
     onSuccess: (data) => {
-      alert('챌린지 인증 등록 성공');
+      const successMessage = data?.message || '챌린지 인증 등록 성공';
+      alert(successMessage);
       setAuthContent('');
       setAuthImageUrl('');
       setAuthVideoUrl('');
       setUploadedFileName('');
-      setAauthStatus('WAITING');
+      setAuthStatus('WAITING');
       onClose();
     },
     onError: (error) => {
-      alert('인증에 등록 실패');
+      const errorMessage = error.response?.data?.message || '인증에 등록 실패';
+        alert(errorMessage);
     }
   });
-
+ 
   const handleRemoveFile = (event) => {
     event.stopPropagation();
     setAuthImageUrl(null);
@@ -43,14 +45,22 @@ const AuthPage = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!authContent) {
+      alert('인증 내용을 작성해주세요.');
+      return; 
+    }
 
-    const formData = new FormData();
-    formData.append('authContent', authContent);
-    formData.append('authVideoUrl', authVideoUrl);
-    formData.append('authStatus', authStatus);
-    if (authImageUrl) formData.append('authImageUrl', authImageUrl, uploadedFileName);
+    const authCreateData = {
+      authContent,
+      authVideoUrl,
+      authStatus
+    }
+    const form = new FormData();
+    form.append('authCreateData', new Blob([JSON.stringify(authCreateData)], { type: "application/json" }));
+    
+    if (authImageUrl) form.append('authImageUrl', authImageUrl);
 
-    mutation.mutate(formData);
+    mutation.mutate(form);
   };
 
   if (!isOpen) return null;

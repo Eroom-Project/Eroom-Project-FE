@@ -51,7 +51,11 @@ function HomePage() {
                             border: '#67CB71',
                             fontSize: '24px',
                             color: 'white',
-                            fontWeight: '700'
+                            fontWeight: '700',
+                            cursor:'pointer'
+                            
+
+
                         }}>이룸 둘러보기</button>
                     </div>
                 </div>
@@ -158,7 +162,8 @@ function HomePage() {
                     border: '#67CB71',
                     fontSize: '24px',
                     color: 'white',
-                    fontWeight: '700'
+                    fontWeight: '700',
+                    cursor:'pointer'
                 }}>이룸 시작하기</button>
             </div>
         </>
