@@ -3,6 +3,134 @@ import ReactDOM from 'react-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authResult, postAuthStatus, updateAuthStatus, deleteAuthStatus } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
+import styled from 'styled-components';
+
+
+//스타일 컴포넌트 
+const FeedbackContainer = styled.div`
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:20px;
+  font-weight:500;
+  margin-top: 100px;
+  gap:10px;
+`;
+                            
+const AuthCard = styled.div`
+    display:flex;
+    flex-direction:column;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    width:520px;
+    margin-bottom:5px;
+    background-color: #ffffff;
+
+    /* :hover{
+        background-color: #FFC3C3;
+        cursor: pointer; 
+    } */
+`;
+
+const SmallGrayButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #636363;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: white;
+    width: 66px;
+    height: 40px;
+    cursor: pointer;
+`;
+const SmallWhiteButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #ffffff;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: black;
+    width: 66px;
+    height: 40px;
+    cursor: pointer;
+`;
+const GrayButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #636363;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: white;
+    width: 239px;
+    height: 40px;
+    cursor: pointer;
+`;
+const WhiteButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #ffffff;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: black;
+    width: 239px;
+    height: 40px;
+    cursor: pointer;
+`;
+
+const TextArea = styled.textarea`
+    width: 450px;
+    height: 45px;
+    border-Radius: 4px;
+    font-Size: 12px;
+    resize: none;
+    line-Height:1.4;
+    margin-Bottom:5px;
+`;
+
+const EditContainer = styled.div`
+    display: ${props => props.expanded ? 'block' : 'none'};
+    padding: 10px;
+    background-color: #F2F2F2;
+    width: 474px;
+    height: auto;
+    border-radius: 4px;
+    margin: 0 auto 10px auto;
+    align-items: center;
+    word-wrap: break-word;
+    font-size: 12px;
+    line-height: 1.4;
+`;
+
+const DropZoneStyle = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 455px;
+    height: 100px;
+    border: 2px dashed #C3C3C3;
+    border-radius: 10px;
+    background-color: #F9F9F9;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 auto;
+`;
+
+
+// 함수들~~
+
+const formatDateTime = (createdAt) => {
+    const utcDate = new Date(createdAt); // 서버에서 받은 UTC 시간
+    const koreanDate = new Date(utcDate.getTime() + (9 * 60 * 60 * 1000)); // UTC 시간을 한국 시간으로 변환
+    const year = koreanDate.getFullYear();
+    const month = String(koreanDate.getMonth() + 1).padStart(2, '0');
+    const day = String(koreanDate.getDate()).padStart(2, '0');
+    const hours = String(koreanDate.getHours()).padStart(2, '0');
+    const minutes = String(koreanDate.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
+
 
 const AuthResult = ({ isOpen, onClose, challengeId }) => {
    
@@ -10,8 +138,10 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
    const [uploadedFileName, setUploadedFileName] = useState('');
     const [expandedIndex, setExpandedIndex] = useState(null); 
     const [editMode, setEditMode] = useState(null); 
-    const [editedContent, setEditedContent] = useState('');
+    const [authContents, setAuthContents] = useState('');
     const [editImage, setEditImage] = useState(null); 
+    const [authVideoUrl, setAuthVideoUrl] = useState('')
+    
     
 
     // React Query 및 파일 업로드 훅 사용
@@ -26,7 +156,14 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         onSuccess: () => {
             queryClient.invalidateQueries('authResult'); // 쿼리 갱신
             setEditMode(null); // 수정 모드 종료
+            setEditImage(null)
+
         }
+    });
+    const postAuthStatusMutation = useMutation(({authId, authStatus}) => postAuthStatus(authId, authStatus), {
+        onSuccess: () => {
+            queryClient.invalidateQueries('authResult'); // 쿼리 갱신
+            }
     });
 
     const deleteMutation = useMutation((challengeId, authId) => deleteAuthStatus(challengeId, authId), {
@@ -43,21 +180,22 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     });
 
     // 인증 상태 변경 핸들러
-    const handleAuthStatusChange = (e, authId, authStatus, challengeId) => {
+    const handleAuthStatusChange = (e, authId, newStatus) => {
         e.preventDefault();
         e.stopPropagation();
-        mutation.mutate({ authId, authStatus, challengeId });
+        
+        postAuthStatusMutation.mutate({authId, authStatus : newStatus});
     };
 
     // 항목 확장/축소 토글 핸들러
-    const toggleExpand = (index) => {
-        setExpandedIndex(prevIndex => prevIndex === index ? null : index);
+    const toggleExpand = (authId) => {
+        setExpandedIndex(prevIndex => prevIndex === authId ? null : authId);
     };
 
     // 수정 모드 토글 핸들러
     const handleEdit = (item) => {
         setEditMode(prevMode => (prevMode === item.authId ? null : item.authId)); 
-        setEditedContent(item.authContents); 
+        setAuthContents(item.authContents); 
     };
 
     // 파일 드롭 핸들러
@@ -73,29 +211,35 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         setEditImage(null);
         setUploadedFileName('');
     };
-
     // 수정 내용 저장 핸들러
-    const handleUpdate = (authId, challengeId) => {
-        const formData = new FormData();
-        formData.append('authContents', editedContent);
-        if (editImage) {
-            formData.append('authImage', editImage, editImage.name);
+    const handleUpdate = (authId) => {
+        
+        const authUpdateData = {
+            authContents,
+            authVideoUrl
         }
-        updateMutation.mutate({ authId, challengeId, formData });
+        const formData = new FormData();
+        formData.append('authUpdateData', new Blob([JSON.stringify(authUpdateData)], { type: "application/json" }));
+        if (editImage) {
+            formData.append('authImageUrl', editImage);
+        }
+        updateMutation.mutate({ authId, formData });
     };
 
     // 삭제 핸들러
     const handleDelete = (authId) => {
+        
         deleteMutation.mutate(authId);
     };
 
     // 리더 여부 확인
-    const isLeader = data?.memberInfoResponseDto?.loginChallengeEnum === 'LEADER';
-
+    
+    const isLeader = data?.memberInfoResponseDto?.loginChallengeEnum === "LEADER";
+    
     // 모달이 열려있지 않으면 null 반환
     if (!isOpen) return null;
 
-    // 모달을 포털로 렌더링
+    // 모달을 UI
     return ReactDOM.createPortal(
         <div style={{
             position: 'fixed',
@@ -108,6 +252,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 1000,
+            overflowY:'auto'
         }}>
             <form style={{
                 width: '540px',
@@ -120,6 +265,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
                 flexDirection: 'column',
                 gap: '20px',
                 position: 'relative',
+                overflowY:'auto'
             }}>
                 <button onClick={onClose} style={{
                     position: 'absolute',
@@ -139,53 +285,30 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
                     marginBottom: '10px'
                 }}>인증 확인하기</div>
     
-                {isLoading && <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px',
-                    fontWeight: '500',
-                    marginTop: '100px',
-                    gap: '10px'
+                {isLoading && <FeedbackContainer> <img src='img/icon (5).png' alt='로딩이미지' /> 로딩중입니다.</FeedbackContainer>}
+                {error && <FeedbackContainer> <img src='img/icon (6).png' alt='에러이미지' /> 오류가 발생했습니다.</FeedbackContainer>}
+            
+                <div style={{
+                    overflowY:'auto'
                 }}>
-                    <img src='img/icon (5).png' alt='로딩이미지' />
-                    로딩중입니다.</div>}
-                {error && <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px',
-                    fontWeight: '500',
-                    marginTop: '100px',
-                    gap: '10px'
-                }}>
-                    <img src='img/icon (6).png' alt='에러이미지' />
-                    오류가 발생했습니다.</div>}
-    
-                {data?.authResponseDtoList?.map((item, index) => {
-                    const isWriter = item.memberId === data.memberInfoResponseDto.loginMemberId;
-                    const showApprovalButtons = isLeader && item.authStatus === 'WAITING';
+                {data?.authResponseDtoList?.map((item) => {
+                    const isWriter = item.memberId === data.memberInfoResponseDto.loginMemberId 
+                    if(!isLeader && !isWriter && item.authStatus !== "APPROVED"){
+                        return null;
+                    } 
+                    const showApprovalButtons = isLeader && (item.authStatus === "WAITING" || item.authStatus === "DENIED");
+
                     const isEditing = editMode === item.authId;
-                    
+
+                                  
                     return (
-                        <div key={item.authId} style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            border: '1px solid #ccc',
-                            borderRadius: '8px',
-                            overflow: 'hidden',
-                            transition: 'max-height 0.5s ease',
-                            width: '532px',
-                            maxHeight: expandedIndex === index ? '100%' : '100px',
-                        }}>
-                           <div onClick={() => toggleExpand(index)} style={{
+                        <AuthCard key={item.authId} >
+                           <div onClick={() => toggleExpand(item.authId)} style={{
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',
     padding: '10px',
-    width: '95%',
+    width: '100%',
 }}>
     <div style={{
         display: 'flex',
@@ -206,7 +329,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             <div style={{
                 fontSize: '12px',
                 color: '#A5A5A5'
-            }}>{item.createdAt}</div>
+            }}>{formatDateTime(item.createdAt)}</div>
         </div>
     </div>
 
@@ -216,73 +339,26 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             alignItems: 'center',
             gap: '10px',
         }}>
-            <button onClick={(e) => handleAuthStatusChange(e, item.authStatus, 'APPROVED')}
-                type='button'
-                style={{
-                    fontFamily: 'Noto Sans KR, sans-serif',
-                    fontSize: '15px',
-                    backgroundColor: '#636363',
-                    border: '1px solid #636363',
-                    borderRadius: '6px',
-                    color: 'white',
-                    width: '66px',
-                    height: '40px'
-                }}>승인</button>
-            <button onClick={(e) => handleAuthStatusChange(e, item.authStatus, 'DENIED')}
-                type='button'
-                style={{
-                    fontFamily: 'Noto Sans KR, sans-serif',
-                    fontSize: '15px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #626262',
-                    borderRadius: '6px',
-                    color: 'black',
-                    width: '66px',
-                    height: '40px'
-                }}>거절</button>
+            <SmallGrayButton onClick={(e) => handleAuthStatusChange(e, item.authId, 'APPROVED')}
+                type='button'>승인</SmallGrayButton>
+            
+            <SmallWhiteButton onClick={(e) => handleAuthStatusChange(e, item.authId, 'DENIED')}
+                type='button'>거절</SmallWhiteButton>
         </div>
     )}
 </div>
 
 {isEditing ? (
-    <div style={{
-        display: expandedIndex === index ? 'block' : 'none',
-        padding: '10px',
-        backgroundColor: '#F2F2F2',
-        width: '474px',
-        height: 'auto',
-        borderRadius: '4px',
-        margin: '0 auto 10px auto',
-        alignItems: 'center',
-        wordWrap: 'break-word',
-        fontSize: '12px',
-        lineHeight: '1.4'
-    }}>
-        <textarea
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-            style={{
-                width: '450px',
-                height: '100px',
-                borderRadius: '4px',
-                fontSize: '12px',
-                resize: 'none',
-                lineHeight:'1.4'
-            }}
-        />
-        <div {...getRootProps()} style={{
-  display:'flex',
-  alignItems:'center',
-  justifyContent:'center',
-  width:'455px',
-  height:'152px', 
-  border: '2px dashed #C3C3C3',
-  borderRadius: '10px', 
-  backgroundColor: '#F9F9F9', 
-  textAlign: 'center',
-  cursor: 'pointer',
-  margin:'0 auto'
-}}>
+    <EditContainer expanded={expandedIndex === item.authId}>
+        <TextArea
+            value={authVideoUrl}
+            onChange={(e) => setAuthVideoUrl(e.target.value)}
+            />
+        <TextArea
+            value={authContents}
+            onChange={(e) => setAuthContents(e.target.value)}
+            />
+        <DropZoneStyle {...getRootProps()}>
   <input {...getInputProps()} />
   {
               uploadedFileName ?
@@ -307,80 +383,56 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
                   </>
                 )
             }
-</div>
+</DropZoneStyle>
 
-    </div>
+    </EditContainer>
 ) : (
     <>
-        <div style={{
-            display: expandedIndex === index ? 'block' : 'none',
-            padding: '10px',
-            backgroundColor: '#F2F2F2',
-            width: '474px',
-            height: 'auto',
-            borderRadius: '4px',
-            margin: '0 auto 10px auto',
-            alignItems: 'center',
-            wordWrap: 'break-word',
-            fontSize: '12px',
-            lineHeight: '1.2'
-        }}>
+        <EditContainer expanded={expandedIndex === item.authId}>
+        
             <div>비디오 링크: {item.authVideoUrl}</div>
             <div>{item.authContents}</div>
-        </div>
             <div style={{
                 display: 'flex',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                marginBottom:'5PX'
                 }}>
                 <img src={item.authImageUrl} alt="Auth Image" style={{
-                    width: '220px',
+                    width: '190px',
+                    maxHeight:'180px',
                     objectFit: 'contain',
                 }} />
             </div>
+        </EditContainer>
+            
     </>
 )}
 
 {isWriter && (
     <div style={{
-        display: expandedIndex === index ? 'flex' : 'none',
+        display: expandedIndex === item.authId ? 'flex' : 'none',
         justifyContent: 'center',
         gap: '10px',
         marginBottom: '10px',
         width: '100%',
     }}>
-        <button
+        <GrayButton
             onClick={isEditing ? () => handleUpdate(item.authId, item.challengerId) : () => handleEdit(item)}
             type='button'
-            style={{
-                fontFamily: 'Noto Sans KR, sans-serif',
-                fontSize: '15px',
-                backgroundColor: '#636363',
-                border: '1px solid #636363',
-                borderRadius: '6px',
-                color: 'white',
-                width: '239px',
-                height: '40px'
-            }}>{isEditing ? '저장' : '수정'}</button>
+            >{isEditing ? '저장' : '수정'}</GrayButton>
 
-        <button
+        <WhiteButton
             onClick={() => handleDelete(item.authId)}
             type='button'
-            style={{
-                fontFamily: 'Noto Sans KR, sans-serif',
-                fontSize: '15px',
-                backgroundColor: '#ffffff',
-                border: '1px solid #626262',
-                borderRadius: '6px',
-                color: 'black',
-                width: '239px',
-                height: '40px'
-            }}>삭제</button>
+            >삭제</WhiteButton>
     </div>
 )}
-                        </div>
+                        </AuthCard>
                     );
                 })}
+                </div>
             </form>
+            
         </div>,
         document.getElementById('modal-root')
     );
