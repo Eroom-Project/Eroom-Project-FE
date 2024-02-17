@@ -121,11 +121,11 @@ function SignInPage() {
             <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
     }
 
-    let day = new Date();
-    let today = (`${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`)
-    console.log(today)
-    
-    
+    const handleOnKey = (e) => {
+        if(e.key === 'Enter'){
+            signIn()
+        }
+    }
     return (
         <Back>
             <MainForm>
@@ -141,6 +141,7 @@ function SignInPage() {
                             value={input.email}
                             onChange={(e) => { handleInputChange(e) }}
                             placeholder='example@naver.com'
+                            onKeyDown={handleOnKey}
                         />
                     </InputBox>
                     <InputBox>
@@ -153,6 +154,7 @@ function SignInPage() {
                             value={input.password}
                             onChange={(e) => { handleInputChange(e) }}
                             placeholder='********'
+                            onKeyDown={handleOnKey}
                         />
                     </InputBox>
                     {button()}

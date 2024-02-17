@@ -6,6 +6,7 @@ const getProfile = async() => {
 }
 const getChallengeDetail = async(challengeId) => {
     const res = await api.get(`/api/challenge/${challengeId}`)
+    // console.log(res.data.data)
     return res.data.data
 }
 
