@@ -4,6 +4,7 @@ import SignInPage from '../pages/SignInPage/SignInPage'
 import SignUpPage from '../pages/SignUpPage/SignUpPage'
 import Redirection from '../pages/SignInPage/Redirection'
 import MyPage from '../pages/MyPage/MyPage'
+import MyDetailPage from '../pages/MyDetailPage/MyDetailPage'
 import HomePage from '../pages/HomePage/HomePage'
 import MainPage from '../pages/MainPage/MainPage'
 import MainDetailPage from '../pages/MainDetailPage/MainDetailPage'
@@ -23,6 +24,7 @@ function Router() {
                 <Route path='/' element={<Layout/>}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/mypage" element={<MyPage />} />
+                    <Route path="/mypage/:id" element={<MyDetailPage />} />
                     <Route path="/main" element={<MainPage />} />
                     <Route path="/main/:id" element={<MainDetailPage />} />
                     <Route path="/create" element={<CreatePage />} />
