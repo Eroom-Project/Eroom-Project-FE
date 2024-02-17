@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AuthPage from '../AuthPage/AuthPage';
 import AuthResult from '../AuthResultPage/AuthResultPage';
+import ChatWindow from './ChatWindow';
 
 function RoomPage() {
     const [isChatOpen, setIsChatOpen] = useState(false); 
@@ -89,7 +90,7 @@ function RoomPage() {
                     padding: '20px', 
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)', 
                 }}>
-                    <div>채팅창 내용 여기에 적자</div>
+                    <div>여기에 채팅방 들어갈 예정</div>
                 </div>
             )}
 
