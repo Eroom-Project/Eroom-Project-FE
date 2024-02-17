@@ -4,7 +4,6 @@ import Isometric from '../../components/MyPage/Isometric'
 import Profile from '../../components/MyPage/Profile'
 import Chellange from '../../components/MyPage/Chellange'
 
-
 function MyPage() {
 
     return (

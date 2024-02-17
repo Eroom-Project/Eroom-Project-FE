@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { getChallengeDetail, getProfile } from '../../services/Query'
+import { getProfile } from '../../services/Query'
 import { useQuery } from 'react-query'
-import { useNavigate } from 'react-router-dom'
+import { MyPageModalPotal } from './Potal'
+import MyDetailPage from '../../pages/MyDetailPage/MyDetailPage'
 
 function Chellange() {
 
     const chellangeData = useQuery('chellangeData', getProfile)
 
     if (chellangeData.data) {
-        // console.log(chellangeData.data)
+        console.log(chellangeData.data.challengeList)
     }
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")
@@ -23,7 +24,15 @@ function Chellange() {
         finish: false
     })
 
-    const navigate = useNavigate();
+    const [modalState, setModalState] = useState(false)
+    const [modalChallengeId, setModalChallengeId] = useState()
+
+    const modalOpen = (challengeId) => {
+        setModalChallengeId(challengeId)
+        return (
+            modalState ? setModalState(false) : setModalState(true)
+        )
+    }
 
     const chellange = () => {
         // console.log(chellangeData.data)
@@ -35,30 +44,37 @@ function Chellange() {
                         .filter((value) => value.challengerRole === "LEADER")
                         .map((value) => {
                             return (
-                                <Contents key={value.challengeId}
-                                onClick ={()=>{navigate(`/mypage/${value.challengeId}`)}}
-                                >
-                                    <ContentsTop>
-                                        <Img src={value.thumbnailImageUrl} alt="img" />
-                                        <CurrentUsers>
-                                            {value.currentAttendance}/{value.limitAttendance}
-                                        </CurrentUsers>
-                                    </ContentsTop>
-                                    <ContentsBottom>
-                                        <Title>
-                                            {value.title}
-                                        </Title>
-                                        <Day>
-                                            {value.frequency}
-                                        </Day>
-                                    </ContentsBottom>
-                                </Contents>
+                                <>
+                                    <Contents key={value.challengeId}
+                                        onClick={() => { modalOpen(value.challengeId)}}
+                                    >
+                                        <ContentsTop>
+                                            <Img src={value.thumbnailImageUrl} alt="img" />
+                                            <CurrentUsers>
+                                                {value.currentAttendance}/{value.limitAttendance}
+                                            </CurrentUsers>
+                                        </ContentsTop>
+                                        <ContentsBottom>
+                                            <Title>
+                                                {value.title}
+                                            </Title>
+                                            <Day>
+                                                {value.frequency}
+                                            </Day>
+                                        </ContentsBottom>
+                                    </Contents>
+                                    {
+                                        modalState === true && modalChallengeId === value.challengeId &&
+                                        <MyPageModalPotal>
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} />
+                                        </MyPageModalPotal>
+                                    }
+                                </>
                             )
                         })
                 )
-            }
-            if (chellangeState.finish === true) {
-                return(
+            } else if (chellangeState.finish === true) {
+                return (
                     chellangeData.data.challengeList
                         .filter((value) => {
                             let currunt = new Date();
@@ -67,50 +83,66 @@ function Chellange() {
                         })
                         .map((value) => {
                             return (
-                                <Contents key={value.challengeId}
-                                onClick ={()=>{navigate(`/mypage/${value.challengeId}`)}}
-                                >
-                                    <ContentsTop>
-                                        <Img src={value.thumbnailImageUrl} alt="img" />
-                                        <CurrentUsers>
-                                            {value.currentAttendance}/{value.limitAttendance}
-                                        </CurrentUsers>
-                                    </ContentsTop>
-                                    <ContentsBottom>
-                                        <Title>
-                                            {value.title}
-                                        </Title>
-                                        <Day>
-                                            {value.frequency}
-                                        </Day>
-                                    </ContentsBottom>
-                                </Contents>
+                                <>
+                                    <Contents key={value.challengeId}
+                                        onClick={()=>{modalOpen(value.challengeId)}}
+                                    >
+                                        <ContentsTop>
+                                            <Img src={value.thumbnailImageUrl} alt="img" />
+                                            <CurrentUsers>
+                                                {value.currentAttendance}/{value.limitAttendance}
+                                            </CurrentUsers>
+                                        </ContentsTop>
+                                        <ContentsBottom>
+                                            <Title>
+                                                {value.title}
+                                            </Title>
+                                            <Day>
+                                                {value.frequency}
+                                            </Day>
+                                        </ContentsBottom>
+                                    </Contents>
+                                    {
+                                        modalState === true && modalChallengeId === value.challengeId &&
+                                        <MyPageModalPotal>
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} />
+                                        </MyPageModalPotal>
+                                    }
+                                </>
                             )
                         })
                 )
             } else {
-                return(
+                return (
                     chellangeData.data.challengeList
                         .map((value) => {
                             return (
-                                <Contents key={value.challengeId}
-                                onClick ={()=>{navigate(`/mypage/${value.challengeId}`)}}
-                                >
-                                    <ContentsTop>
-                                        <Img src={value.thumbnailImageUrl} alt="img" />
-                                        <CurrentUsers>
-                                            {value.currentAttendance}/{value.limitAttendance}
-                                        </CurrentUsers>
-                                    </ContentsTop>
-                                    <ContentsBottom>
-                                        <Title>
-                                            {value.title}
-                                        </Title>
-                                        <Day>
-                                            {value.frequency}
-                                        </Day>
-                                    </ContentsBottom>
-                                </Contents>
+                                <>
+                                    <Contents key={value.challengeId}
+                                        onClick={() => { modalOpen(value.challengeId) }}
+                                    >
+                                        <ContentsTop>
+                                            <Img src={value.thumbnailImageUrl} alt="img" />
+                                            <CurrentUsers>
+                                                {value.currentAttendance}/{value.limitAttendance}
+                                            </CurrentUsers>
+                                        </ContentsTop>
+                                        <ContentsBottom>
+                                            <Title>
+                                                {value.title}
+                                            </Title>
+                                            <Day>
+                                                {value.frequency}
+                                            </Day>
+                                        </ContentsBottom>
+                                    </Contents>
+                                    {
+                                        modalState === true && modalChallengeId === value.challengeId &&
+                                        <MyPageModalPotal>
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} />
+                                        </MyPageModalPotal>
+                                    }
+                                </>
                             )
                         })
                 )
@@ -121,7 +153,7 @@ function Chellange() {
     return (
         <>
             <SortBox>
-                <H3 onClick={() => { setChellangeState({ ...chellangeState, create: false,  finish: false }) }}>진행중 챌린지</H3>
+                <H3 onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false }) }}>진행중 챌린지</H3>
                 <H3 onClick={() => { setChellangeState({ ...chellangeState, create: true, finish: false }) }}>생성한 챌린지</H3>
                 <H3 onClick={() => { setChellangeState({ ...chellangeState, finish: true, create: false }) }}>종료된 챌린지</H3>
             </SortBox>
