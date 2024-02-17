@@ -46,7 +46,7 @@ function Chellange() {
                             return (
                                 <>
                                     <Contents key={value.challengeId}
-                                        onClick={() => { modalOpen(value.challengeId)}}
+                                        onClick={() => { modalOpen(value.challengeId) }}
                                     >
                                         <ContentsTop>
                                             <Img src={value.thumbnailImageUrl} alt="img" />
@@ -66,7 +66,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
                                         </MyPageModalPotal>
                                     }
                                 </>
@@ -85,7 +85,7 @@ function Chellange() {
                             return (
                                 <>
                                     <Contents key={value.challengeId}
-                                        onClick={()=>{modalOpen(value.challengeId)}}
+                                        onClick={() => { modalOpen(value.challengeId) }}
                                     >
                                         <ContentsTop>
                                             <Img src={value.thumbnailImageUrl} alt="img" />
@@ -105,7 +105,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
                                         </MyPageModalPotal>
                                     }
                                 </>
@@ -139,7 +139,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
                                         </MyPageModalPotal>
                                     }
                                 </>
@@ -150,12 +150,23 @@ function Chellange() {
         }
     }
 
+    // sort style
+    const handleSort1 = () => {
+        return chellangeState.create===false &&  chellangeState.finish===false? "1" : ".5" 
+    }
+    const handleSort2 = () => {
+        return chellangeState.create===true ? "1" : ".5" 
+    }
+    const handleSort3 = () => {
+        return chellangeState.finish===true ? "1" : ".5" 
+    }
+
     return (
         <>
             <SortBox>
-                <H3 onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false }) }}>진행중 챌린지</H3>
-                <H3 onClick={() => { setChellangeState({ ...chellangeState, create: true, finish: false }) }}>생성한 챌린지</H3>
-                <H3 onClick={() => { setChellangeState({ ...chellangeState, finish: true, create: false }) }}>종료된 챌린지</H3>
+                <H3 opacity={handleSort1()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false }) }}>진행중 챌린지</H3>
+                <H3 opacity={handleSort2()} onClick={() => { setChellangeState({ ...chellangeState, create: true, finish: false }) }}>생성한 챌린지</H3>
+                <H3 opacity={handleSort3()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: true }) }}>종료된 챌린지</H3>
             </SortBox>
             <ContentsBox>
                 <ContentsGrid>
@@ -172,6 +183,7 @@ const H3 = styled.div`
     font-size: 14px;
     font-weight: 500;
     margin-right: 26px;
+    opacity: ${(props) => props.opacity};
     cursor: pointer;
 `
 const SortBox = styled.div`
@@ -185,9 +197,10 @@ const SortBox = styled.div`
 const ContentsBox = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
+    min-height: 300px;
     margin-bottom: 20px;
 `
 const ContentsGrid = styled.div`
