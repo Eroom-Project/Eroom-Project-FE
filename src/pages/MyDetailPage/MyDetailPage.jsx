@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { getChallengeDetail } from '../../services/Query'
 import styled from 'styled-components'
 
-function MyDetailPage({ challengeId, modalOpen }) {
+function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
     const challengeDetailData = useQuery(
         ['challengeDetailData', challengeId],
         () => getChallengeDetail(challengeId),)
@@ -62,7 +62,9 @@ function MyDetailPage({ challengeId, modalOpen }) {
                             </InfoBox>
                         </>
                     }
-                    <Button>참여 신청 하기</Button>
+                    {
+                    chellangeState.finish === true? <Button>종료된 챌린지</Button> : <Button>참여 신청 하기</Button>
+                    }
                 </ContentsBox>
             </MainBox>
         </>
