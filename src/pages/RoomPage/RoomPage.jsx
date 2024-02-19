@@ -71,9 +71,15 @@ function RoomPage() {
                 <button onClick={() => setIsChatOpen(!isChatOpen)} style={{
                     cursor: 'pointer',
                     position: 'absolute',
-                    left: '-40px',
+                    left: '-30px',
                     top: '50%',
-                    transform: 'translateY(-50%) rotate(0deg)'
+                    transform: 'translateY(-50%) rotate(0deg)',
+                    fontFamily:'Noto Sans KR, sans-serif',
+                    fontSize:'20px',
+                    backgroundColor:'white',
+                    border:'none',
+                    fontWeight:'1000'
+
                 }}>
                     {isChatOpen ? '>' : '<'}
                 </button>
@@ -81,16 +87,17 @@ function RoomPage() {
             {isChatOpen && (
                 <div style={{
                     position: 'absolute',
-                    right: '0',
-                    top: '0',
+                    right: '0', 
+                    top: '50px',
                     width: '500px', 
-                    height: '100%', 
+                    height: '90vh', 
                     backgroundColor: '#f4f4f4', 
                     borderLeft: '1px solid #ccc', 
                     padding: '20px', 
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)', 
+                    
                 }}>
-                    <div>여기에 채팅방 들어갈 예정</div>
+                    <ChatWindow />
                 </div>
             )}
 

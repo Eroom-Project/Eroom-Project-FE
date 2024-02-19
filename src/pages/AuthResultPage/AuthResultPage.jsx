@@ -6,120 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 
 
-//스타일 컴포넌트 
-const FeedbackContainer = styled.div`
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  font-size:20px;
-  font-weight:500;
-  margin-top: 100px;
-  gap:10px;
-`;
-                            
-const AuthCard = styled.div`
-    display:flex;
-    flex-direction:column;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: max-height 0.5s ease;
-    width:520px;
-    margin-bottom:5px;
-    background-color: #ffffff;
-
-    /* :hover{
-        background-color: #FFC3C3;
-        cursor: pointer; 
-    } */
-`;
-
-const SmallGrayButton = styled.button`
-    font-Family: Noto Sans KR, sans-serif;
-    font-Size: 15px;
-    background-Color: #636363;
-    border: 1px solid #636363;
-    border-Radius: 6px;
-    color: white;
-    width: 66px;
-    height: 40px;
-    cursor: pointer;
-`;
-const SmallWhiteButton = styled.button`
-    font-Family: Noto Sans KR, sans-serif;
-    font-Size: 15px;
-    background-Color: #ffffff;
-    border: 1px solid #636363;
-    border-Radius: 6px;
-    color: black;
-    width: 66px;
-    height: 40px;
-    cursor: pointer;
-`;
-const GrayButton = styled.button`
-    font-Family: Noto Sans KR, sans-serif;
-    font-Size: 15px;
-    background-Color: #636363;
-    border: 1px solid #636363;
-    border-Radius: 6px;
-    color: white;
-    width: 239px;
-    height: 40px;
-    cursor: pointer;
-`;
-const WhiteButton = styled.button`
-    font-Family: Noto Sans KR, sans-serif;
-    font-Size: 15px;
-    background-Color: #ffffff;
-    border: 1px solid #636363;
-    border-Radius: 6px;
-    color: black;
-    width: 239px;
-    height: 40px;
-    cursor: pointer;
-`;
-
-const TextArea = styled.textarea`
-    width: 450px;
-    height: 45px;
-    border-Radius: 4px;
-    font-Size: 12px;
-    resize: none;
-    line-Height:1.4;
-    margin-Bottom:5px;
-`;
-
-const EditContainer = styled.div`
-    display: ${props => props.expanded ? 'block' : 'none'};
-    padding: 10px;
-    background-color: #F2F2F2;
-    width: 474px;
-    height: auto;
-    border-radius: 4px;
-    margin: 0 auto 10px auto;
-    align-items: center;
-    word-wrap: break-word;
-    font-size: 12px;
-    line-height: 1.4;
-`;
-
-const DropZoneStyle = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 455px;
-    height: 100px;
-    border: 2px dashed #C3C3C3;
-    border-radius: 10px;
-    background-color: #F9F9F9;
-    text-align: center;
-    cursor: pointer;
-    margin: 0 auto;
-`;
-
-
 // 함수들~~
-
 const formatDateTime = (createdAt) => {
     const utcDate = new Date(createdAt); // 서버에서 받은 UTC 시간
     const koreanDate = new Date(utcDate.getTime() + (9 * 60 * 60 * 1000)); // UTC 시간을 한국 시간으로 변환
@@ -438,3 +325,115 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     );
  }
 export default AuthResult;
+
+
+//스타일 컴포넌트 
+const FeedbackContainer = styled.div`
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:20px;
+  font-weight:500;
+  margin-top: 100px;
+  gap:10px;
+`;
+                            
+const AuthCard = styled.div`
+    display:flex;
+    flex-direction:column;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    width:520px;
+    margin-bottom:5px;
+    background-color: #ffffff;
+
+    /* :hover{
+        background-color: #FFC3C3;
+        cursor: pointer; 
+    } */
+`;
+
+const SmallGrayButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #636363;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: white;
+    width: 66px;
+    height: 40px;
+    cursor: pointer;
+`;
+const SmallWhiteButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #ffffff;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: black;
+    width: 66px;
+    height: 40px;
+    cursor: pointer;
+`;
+const GrayButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #636363;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: white;
+    width: 239px;
+    height: 40px;
+    cursor: pointer;
+`;
+const WhiteButton = styled.button`
+    font-Family: Noto Sans KR, sans-serif;
+    font-Size: 15px;
+    background-Color: #ffffff;
+    border: 1px solid #636363;
+    border-Radius: 6px;
+    color: black;
+    width: 239px;
+    height: 40px;
+    cursor: pointer;
+`;
+
+const TextArea = styled.textarea`
+    width: 450px;
+    height: 45px;
+    border-Radius: 4px;
+    font-Size: 12px;
+    resize: none;
+    line-Height:1.4;
+    margin-Bottom:5px;
+`;
+
+const EditContainer = styled.div`
+    display: ${props => props.expanded ? 'block' : 'none'};
+    padding: 10px;
+    background-color: #F2F2F2;
+    width: 474px;
+    height: auto;
+    border-radius: 4px;
+    margin: 0 auto 10px auto;
+    align-items: center;
+    word-wrap: break-word;
+    font-size: 12px;
+    line-height: 1.4;
+`;
+
+const DropZoneStyle = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 455px;
+    height: 100px;
+    border: 2px dashed #C3C3C3;
+    border-radius: 10px;
+    background-color: #F9F9F9;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 auto;
+`;
