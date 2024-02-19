@@ -2,6 +2,7 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { getChallengeDetail } from '../../services/Query'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
 function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
     const challengeDetailData = useQuery(
@@ -21,7 +22,10 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
         console.log("에러")
     }
 
-    console.log()
+    const navigate = useNavigate("")
+    const roomIn = () => {
+        navigate("/room")
+    }
     return (
         <>
             <Back onClick={modalOpen}>
@@ -63,7 +67,10 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
                         </>
                     }
                     {
-                    chellangeState.finish === true? <Button>종료된 챌린지</Button> : <Button>참여 신청 하기</Button>
+                    chellangeState.finish === true? 
+                    <Button>종료된 챌린지</Button> 
+                    : 
+                    <Button onClick={roomIn}>챌린지방 입장하기</Button>
                     }
                 </ContentsBox>
             </MainBox>
@@ -160,5 +167,11 @@ const Button = styled.button`
     height: 48px;
     border: none;
     border-radius: 10px;
+    color: white;
+    background-color: #45b850;
     cursor: pointer;
+    transition: 1s;
+    &:hover{
+        background-color: #52C75E;
+    }
 `

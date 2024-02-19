@@ -6,7 +6,7 @@ import { getProfile } from '../../services/Query'
 function Isometric() {
     const chellangeData = useQuery('chellangeData', getProfile)
     if (chellangeData.data) {
-        console.log(chellangeData.data.myroomInfo.floor)
+        // console.log(chellangeData.data.myroomInfo.floor)
     }
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")
