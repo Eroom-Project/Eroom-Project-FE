@@ -29,7 +29,6 @@ function Redirection() {
             //test2.
             setCookie("localaccess", `localaccess`, {
                 path: "/",
-                httpOnly: true,
                 secure: true
             })
             navigate("/")
