@@ -19,12 +19,19 @@ function Isometric() {
             <H6>My-Room</H6>
             <MyRoom>
                 {
+                //chellangeData.data.myroomInfo.floor
                 chellangeData.data&&
-                <Img src={chellangeData.data.myroomInfo.floor} alt="" />
+                <Img src={"/img/img4.jpg"} alt="Room" />
                 }
+                
             </MyRoom>
             <H6>My-Brick</H6>
             <Brick>
+            {
+                //chellangeData.data.myroomInfo.brick
+                chellangeData.data&&
+                <Img src={"/img/characters.png"} alt="" />
+                }
             </Brick>
         </MainBox>
     )
@@ -42,9 +49,10 @@ const MyRoom = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 574px;
     min-width: 440px;
     height: 450px;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     border-radius: 8px;
     margin-bottom: 25px;
 
@@ -56,10 +64,13 @@ const Brick = styled.div`
     height: 150px;
     border: 1px solid gray;
     border-radius: 8px;
+    overflow: hidden;
     
 `
 const Img = styled.img`
     object-fit: cover;
+    width: 100%;
+    height: 100%;
 `
 
 const H6 = styled.div`

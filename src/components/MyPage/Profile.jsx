@@ -402,17 +402,18 @@ function MyPage() {
                             </>
                     }
                     <Form>
-                        {
+                        {   
+                            // profileData.data.memberInfo.profileImageUrl
                             readOnly === false ?
                                 <ImgBox>
                                     <Img src={
-                                        thumbnail.url.includes('data')? thumbnail.url : profileData.data.memberInfo.profileImageUrl
+                                        thumbnail.url.includes('data')? thumbnail.url : "/img/icon (2).png"
                                     } alt="미리보기" />
                                 </ImgBox>
                                 :
                                 <ImgBox2>
                                     <Img src={
-                                        profileData.data ? profileData.data.memberInfo.profileImageUrl : ""
+                                        profileData.data ? "/img/icon (2).png": "/img/icon (2).png"
                                     } alt="미리보기" />
                                 </ImgBox2>
                         }
