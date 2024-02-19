@@ -7,6 +7,149 @@ import styled from 'styled-components';
 import MainDetailPage from '../MainDetailPage/MainDetailPage';
 import { BiSearch } from 'react-icons/bi';
 
+
+
+function MainPage() {
+  // 상태 및 훅 사용
+  const [show, setShow] = useState('');
+  const [input, setInput] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [visibleItems, setVisibleItems] = useState(12); // 초기에 보이는 아이템 수 (4개 * 3줄)
+
+  const { isLoading, isError, data } = useQuery(
+    ['challenge', show, searchQuery],
+    () => getChallenge(show, searchQuery),
+    { refetchOnWindowFocus: false }
+  );
+  
+
+  const mutation = useMutation(
+    (challengeId) => entryChallenge(challengeId),
+    {
+      onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
+      alert(successMessage);},
+      onError: (error) => {
+        const errorMessage = error.response?.data?.message || '참여 신청 실패!';
+        alert(errorMessage);
+      }
+    }
+  );
+  
+  const categoryMap = {
+    IT: 'IT',
+    인문: 'HUMANITIES',
+    수학: 'MATH',
+    과학: 'SCIENCE',
+    예체능: 'ARTS_AND_PHYSICAL_EDUCATION',
+    외국어: 'FOREIGN_LANGUAGE',
+    기타: 'ETC',
+  };
+  const SortMap = {
+    '인기순': 'POPULAR',
+    '최신순': 'LATEST',
+  };
+
+  // 이벤트 핸들러
+  const applyForChallenge = (challengeId) => mutation.mutate(challengeId);
+
+  const handleOptionChange = (value) => {
+    const keyword = categoryMap[value] || SortMap[value];
+    setShow(keyword);
+    setSearchQuery(''); 
+  };
+
+  const handleSearch = () => {
+    setSearchQuery(input);
+    setShow('');
+    setInput('');
+  };
+
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setModalOpen(true);
+  };
+
+  const handleShowMore = () => {
+    setVisibleItems((prev) => prev + 12);
+  };
+
+  return (
+    <div>
+      <div>
+        <h1>챌린지를 시작하세요</h1>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <SearchContainer>
+          <SearchInput
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder='함께하고 싶은 챌린지를 찾아보세요!'
+          />
+          <SearchButton onClick={handleSearch}>
+            <BiSearch size={20} color='#6c6c6c' />
+          </SearchButton>
+        </SearchContainer>
+      </div>
+      <OptionsContainer>
+  {Object.keys(categoryMap).map((option) => (
+    <FilterButton
+      key={option}
+      onClick={() => handleOptionChange(option)}
+      style={{
+        marginTop: '20px',
+      }}
+    >
+      {option}
+    </FilterButton>
+  ))}
+</OptionsContainer>
+      <Line />
+      <OptionsContainer style={{ justifyContent: 'flex-start',  cursor: 'pointer', marginBottom:'10px',marginTop:'10px' }}>
+        {Object.keys(SortMap).map((option) => (
+          <div key={option} onClick={() => handleOptionChange(option)}>
+            {option}
+          </div>
+        ))}
+      </OptionsContainer>
+      {isLoading && <FeedbackContainer>
+        <img src='img/icon (5).png' alt='로딩이미지'/>
+        로딩중입니다.</FeedbackContainer>}
+      {isError && <FeedbackContainer>
+        <img src='img/icon (6).png' alt='에러이미지'/>
+        오류가 발생했습니다.</FeedbackContainer>}
+      <CardsContainer>
+      {Array.isArray(data) && data?.slice(0, visibleItems).map((item, challengeId) => (
+  <Card key={challengeId} onClick={() => openModal(item)}>
+    <CardImage src={item.thumbnailImageUrl} alt={item.title} />
+    
+    <AttendanceText>
+      {item.currentAttendance} / {item.limitAttendance} 명
+    </AttendanceText>
+    
+    <TitleText>{item.title}</TitleText> 
+    <FrequencyText>{item.frequency}</FrequencyText>
+  </Card>
+))}
+      </CardsContainer>
+
+      {visibleItems < data?.length && (
+        <MoreButton onClick={handleShowMore}>더보기</MoreButton>
+      )}
+
+      <MainDetailPage
+        selectedItem={selectedItem}
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        applyForChallenge={applyForChallenge}
+      />
+    </div>
+  );
+}
+
+export default MainPage;
+
 // 스타일 컴포넌트 정의
 
 const Line = styled.hr`
@@ -160,144 +303,3 @@ const FeedbackContainer = styled.div`
   gap:10px;
 `;
 
-
-function MainPage() {
-  // 상태 및 훅 사용
-  const [show, setShow] = useState('');
-  const [input, setInput] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [visibleItems, setVisibleItems] = useState(12); // 초기에 보이는 아이템 수 (4개 * 3줄)
-
-  const { isLoading, isError, data } = useQuery(
-    ['challenge', show, searchQuery],
-    () => getChallenge(show, searchQuery),
-    { refetchOnWindowFocus: false }
-  );
-  
-
-  const mutation = useMutation(
-    (challengeId) => entryChallenge(challengeId),
-    {
-      onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
-      alert(successMessage);},
-      onError: (error) => {
-        const errorMessage = error.response?.data?.message || '참여 신청 실패!';
-        alert(errorMessage);
-      }
-    }
-  );
-  
-  const categoryMap = {
-    IT: 'IT',
-    인문: 'HUMANITIES',
-    수학: 'MATH',
-    과학: 'SCIENCE',
-    예체능: 'ARTS_AND_PHYSICAL_EDUCATION',
-    외국어: 'FOREIGN_LANGUAGE',
-    기타: 'ETC',
-  };
-  const SortMap = {
-    '인기순': 'POPULAR',
-    '최신순': 'LATEST',
-  };
-
-  // 이벤트 핸들러
-  const applyForChallenge = (challengeId) => mutation.mutate(challengeId);
-
-  const handleOptionChange = (value) => {
-    const keyword = categoryMap[value] || SortMap[value];
-    setShow(keyword);
-    setSearchQuery(''); 
-  };
-
-  const handleSearch = () => {
-    setSearchQuery(input);
-    setShow('');
-    setInput('');
-  };
-
-  const openModal = (item) => {
-    setSelectedItem(item);
-    setModalOpen(true);
-  };
-
-  const handleShowMore = () => {
-    setVisibleItems((prev) => prev + 12);
-  };
-
-  return (
-    <>
-      <div>
-        <h1>챌린지를 시작하세요</h1>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <SearchContainer>
-          <SearchInput
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder='함께하고 싶은 챌린지를 찾아보세요!'
-          />
-          <SearchButton onClick={handleSearch}>
-            <BiSearch size={20} color='#6c6c6c' />
-          </SearchButton>
-        </SearchContainer>
-      </div>
-      <OptionsContainer>
-  {Object.keys(categoryMap).map((option) => (
-    <FilterButton
-      key={option}
-      onClick={() => handleOptionChange(option)}
-      style={{
-        marginTop: '20px',
-      }}
-    >
-      {option}
-    </FilterButton>
-  ))}
-</OptionsContainer>
-      <Line />
-      <OptionsContainer style={{ justifyContent: 'flex-start',  cursor: 'pointer', marginBottom:'10px',marginTop:'10px' }}>
-        {Object.keys(SortMap).map((option) => (
-          <div key={option} onClick={() => handleOptionChange(option)}>
-            {option}
-          </div>
-        ))}
-      </OptionsContainer>
-      {isLoading && <FeedbackContainer>
-        <img src='img/icon (5).png' alt='로딩이미지'/>
-        로딩중입니다.</FeedbackContainer>}
-      {isError && <FeedbackContainer>
-        <img src='img/icon (6).png' alt='에러이미지'/>
-        오류가 발생했습니다.</FeedbackContainer>}
-      <CardsContainer>
-      {Array.isArray(data) && data?.slice(0, visibleItems).map((item, challengeId) => (
-  <Card key={challengeId} onClick={() => openModal(item)}>
-    <CardImage src={item.thumbnailImageUrl} alt={item.title} />
-    
-    <AttendanceText>
-      {item.currentAttendance} / {item.limitAttendance} 명
-    </AttendanceText>
-    
-    <TitleText>{item.title}</TitleText> 
-    <FrequencyText>{item.frequency}</FrequencyText>
-  </Card>
-))}
-      </CardsContainer>
-
-      {visibleItems < data?.length && (
-        <MoreButton onClick={handleShowMore}>더보기</MoreButton>
-      )}
-
-      <MainDetailPage
-        selectedItem={selectedItem}
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        applyForChallenge={applyForChallenge}
-      />
-    </>
-  );
-}
-
-export default MainPage;
