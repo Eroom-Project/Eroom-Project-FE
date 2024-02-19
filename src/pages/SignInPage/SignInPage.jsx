@@ -94,7 +94,7 @@ function SignInPage() {
                 res.status === 200 &&
                     setCookie("localaccess", `localaccess`, {
                         path: "/",
-                        httpyOnly: true,
+                        httpOnly: true,
                         secure: true
                     })
                 navigate("/")

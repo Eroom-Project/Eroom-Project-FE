@@ -4,15 +4,13 @@ import styled from 'styled-components'
 import { getProfile } from '../../services/Query'
 import { useQuery } from 'react-query'
 
-
-
 function MyPage() {
 
 
     const profileData = useQuery('profileData', getProfile)
 
     if (profileData.data) {
-        console.log(`memberInfo => ${profileData.data.memberInfo.profileImageUrl}`)
+        console.log(profileData.data.memberInfo)
     }
 
     if (profileData.isLoading) {
@@ -29,20 +27,30 @@ function MyPage() {
         if (file) {
             let reader = new FileReader();
             reader.onload = function (e) {
-                setInput({
-                    ...input,
+                setThumbnail({
+                    ...thumbnail,
                     url: e.target.result
                 })
             }
-            
+
             reader.readAsDataURL(e.target.files[0])
         } else {
-            setInput({
-                ...input,
+            setThumbnail({
+                ...thumbnail,
                 url: ""
             })
         }
+        if (file) {
+            console.log(file)
+            return setInput({ ...input, url: file })
+        } else {
+            return setInput({ ...input, url: "" })
+        }
     }
+
+    const [thumbnail, setThumbnail] = useState({
+        url:""
+    })
 
     // input value
     const [input, setInput] = useState({
@@ -55,13 +63,23 @@ function MyPage() {
 
     // url 유효성 검사
     useEffect(() => {
-        console.log(input.url.includes('data'))
-        if (input.url.includes('data')) {
-            setAuth({
-                ...auth,
-                url: true
-            })
+        // console.log(input.url.includes('data'))
+        // if (input.url.includes('data')) {
+        //     setAuth({
+        //         ...auth,
+        //         url: true
+        //     })
+        //     console.log(input.url)
+        // }
+        if(input.url.name){
             console.log(input.url)
+            console.log(input.url.name)
+            if (input.url.name.includes('.png') || input.url.name.includes('.jpg') || input.url.name.includes('.jpeg')) {
+                setAuth({
+                    ...auth,
+                    url: true
+                })
+            }
         }
     }, [input.url])
 
@@ -71,7 +89,7 @@ function MyPage() {
     const emailCheck = async () => {
         try {
             const res = await api.get("/api/signup/email", {
-                params:{email: input.email}
+                params: { email: input.email }
             })
             console.log(res)
             if (res.data.message === "사용 가능한 email입니다.") {
@@ -89,7 +107,7 @@ function MyPage() {
     const nickNameCheck = async () => {
         try {
             const res = await api.get("/api/signup/nickname", {
-                params:{nickname: input.nickname}
+                params: { nickname: input.nickname }
             })
             console.log(res)
             if (res.data.message === "사용 가능한 닉네임입니다.") {
@@ -181,12 +199,37 @@ function MyPage() {
     const changeData = async () => {
         try {
             const newUser = {
-                email: auth.email ? input.email : profileData.data.memberInfo.email ,
-                password: auth.password ? input.password : profileData.data.memberInfo.password,
+                email: auth.email ? input.email : profileData.data.memberInfo.email,
+                password: auth.password ? input.password : "패스워드 수정 없음",
                 nickname: auth.nickname ? input.nickname : profileData.data.memberInfo.nickname,
-                url: auth.url ? input.url : profileData.data.memberInfo.profileImageUrl,
             }
-            const response = await api.put("/api/member/profile", newUser)
+
+            const formData = new FormData();
+
+            formData.append('profileData',new Blob([JSON.stringify(newUser)], { type: "application/json" }))
+
+            if(auth.url){
+                formData.append('profileUrl', input.url)
+            }else{
+                formData.append(profileData.data.memberInfo.profileImageUrl)
+            }
+            
+
+            // 폼 데이터 보기
+            Object.entries(newUser).forEach(item => formData.append(item[0], item[1]));
+            let entries = formData.entries()
+            for (const pair of entries) {
+                console.log(pair[0] + ',' + pair[1]);
+            }
+
+            console.log(thumbnail)
+
+            setThumbnail({
+                ...thumbnail,
+                url: ''
+            })
+            // 폼 데이터 형식 변환해서 보내기(URLSearchParams: 객체를 fordata형식으로 만들어줌)
+            const response = await api.put("/api/member/profile", formData)
             console.log(response.data)
             alert("회원 정보 수정이 완료됐습니다.")
 
@@ -229,6 +272,7 @@ function MyPage() {
                 checkPassword: '',
                 url: ''
             })
+        
             emailRef.current.setAttribute("readOnly", "readOnly")
             nameRef.current.setAttribute("readOnly", "readOnly")
             passwordRef.current.setAttribute("readOnly", "readOnly")
@@ -362,13 +406,13 @@ function MyPage() {
                             readOnly === false ?
                                 <ImgBox>
                                     <Img src={
-                                        input.url && profileData.data ? input.url : "/img/icon (2).png"
+                                        thumbnail.url.includes('data')? thumbnail.url : profileData.data.memberInfo.profileImageUrl
                                     } alt="미리보기" />
                                 </ImgBox>
                                 :
                                 <ImgBox2>
                                     <Img src={
-                                        input.url && profileData.data?  input.url : "/img/icon (2).png"
+                                        profileData.data ? profileData.data.memberInfo.profileImageUrl : ""
                                     } alt="미리보기" />
                                 </ImgBox2>
                         }
@@ -409,7 +453,7 @@ function MyPage() {
                                     <Input
                                         type="text"
                                         name="nickname"
-                                        placeholder= {profileData.data.memberInfo.nickname}
+                                        placeholder={profileData.data.memberInfo.nickname}
                                         onFocus={() => { handlerFocus("nickname") }}
                                         onBlur={() => { handlerBlur("nickname") }}
                                         value={input.nickname}

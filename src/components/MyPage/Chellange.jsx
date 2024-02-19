@@ -10,7 +10,7 @@ function Chellange() {
     const chellangeData = useQuery('chellangeData', getProfile)
 
     if (chellangeData.data) {
-        console.log(chellangeData.data.challengeList)
+        // console.log(chellangeData.data.challengeList)
     }
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")

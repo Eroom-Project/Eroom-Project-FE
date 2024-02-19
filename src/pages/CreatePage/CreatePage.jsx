@@ -4,53 +4,6 @@ import { createChallenge } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 
-// 스타일 컴포넌트
-const TitleText = styled.label`
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 14px;
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.3px;
-  margin-bottom: 10px;
-  color: #000000;
-  margin-top: 20px;
-`;
-
-const FormContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 20px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 10px;
-`;
-
-const InputStyle = styled.input`
-  border: 1px solid #c3c3c3;
-  border-radius: 6px;
-  width: 590px;
-  height: 40px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-`;
-
-const CountContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  gap: 15px;
-  width: 1200px;
-`;
 
 function useInput(initialValue) {
   const [value, setValue] = useState(initialValue);
@@ -347,3 +300,52 @@ function CreatePage() {
 }
 
 export default CreatePage;
+
+
+// 스타일 컴포넌트
+const TitleText = styled.label`
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 14px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.3px;
+  margin-bottom: 10px;
+  color: #000000;
+  margin-top: 20px;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 10px;
+`;
+
+const InputStyle = styled.input`
+  border: 1px solid #c3c3c3;
+  border-radius: 6px;
+  width: 590px;
+  height: 40px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+`;
+
+const CountContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  width: 1200px;
+`;
