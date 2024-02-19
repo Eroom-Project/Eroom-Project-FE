@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getCookie, removeCookie, setCookie } from '../../services/Cookie'
 import { Link, useNavigate } from 'react-router-dom'
+import api from '../../services/api'
 function NavBar() {
     const navigate = useNavigate()
 
@@ -30,12 +31,16 @@ function NavBar() {
 
     console.log(cookieState)
 
-    const removeCookies = () => {
+    const removeCookies = async() => {
+        const res = await api.post('/api/logout')
+        console.log(res)
         removeCookie("localaccess")
         setCookieState({
             ...cookieState,
             cookies: false,
         })
+        alert(res.data.message)
+
         navigate("/")
     }
 

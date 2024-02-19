@@ -14,10 +14,20 @@ function Redirection() {
     // Authorization: Bearer <token>
     const postKakao = async () => {
         try {
-            const res = await api.get("/auth/callback/kakao", 
-            {params:{code}})
-            console.log(res.data.token)
-            res.data.token && setCookie("oToken", `JWT ${res.data.token}`, {
+            const res = await api.get("/auth/callback/kakao",
+            { params: { code } })
+            console.log(res)
+            // res.data.token && setCookie("oToken", `JWT ${res.data.token}`, {
+            //     path: "/",
+            //     httpOnly: true,
+            //     secure: true
+            // })
+            
+            //test1.
+            const token = res.headers.authorization;
+            window.localStorage.setItem('token', token);
+            //test2.
+            setCookie("localaccess", `localaccess`, {
                 path: "/",
                 httpOnly: true,
                 secure: true
@@ -27,10 +37,10 @@ function Redirection() {
             console.log("Login failed:", error)
         }
     }
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         postKakao()
-    },[])
+    }, [])
 
     return (
         <div>
