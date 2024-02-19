@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../MainPage/modal';
 import { detailchallenge } from '../../services/mainaxios'; 
+import { useNavigate } from 'react-router-dom';
 
+
+ 
 const categoryMap = {
     IT: 'IT',
     HUMANITIES: '인문',
@@ -14,6 +17,7 @@ const categoryMap = {
 
 function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
     const [challengeDetail, setChallengeDetail] = useState(null);
+    const navigator = useNavigate();
 
     useEffect(() => {
         if (selectedItem?.challengeId) {
@@ -95,10 +99,13 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     </div>
                 </div>
             </div>
-               
+               <div style={{
+                display:'flex',
+                gap:'10px'
+               }}>
             <button onClick={() => applyForChallenge(challengeDetail?.challengeId)} style={{
                 fontFamily:'Noto Sans KR, sans-serif',
-                width:'430px',
+                width:'220px',
                 height:'48px',
                 marginTop:'10px',
                 backgroundColor:'#636363',
@@ -109,6 +116,20 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                 fontWeight:'500',
                 cursor: 'pointer'
             }}>참여 신청하기</button>
+             <button onClick={()=>{navigator('/room')}} style={{
+                fontFamily:'Noto Sans KR, sans-serif',
+                width:'220px',
+                height:'48px',
+                marginTop:'10px',
+                backgroundColor:'#4f5aff',
+                border:'none',
+                color: 'white',
+                fontSize:'15px',
+                borderRadius: '4px',
+                fontWeight:'500',
+                cursor: 'pointer'
+            }}>챌린지방 입장하기</button>
+            </div>
         </Modal>
     );
 }
