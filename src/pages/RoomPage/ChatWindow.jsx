@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Chat from './Chat';
 
 function ChatWindow() {
   const [messages, setMessages] = useState([]);
@@ -116,8 +117,9 @@ function ChatWindow() {
             height: '30px'            
           }}
         />
-        <button onClick={handleSendMessage} style={{ height: '30px' }}>
-          전송</button>
+        {/* <button onClick={handleSendMessage} style={{ height: '30px' }}>
+          전송</button> */}
+          <Chat />
       </div>
     </div>
   );
