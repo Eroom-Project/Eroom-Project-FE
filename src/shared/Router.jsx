@@ -13,6 +13,7 @@ import AuthPage from '../pages/AuthPage/AuthPage'
 import AuthResultPage from '../pages/AuthResultPage/AuthResultPage'
 import Layout from '../components/Common/Layout'
 
+
 function Router() {
     return (
         <BrowserRouter>
@@ -29,7 +30,7 @@ function Router() {
                     <Route path="/room" element={<RoomPage />} />
                     <Route path="/auth" element={<AuthPage />} />
                     <Route path="/auth/:id" element={<AuthResultPage />} />
-                </Route>
+                    </Route>
             </Routes>
         </BrowserRouter>
     )

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AuthPage from '../AuthPage/AuthPage';
 import AuthResult from '../AuthResultPage/AuthResultPage';
 import ChatWindow from './ChatWindow';
+import Chat from './Chat';
 
 function RoomPage() {
     const [isChatOpen, setIsChatOpen] = useState(false); 
@@ -97,7 +98,7 @@ function RoomPage() {
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)', 
                     
                 }}>
-                    <ChatWindow />
+                    <Chat />
                 </div>
             )}
 
