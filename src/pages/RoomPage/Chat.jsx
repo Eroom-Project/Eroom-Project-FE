@@ -2,83 +2,67 @@ import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-function Chat({ challengeId, memberId  }) {
+function Chat({ challengeId, memberId }) {
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  
-
-
   useEffect(() => {
-    // SockJS와 Stomp 클라이언트 초기화
     const socket = new SockJS(`https://api.eroom-challenge.com/ws-stomp`);
     const client = new Client({
-      brokerURL:`ws://api.eroom-challenge.com/ws-stomp`,
-      webSocketFactory: () => socket, 
-      
+      brokerURL: `ws://api.eroom-challenge.com/ws-stomp`,
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        memberId: String(memberId), 
+        challengeId: String(challengeId),
+      },
       debug: function (str) {
-        console.log('상태!', str);
+        console.log('지금 이런일이 일어나고 있어요!', str);
       },
       onConnect: () => {
-        console.log('연결됨');
+        console.log('Connected');
         setStompClient(client);
-
-
-
-        console.log(`memberId 타입: ${typeof Number(memberId)}, challengeId 타입: ${typeof challengeId}`);
-
-
+                
         // 구독 설정
         client.subscribe(
           `/sub/chat/challenge/${challengeId}`,
           (message) => {
-            const receivedMessage = JSON.parse(message);
-            console.log('메세지 받음~', receivedMessage);
+            console.log('aaaaaaaaaaaaaaaa', message.body ); // 파싱된 메시지 내용을 출력
+            const receivedMessage = JSON.parse(message.body );
             setMessages((prevMessages) => [
               ...prevMessages,
               receivedMessage,
             ]);
+            console.log('bbbbbbbbbbbbbbbbb',receivedMessage ); // 파싱된 메시지 내용을 출력
           },
-          { memberId :Number(memberId), challengeId, type: 'JOIN' } // 헤더에 타입 지정
-        );
+          );
       },
-      // 연결 오류 시 처리
       onStompError: (frame) => {
         console.error('Broker reported error: ' + frame.headers['message']);
         console.error('Additional details: ' + frame.body);
       },
     });
-
-    // Stomp 클라이언트 연결
+    
     client.activate();
 
     return () => {
-      // 컴포넌트 언마운트 시 연결 해제
       if (client.active) {
         client.deactivate();
       }
     };
-  }, [challengeId]);
-
+  }, [challengeId, memberId]); 
   const sendMessage = () => {
     if (stompClient && stompClient.connected) {
       const ChatMessage = {
-        MessageType : 'CHAT',
+        messagesType: 'CHAT',
         message: newMessage,
-        sender : '재현'
-       
+        sender: '재현',
       };
-      console.log('내가간다',ChatMessage)
-      // 메시지 전송
+      console.log('Sending message', ChatMessage);
       stompClient.publish({
         destination: '/pub/chat.sendMessage',
         body: JSON.stringify(ChatMessage),
-        headers: {
-          memberId :Number(memberId),
-          challengeId
-        }
-      });
+        });
 
       setNewMessage('');
     }
@@ -92,7 +76,7 @@ function Chat({ challengeId, memberId  }) {
       <input
         type="text"
         value={newMessage}
-        onChange={(event) => setNewMessage(event.target.value)}
+        onChange={(e) => setNewMessage(e.target.value)}
       />
       <button onClick={sendMessage}>Send</button>
     </div>
