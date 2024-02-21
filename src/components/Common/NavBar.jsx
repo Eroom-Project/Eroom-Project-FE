@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getCookie, removeCookie, setCookie } from '../../services/Cookie'
+import { getCookie, removeCookie } from '../../services/Cookie'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 function NavBar() {
+
     const navigate = useNavigate()
 
-    const [cookieState, setCookieState] = useState({
-        cookies: false,
-    })
+    const [cookieState, setCookieState] = useState(false)
 
     const isCookie = async() => {
         const cookies = await getCookie("localaccess");
         if (cookies) {
             (
-                setCookieState({
-                    ...cookieState,
-                    cookies: true,
-                })
+                setCookieState(true)
             )
         } else {
+            setCookieState(false)
             console.log("localaccess cookie not found");
 
         }
@@ -29,19 +26,16 @@ function NavBar() {
         isCookie()
     }, [])
 
-    console.log(cookieState)
-
     const removeCookies = async() => {
-        const res = await api.post('/api/logout')
-        console.log(res)
-        removeCookie("localaccess")
-        setCookieState({
-            ...cookieState,
-            cookies: false,
-        })
-        alert(res.data.message)
-
-        navigate("/")
+        if(cookieState){
+            const res = await api.post('/api/logout',{})
+            console.log(res)
+            removeCookie("localaccess")
+            setCookieState (false)
+            alert(res.data.message)
+    
+            navigate("/")
+        }
     }
 
     return (
@@ -55,7 +49,7 @@ function NavBar() {
                     </Info>
                     <SignIn>
                         {
-                            cookieState.cookies?
+                            cookieState === true?
                                 <>
                                     <Link to="/mypage"><Span> 마이페이지</Span></Link>
                                     <Span onClick={removeCookies}>로그아웃</Span>

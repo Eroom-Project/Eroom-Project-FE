@@ -5,7 +5,15 @@ import KakaoSignIn from './KakaoSignIn';
 import { useNavigate } from 'react-router-dom';
 import {
     Message,
-    Back,
+    Background,
+    ImgBack,
+    Img1,
+    Img2,
+    Img3,
+    Img4,
+    Img5,
+    Img6,
+    SignBack,
     MainForm,
     Form,
     H1,
@@ -21,7 +29,7 @@ import {
 
 function SignInPage() {
 
-    
+
 
     const navigate = useNavigate()
     const [focusState, setFocusState] = useState({
@@ -82,6 +90,7 @@ function SignInPage() {
 
     // 토큰 어떻게 들어오는지 보기
     // Authorization: Bearer <token>
+    // const dispatch = useDispatch()
     const signIn = async () => {
         if (auth.email && auth.password) {
             try {
@@ -91,12 +100,13 @@ function SignInPage() {
                 }
                 const res = await api.post("/api/login", newUser)
                 console.log(res.status)
-                res.status === 200 &&
+                if (res.status === 200) {
                     setCookie("localaccess", `localaccess`, {
                         path: "/",
                         secure: true
                     })
-                navigate("/")
+                    navigate("/")
+                }
             } catch (error) {
                 alert("로그인 에러")
                 console.log("Login failed:", error)
@@ -121,50 +131,60 @@ function SignInPage() {
     }
 
     const handleOnKey = (e) => {
-        if(e.key === 'Enter'){
+        if (e.key === 'Enter') {
             signIn()
         }
     }
     return (
-        <Back>
-            <MainForm>
-                <Form>
-                <H1>로그인</H1>
-                    <InputBox>
-                        <H6>이메일: {message("email")}</H6>
-                        <Input
-                            name="email"
-                            type="text"
-                            onFocus={() => { handlerFocus("email") }}
-                            onBlur={() => { handlerBlur("email") }}
-                            value={input.email}
-                            onChange={(e) => { handleInputChange(e) }}
-                            placeholder='example@naver.com'
-                            onKeyDown={handleOnKey}
-                        />
-                    </InputBox>
-                    <InputBox>
-                        <H6>비밀번호: {message("password")}</H6>
-                        <Input
-                            name="password"
-                            type="password"
-                            onFocus={() => { handlerFocus("password") }}
-                            onBlur={() => { handlerBlur("password") }}
-                            value={input.password}
-                            onChange={(e) => { handleInputChange(e) }}
-                            placeholder='********'
-                            onKeyDown={handleOnKey}
-                        />
-                    </InputBox>
-                    {button()}
-                    <Hr />
-                    <KakaoSignForm>
-                        <KakaoSignIn />
-                        <SignUp>아직 이룸 회원이 아니신가요? <a href='/signup'><Bold>회원가입</Bold></a></SignUp>
-                    </KakaoSignForm>
-                </Form>
-            </MainForm>
-        </Back>
+        <Background>
+            <ImgBack>
+                <Img1 src="/img/BackMongu.png" alt="" />
+                <Img2 src="/img/BackKoji.png" alt="" />
+                <Img3 src="/img/BackDanja.png" alt="" />
+                <Img4 src="/img/BackRoro.png" alt="" />
+                <Img5 src="/img/BackBoori.png" alt="" />
+                <Img6 src="/img/BackPoopoo.png" alt="" />
+            </ImgBack>
+            <SignBack>
+                <MainForm>
+                    <Form>
+                        <H1>로그인</H1>
+                        <InputBox>
+                            <H6>이메일: {message("email")}</H6>
+                            <Input
+                                name="email"
+                                type="text"
+                                onFocus={() => { handlerFocus("email") }}
+                                onBlur={() => { handlerBlur("email") }}
+                                value={input.email}
+                                onChange={(e) => { handleInputChange(e) }}
+                                placeholder='example@naver.com'
+                                onKeyDown={handleOnKey}
+                            />
+                        </InputBox>
+                        <InputBox>
+                            <H6>비밀번호: {message("password")}</H6>
+                            <Input
+                                name="password"
+                                type="password"
+                                onFocus={() => { handlerFocus("password") }}
+                                onBlur={() => { handlerBlur("password") }}
+                                value={input.password}
+                                onChange={(e) => { handleInputChange(e) }}
+                                placeholder='********'
+                                onKeyDown={handleOnKey}
+                            />
+                        </InputBox>
+                        {button()}
+                        <Hr />
+                        <KakaoSignForm>
+                            <KakaoSignIn />
+                            <SignUp>아직 이룸 회원이 아니신가요? <a href='/signup'><Bold>회원가입</Bold></a></SignUp>
+                        </KakaoSignForm>
+                    </Form>
+                </MainForm>
+            </SignBack>
+        </Background>
     )
 }
 

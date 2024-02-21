@@ -3,7 +3,15 @@ import api from '../../services/api'
 import { useNavigate } from 'react-router-dom'
 import {
     Message,
-    Back,
+    Background,
+    ImgBack,
+    Img1,
+    Img2,
+    Img3,
+    Img4,
+    Img5,
+    Img6,
+    SignBack,
     MainForm,
     Form,
     H1,
@@ -27,8 +35,8 @@ function SignUpPage() {
     // 이메일 중복확인
     const emailCheck = async () => {
         try {
-            const res = await api.get("/api/signup/email",{
-                params:{email: input.email}
+            const res = await api.get("/api/signup/email", {
+                params: { email: input.email }
             })
             console.log(res)
             if (res.data.message === "사용 가능한 email입니다.") {
@@ -46,7 +54,7 @@ function SignUpPage() {
     const nickNameCheck = async () => {
         try {
             const res = await api.get("/api/signup/nickname", {
-                params:{nickname: input.nickname}
+                params: { nickname: input.nickname }
             })
             console.log(res)
             if (res.data.message === "사용 가능한 닉네임입니다.") {
@@ -158,33 +166,33 @@ function SignUpPage() {
 
     // massage state를 통해 state 출력 
     const message = (name) => {
-        switch(name){
+        switch (name) {
             case "email":
-                if(auth[name] && check.email){
+                if (auth[name] && check.email) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
-                }else if(auth[name]){
+                } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
-                }else{
+                } else {
                     return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
                 }
             case "nickname":
-                if(auth[name] && check.nickname){
+                if (auth[name] && check.nickname) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
-                }else if(auth[name]){
+                } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
-                }else{
+                } else {
                     return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
                 }
             case "password":
-                return( 
-                auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
-                :
-                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>)
+                return (
+                    auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+                        :
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>)
             case "checkPassword":
-                return( 
-                auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
-                :
-                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>)
+                return (
+                    auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+                        :
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>)
             default:
                 <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
         }
@@ -192,83 +200,93 @@ function SignUpPage() {
 
     // 유효성검사 중복확인 전부 통과해야 회원가입 가능
     const button = () => {
-        return (auth.email && auth.password && auth.checkPassword && auth.nickname && check.email && check.nickname?
+        return (auth.email && auth.password && auth.checkPassword && auth.nickname && check.email && check.nickname ?
             <Button color={"#5EC75E"} type='button' onClick={signUp}>회원가입하기</Button>
             :
             <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
     }
 
     return (
-        <Back>
-            <MainForm >
-                <H1>회원가입</H1>
-                <Form>
-                    <InputBox>
-                        <H6>이메일: {message("email")}</H6>
-                        <InnerBox>
+        <Background>
+            <ImgBack>
+            <Img1 src="/img/BackMongu.png" alt="" />
+                <Img2 src="/img/BackKoji.png" alt="" />
+                <Img3 src="/img/BackDanja.png" alt="" />
+                <Img4 src="/img/BackRoro.png" alt="" />
+                <Img5 src="/img/BackBoori.png" alt="" />
+                <Img6 src="/img/BackPoopoo.png" alt="" />
+            </ImgBack>
+            <SignBack>
+                <MainForm >
+                    <H1>회원가입</H1>
+                    <Form>
+                        <InputBox>
+                            <H6>이메일: {message("email")}</H6>
+                            <InnerBox>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    placeholder='이메일을 입력해주세요.'
+                                    onFocus={() => { handlerFocus("email") }}
+                                    onBlur={() => { handlerBlur("email") }}
+                                    value={input.email}
+                                    onChange={(e) => {
+                                        handleInputChange(e)
+                                    }}
+                                />
+                                <AuthButton onClick={emailCheck}>
+                                    중복<br />
+                                    확인
+                                </AuthButton>
+                            </InnerBox>
+                        </InputBox>
+                        <InputBox>
+                            <H6>닉네임: {message("nickname")}</H6>
+                            <InnerBox>
+                                <Input
+                                    type="text"
+                                    name="nickname"
+                                    placeholder='닉네임은 3~10 자리입니다.'
+                                    onFocus={() => { handlerFocus("nickname") }}
+                                    onBlur={() => { handlerBlur("nickname") }}
+                                    value={input.nickname}
+                                    onChange={(e) => { handleInputChange(e) }}
+                                />
+                                <AuthButton onClick={nickNameCheck}>
+                                    중복<br />
+                                    확인
+                                </AuthButton>
+                            </InnerBox>
+                        </InputBox>
+                        <InputBox>
+                            <H6>비밀번호: {message("password")}</H6>
                             <Input
-                                type="text"
-                                name="email"
-                                placeholder='이메일을 입력해주세요.'
-                                onFocus={() => { handlerFocus("email") }}
-                                onBlur={() => { handlerBlur("email") }}
-                                value={input.email}
-                                onChange={(e) => {
-                                    handleInputChange(e)
-                                }}
-                            />
-                            <AuthButton onClick={emailCheck}>
-                                중복<br />
-                                확인
-                            </AuthButton>
-                        </InnerBox>
-                    </InputBox>
-                    <InputBox>
-                        <H6>닉네임: {message("nickname")}</H6>
-                        <InnerBox>
-                            <Input
-                                type="text"
-                                name="nickname"
-                                placeholder='닉네임은 3~10 자리입니다.'
-                                onFocus={() => { handlerFocus("nickname") }}
-                                onBlur={() => { handlerBlur("nickname") }}
-                                value={input.nickname}
+                                type="password"
+                                name="password"
+                                placeholder='영문, 숫자, 특수문자 조합 8~15 자리입니다.'
+                                onFocus={() => { handlerFocus("password") }}
+                                onBlur={() => { handlerBlur("password") }}
+                                value={input.password}
                                 onChange={(e) => { handleInputChange(e) }}
                             />
-                            <AuthButton onClick={nickNameCheck}>
-                                중복<br />
-                                확인
-                            </AuthButton>
-                        </InnerBox>
-                    </InputBox>
-                    <InputBox>
-                        <H6>비밀번호: {message("password")}</H6>
-                        <Input
-                            type="password"
-                            name="password"
-                            placeholder='영문, 숫자, 특수문자 조합 8~15 자리입니다.'
-                            onFocus={() => { handlerFocus("password") }}
-                            onBlur={() => { handlerBlur("password") }}
-                            value={input.password}
-                            onChange={(e) => { handleInputChange(e) }}
-                        />
-                    </InputBox>
-                    <InputBox>
-                        <H6>비밀번호 확인: {message("checkPassword")}</H6>
-                        <Input
-                            type="password"
-                            name="checkPassword"
-                            placeholder='비밀번호를 확인해주세요.'
-                            onFocus={() => { handlerFocus("checkPassword") }}
-                            onBlur={() => { handlerBlur("checkPassword") }}
-                            value={input.checkPassword}
-                            onChange={(e) => { handleInputChange(e) }}
-                        />
-                    </InputBox>
-                    {button()}
-                </Form>
-            </MainForm>
-        </Back>
+                        </InputBox>
+                        <InputBox>
+                            <H6>비밀번호 확인: {message("checkPassword")}</H6>
+                            <Input
+                                type="password"
+                                name="checkPassword"
+                                placeholder='비밀번호를 확인해주세요.'
+                                onFocus={() => { handlerFocus("checkPassword") }}
+                                onBlur={() => { handlerBlur("checkPassword") }}
+                                value={input.checkPassword}
+                                onChange={(e) => { handleInputChange(e) }}
+                            />
+                        </InputBox>
+                        {button()}
+                    </Form>
+                </MainForm>
+            </SignBack>
+        </Background>
     )
 }
 
