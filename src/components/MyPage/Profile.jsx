@@ -193,6 +193,7 @@ function MyPage() {
         url: false
     })
 
+    console.log(check.email)
     console.log(auth)
 
     // 유효성 검사 통과 했을 때 회원정보 수정 가능
@@ -200,18 +201,18 @@ function MyPage() {
         try {
             const newUser = {
                 email: auth.email ? input.email : profileData.data.memberInfo.email,
-                password: auth.password ? input.password : "패스워드 수정 없음",
+                password: auth.password ? input.password : "",
                 nickname: auth.nickname ? input.nickname : profileData.data.memberInfo.nickname,
             }
 
             const formData = new FormData();
 
-            formData.append('profileData',new Blob([JSON.stringify(newUser)], { type: "application/json" }))
+            formData.append('data',new Blob([JSON.stringify(newUser)], { type: "application/json" }))
 
             if(auth.url){
-                formData.append('profileUrl', input.url)
+                formData.append('profileImageUrl', input.url)
             }else{
-                formData.append(profileData.data.memberInfo.profileImageUrl)
+                formData.append('profileImageUrl', profileData.data.memberInfo.profileImageUrl)
             }
             
 
@@ -320,10 +321,10 @@ function MyPage() {
     const message = (name) => {
         switch (name) {
             case "email":
-                if (auth[name]) {
-                    return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
-                } else if (auth[name] && check.email) {
+                if (auth[name] && check.email) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+                } else if (auth[name]) {
+                    return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
                     return <Message focus={focusState[name] && readOnly === false ? "block" : "none"} style={{ color: "red" }}> 이메일 양식을 입력해주세요. </Message>
                 }
@@ -404,16 +405,16 @@ function MyPage() {
                     <Form>
                         {   
                             // profileData.data.memberInfo.profileImageUrl
-                            readOnly === false ?
+                            readOnly === false?
                                 <ImgBox>
                                     <Img src={
-                                        thumbnail.url.includes('data')? thumbnail.url : "/img/icon (2).png"
+                                        thumbnail.url.includes('data')? thumbnail.url : profileData.data.memberInfo.profileImageUrl
                                     } alt="미리보기" />
                                 </ImgBox>
                                 :
                                 <ImgBox2>
                                     <Img src={
-                                        profileData.data ? "/img/icon (2).png": "/img/icon (2).png"
+                                        profileData.data && profileData.data.memberInfo.profileImageUrl
                                     } alt="미리보기" />
                                 </ImgBox2>
                         }

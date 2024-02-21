@@ -100,6 +100,7 @@ const MainBox = styled.div`
     top: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
+    height: 700px;
     padding: 23px 24px;
     border-radius: 10px;
 `
@@ -127,6 +128,20 @@ const TitleBox = styled.div`
     gap: 10px;
     width: 100%;
     height: 150px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 1px;
+    background-color: #2f3542;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #F2F2F2;
+  }
 `
 const Title = styled.div`
     font-size: 18px;
