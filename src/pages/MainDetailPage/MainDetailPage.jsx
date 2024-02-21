@@ -100,7 +100,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
             <div style={{ display: 'flex', gap: '10px' }}>
     
             {isParticipating ? (
-                <button onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId}}); }} style={{
+                <button onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId}}); }} style={{
                     fontFamily: 'Noto Sans KR, sans-serif',
                     width: '220px',
                     height: '48px',
