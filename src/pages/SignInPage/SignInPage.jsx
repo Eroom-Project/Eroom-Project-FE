@@ -137,17 +137,22 @@ function SignInPage() {
 
     useEffect(()=>{
         console.log(ref)
+        
+        const parallax = (e) => {
+            ref.current.forEach(function(value){
+                let moving = value.getAttribute("data-value")
+                let x  = (e.clientX * moving) / 250
+                let y  = (e.clientY * moving) / 250
+                value.style.transform = "translateX(" + x +"px) translateY(" + y +"px)"
+            })
+        }
+        console.log(ref)
+        document.addEventListener("mousemove", parallax);
+        return () => {
+            document.removeEventListener("mousemove", parallax);
+        }
+        
     }, [])
-    document.addEventListener("mousemove", parallax);
-    function parallax(e){
-        ref.current.forEach(function(value){
-            let moving = value.getAttribute("data-value")
-            let x  = (e.clientX * moving) / 250
-            let y  = (e.clientY * moving) / 250
-            value.style.transform = "translateX(" + x +"px) translateY(" + y +"px)"
-
-        })
-    }
     return (
         <Background>
             <ImgBack>
