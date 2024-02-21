@@ -69,7 +69,7 @@ export const MainForm = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    border: 1px solid #F2F2F2;
+    border: 1px solid #E9E9E9;
     background-color: #FFFF;
     padding: 34px 32px;
     border-radius: 10px;
@@ -99,12 +99,12 @@ export const AuthButton = styled.button`
     margin-left: 5px;
     border: none;
     border-radius: 6px;
-    color: #636363;
+    color: #1C1C1C;
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 400;
     cursor: pointer;
     &:hover{
-        background-color: #636363;
+        background-color: #1C1C1C;
         color: #FFFF;
     }
 `
@@ -112,7 +112,7 @@ export const AuthButton = styled.button`
 export const Hr = styled.div`
     width: 100%;
     border: none;
-    border-bottom: 1px solid #F2F2F2;
+    border-bottom: 1px solid #E5E5E5;
     margin: 30px 0px;
 `
 
@@ -171,5 +171,5 @@ export const Bold = styled.span`
     margin-left: 8px;
     font-size: 14px;
     font-weight: 700;
-    color: black;
+    color: #1C1C1C;
 `
