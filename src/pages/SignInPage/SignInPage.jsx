@@ -101,15 +101,12 @@ function SignInPage() {
                 const res = await api.post("/api/login", newUser)
                 console.log(res.status)
                 if (res.status === 200) {
-                    setCookie("localaccess", `localaccess`, {
-                        path: "/",
-                        secure: true
-                    })
+                    window.localStorage.setItem("localaccess", true)
                     navigate("/")
                 }
             } catch (error) {
                 alert("로그인 에러")
-                console.log("Login failed:", error)
+                console.log("E-ROOM Login failed:", error)
             }
         }
     }
