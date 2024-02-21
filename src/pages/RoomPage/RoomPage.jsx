@@ -10,7 +10,7 @@ function RoomPage() {
     const [isAuthResultOpen, setIsAuthResultOpen] = useState(false);
     
     const location = useLocation();
-    const { challengeId } = location.state || {};
+    const { challengeId,  memberId } = location.state || {};
     
     return (
         <div style={{
@@ -101,7 +101,7 @@ function RoomPage() {
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)', 
                     
                 }}>
-                    <Chat />
+                    <Chat challengeId={challengeId} memberId ={memberId } />
                 </div>
             )}
 
