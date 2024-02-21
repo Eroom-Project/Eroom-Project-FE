@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { useMutation } from 'react-query';
 import { challengeAuth } from '../../services/mainaxios';
 
-const AuthPage = ({ isOpen, onClose }) => {
+const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   const [authContent, setAuthContent] = useState('');
   const [authImageUrl, setAuthImageUrl] = useState(null);
   const [authVideoUrl, setAuthVideoUrl] = useState('');
@@ -20,7 +20,7 @@ const AuthPage = ({ isOpen, onClose }) => {
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const mutation = useMutation(formData => challengeAuth(formData), {
+  const mutation = useMutation(form => challengeAuth(form, challengeId), {
     onSuccess: (data) => {
       const successMessage = data?.message || '챌린지 인증 등록 성공';
       alert(successMessage);
@@ -49,7 +49,7 @@ const AuthPage = ({ isOpen, onClose }) => {
       alert('인증 내용을 작성해주세요.');
       return; 
     }
-
+    
     const authCreateData = {
       authContent,
       authVideoUrl,
@@ -60,9 +60,9 @@ const AuthPage = ({ isOpen, onClose }) => {
     
     if (authImageUrl) form.append('authImageUrl', authImageUrl);
 
-    mutation.mutate(form);
+    mutation.mutate(form, challengeId );
   };
-
+  
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(

@@ -27,20 +27,19 @@ const createChallenge = async (form) => {
 };
 
 const challengeAuth = async (form, challengeId) => {
-
-  const response = await api.post(`/api/challenge/5/auth`, form, challengeId);
+  
+  const response = await api.post(`/api/challenge/${challengeId}/auth`, form);
   return response.data;
 };
 
 const authResult = async (challengeId) =>{
-    const response = await api.get(`/api/challenge/5/auth`)
-    return response.data.data;
+      const response = await api.get(`/api/challenge/${challengeId}/auth`)
+      return response.data.data;
 }
 
-const postAuthStatus = async (authId, authStatus) =>{
-
+const postAuthStatus = async (authId, authStatus, challengeId) =>{
   const payload ={authStatus : authStatus}
-  const response = await api.put(`/api/challenge/5/leader/auth/${authId}`, payload)
+  const response = await api.put(`/api/challenge/${challengeId}/leader/auth/${authId}`, payload)
   return response.data;
 }
 
@@ -50,16 +49,15 @@ const detailchallenge = async(challengeId) =>{
   return response.data.data;
 }
 
-const updateAuthStatus = async ({ authId, formData }) => {
-  const response = await api.put(`/api/challenge/5/auth/${authId}`, formData);
+const updateAuthStatus = async ({ authId, formData, challengeId }) => {
+  const response = await api.put(`/api/challenge/${challengeId}/auth/${authId}`, formData);
   return response.data;
 };
 
-const deleteAuthStatus = async (authId) => {
-  console.log('ccccccccc',authId)
-  const response = await api.delete(`/api/challenge/5/auth/${authId}`);
+const deleteAuthStatus = async ({challengeId, authId}) => {
+  
+  const response = await api.delete(`/api/challenge/${challengeId}/auth/${authId}`);
   return response.data;
 };
-
 
 export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus };
