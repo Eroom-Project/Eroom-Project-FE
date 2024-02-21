@@ -16,14 +16,13 @@ function Redirection() {
         try {
             const res = await api.get("/auth/callback/kakao",
             { params: { code } })
-            console.log(res)
-            setCookie("localaccess", `localaccess`, {
-                path: "/",
-                secure: true
-            })
-            navigate("/")
+            console.log(res.status)
+            if (res.status === 200) {
+                window.localStorage.setItem("localaccess", true)
+                navigate("/")
+            }
         } catch (error) {
-            console.log("Login failed:", error)
+            console.log("Kakao Login failed:", error)
         }
     }
 
