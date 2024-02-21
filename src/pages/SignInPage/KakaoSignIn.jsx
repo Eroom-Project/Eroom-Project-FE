@@ -31,7 +31,7 @@ const KakaoBtn = styled.button`
     border: none;
     border-radius: 10px;
     background-color: #FEE500;
-    color: #201D00;
+    color: #1C1C1C;
     font-weight: 700;
     font-size: 12px;
     cursor: pointer;
@@ -42,5 +42,5 @@ const KakaoBtn = styled.button`
 
 const Img = styled.img`
     width: 5%;
-    margin-right: 8px;
+    margin-right: 7px;
 `
