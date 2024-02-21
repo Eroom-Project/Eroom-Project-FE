@@ -37,31 +37,31 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
                         challengeDetailData.data &&
                         <>
                             <ImgBox>
-                                {<Img src={challengeDetailData.data.thumbnailImageUrl} alt="" />}
+                                {<Img src={challengeDetailData.data.responseDto.thumbnailImageUrl} alt="" />}
                             </ImgBox>
                             <TitleBox>
                                 <Title>
-                                    {challengeDetailData.data.title}
+                                    {challengeDetailData.data.responseDto.title}
                                 </Title>
                                 <Category>
-                                    {`○ ${challengeDetailData.data.category}`}
+                                    {`○ ${challengeDetailData.data.responseDto.category}`}
                                 </Category>
                                 <Description>
-                                    {challengeDetailData.data.description}
+                                    {challengeDetailData.data.responseDto.description}
                                 </Description>
                             </TitleBox>
                             <InfoBox>
                                 <Category>
-                                    <Bold>참여기간</Bold> &nbsp; {`${challengeDetailData.data.startDate} ~ ${challengeDetailData.data.dueDate}`}
+                                    <Bold>참여기간</Bold> &nbsp; {`${challengeDetailData.data.responseDto.startDate} ~ ${challengeDetailData.data.responseDto.dueDate}`}
                                 </Category>
                                 <Category>
-                                    <Bold>운영횟수</Bold> &nbsp; {`${challengeDetailData.data.frequency} 참여`}
+                                    <Bold>운영횟수</Bold> &nbsp; {`${challengeDetailData.data.responseDto.frequency} 참여`}
                                 </Category>
                                 <Category>
-                                    <Bold>참여인원</Bold> &nbsp; {`${challengeDetailData.data.currentAttendance}명 / ${challengeDetailData.data.limitAttendance}명`}
+                                    <Bold>참여인원</Bold> &nbsp; {`${challengeDetailData.data.responseDto.currentAttendance}명 / ${challengeDetailData.data.responseDto.limitAttendance}명`}
                                 </Category>
                                 <Category>
-                                    <Bold>인증방식</Bold> &nbsp; {challengeDetailData.data.authExplanation}
+                                    <Bold>인증방식</Bold> &nbsp; {challengeDetailData.data.responseDto.authExplanation}
                                 </Category>
                             </InfoBox>
                         </>
