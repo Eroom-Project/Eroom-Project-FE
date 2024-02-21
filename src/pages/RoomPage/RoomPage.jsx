@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import AuthPage from '../AuthPage/AuthPage';
 import AuthResult from '../AuthResultPage/AuthResultPage';
-import ChatWindow from './ChatWindow';
+import Chat from './Chat';
+import { useLocation } from 'react-router-dom';
 
 function RoomPage() {
     const [isChatOpen, setIsChatOpen] = useState(false); 
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isAuthResultOpen, setIsAuthResultOpen] = useState(false);
-
+    
+    const location = useLocation();
+    const { challengeId,  memberId } = location.state || {};
+    
     return (
         <div style={{
             maxWidth: '1400px',
@@ -97,12 +101,12 @@ function RoomPage() {
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)', 
                     
                 }}>
-                    <ChatWindow />
+                    <Chat challengeId={challengeId} memberId ={memberId } />
                 </div>
             )}
 
-            <AuthPage isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
-            <AuthResult isOpen={isAuthResultOpen} onClose={() => setIsAuthResultOpen(false)} />
+            <AuthPage isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} challengeId={challengeId}  />
+            <AuthResult isOpen={isAuthResultOpen} onClose={() => setIsAuthResultOpen(false)} challengeId={challengeId} />
         </div>
     );
 }

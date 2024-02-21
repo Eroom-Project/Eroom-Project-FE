@@ -47,13 +47,14 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
 
         }
     });
-    const postAuthStatusMutation = useMutation(({authId, authStatus}) => postAuthStatus(authId, authStatus), {
+    const postAuthStatusMutation = useMutation(({authId, authStatus, challengeId}) => postAuthStatus(authId, authStatus, challengeId), {
         onSuccess: () => {
             queryClient.invalidateQueries('authResult'); // 쿼리 갱신
             }
     });
+    
 
-    const deleteMutation = useMutation((challengeId, authId) => deleteAuthStatus(challengeId, authId), {
+    const deleteMutation = useMutation((authId) => deleteAuthStatus({challengeId, authId}), {
         onSuccess: () => {
             queryClient.invalidateQueries('authResult'); // 쿼리 갱신
         }
@@ -71,7 +72,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         e.preventDefault();
         e.stopPropagation();
         
-        postAuthStatusMutation.mutate({authId, authStatus : newStatus});
+        postAuthStatusMutation.mutate({authId, challengeId, authStatus : newStatus});
     };
 
     // 항목 확장/축소 토글 핸들러
@@ -110,13 +111,13 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         if (editImage) {
             formData.append('authImageUrl', editImage);
         }
-        updateMutation.mutate({ authId, formData });
+        updateMutation.mutate({ authId, formData, challengeId });
     };
 
     // 삭제 핸들러
     const handleDelete = (authId) => {
         
-        deleteMutation.mutate(authId);
+        deleteMutation.mutate(authId); 
     };
 
     // 리더 여부 확인
