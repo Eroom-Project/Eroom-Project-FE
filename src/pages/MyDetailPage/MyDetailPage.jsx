@@ -52,13 +52,13 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
                             </TitleBox>
                             <InfoBox>
                                 <Category>
-                                    <Bold>참여기간</Bold> &nbsp; {`${challengeDetailData.data.responseDto.startDate} ~ ${challengeDetailData.data.dueDate}`}
+                                    <Bold>참여기간</Bold> &nbsp; {`${challengeDetailData.data.responseDto.startDate} ~ ${challengeDetailData.data.responseDto.dueDate}`}
                                 </Category>
                                 <Category>
                                     <Bold>운영횟수</Bold> &nbsp; {`${challengeDetailData.data.responseDto.frequency} 참여`}
                                 </Category>
                                 <Category>
-                                    <Bold>참여인원</Bold> &nbsp; {`${challengeDetailData.data.responseDto.currentAttendance}명 / ${challengeDetailData.data.limitAttendance}명`}
+                                    <Bold>참여인원</Bold> &nbsp; {`${challengeDetailData.data.responseDto.currentAttendance}명 / ${challengeDetailData.data.responseDto.limitAttendance}명`}
                                 </Category>
                                 <Category>
                                     <Bold>인증방식</Bold> &nbsp; {challengeDetailData.data.responseDto.authExplanation}
