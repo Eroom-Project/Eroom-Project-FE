@@ -88,8 +88,8 @@ function RoomPage() {
                     {isChatOpen ? '>' : '<'}
                 </button>
             </div>
-            {isChatOpen && (
-                <div style={{
+            
+                <div  style={{
                     position: 'absolute',
                     right: '0', 
                     top: '50px',
@@ -98,12 +98,12 @@ function RoomPage() {
                     backgroundColor: '#f4f4f4', 
                     borderLeft: '1px solid #ccc', 
                     padding: '20px', 
-                    boxShadow: '-2px 3px rgba(0,0,0,0.1)', 
-                    
-                }}>
+                    boxShadow: '-2px 3px rgba(0,0,0,0.1)',
+                    display: isChatOpen ? 'block' : 'none', 
+}}>
                     <Chat challengeId={challengeId} memberId ={memberId } />
                 </div>
-            )}
+            
 
             <AuthPage isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} challengeId={challengeId}  />
             <AuthResult isOpen={isAuthResultOpen} onClose={() => setIsAuthResultOpen(false)} challengeId={challengeId} />
