@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../MainPage/modal';
 import { detailchallenge } from '../../services/mainaxios'; 
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 
  
@@ -16,25 +17,13 @@ const categoryMap = {
 };
 
 function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
-    const [challengeDetail, setChallengeDetail] = useState(null);
     
-
-
-
     const navigator = useNavigate();
 
-    useEffect(() => {
-        if (selectedItem?.challengeId) {
-            detailchallenge(selectedItem.challengeId).then(data => {
-                
-                setChallengeDetail(data);
-            }).catch(error => {
-                console.error("챌린지를 불러오는데 실패했습니다.", error);
-            });
-        }
-    }, [selectedItem]);
     
-
+    const { data: challengeDetail} = useQuery(['challengeDetail', selectedItem?.challengeId], () => detailchallenge(selectedItem?.challengeId), {
+        enabled: !!selectedItem?.challengeId, 
+    });
 
     const translatedCategory = categoryMap[challengeDetail?.responseDto?.category] || '';
     const isParticipating = challengeDetail?.responseDto?.currentMemberIdList?.includes(Number(challengeDetail?.loginMemberId))
@@ -111,7 +100,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
             <div style={{ display: 'flex', gap: '10px' }}>
     
             {isParticipating ? (
-                <button onClick={() => { navigator('/room'); }} style={{
+                <button onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId}}); }} style={{
                     fontFamily: 'Noto Sans KR, sans-serif',
                     width: '220px',
                     height: '48px',
@@ -131,8 +120,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                         navigator('/signin');
                     } else {
                         applyForChallenge(challengeDetail?.responseDto?.challengeId);
-                        
-                    }
+                        }
                 }} style={{
                     fontFamily: 'Noto Sans KR, sans-serif',
                     width: '220px',

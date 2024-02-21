@@ -9,8 +9,6 @@ import MainPage from '../pages/MainPage/MainPage'
 import MainDetailPage from '../pages/MainDetailPage/MainDetailPage'
 import CreatePage from '../pages/CreatePage/CreatePage'
 import RoomPage from '../pages/RoomPage/RoomPage'
-import AuthPage from '../pages/AuthPage/AuthPage'
-import AuthResultPage from '../pages/AuthResultPage/AuthResultPage'
 import Layout from '../components/Common/Layout'
 
 
@@ -25,12 +23,10 @@ function Router() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/mypage" element={<MyPage />} />
                     <Route path="/main" element={<MainPage />} />
-                    <Route path="/main/:id" element={<MainDetailPage />} />
+                    <Route path="/main" element={<MainDetailPage />} />
                     <Route path="/create" element={<CreatePage />} />
                     <Route path="/room" element={<RoomPage />} />
-                    <Route path="/auth" element={<AuthPage />} />
-                    <Route path="/auth/:id" element={<AuthResultPage />} />
-                    </Route>
+                </Route>
             </Routes>
         </BrowserRouter>
     )
