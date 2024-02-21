@@ -4,13 +4,14 @@ const GlobalStyle = createGlobalStyle`
     body {
         font-family: 'Noto Sans KR', sans-serif;
         font-size: 12px;
+        color: #1C1C1C;
         &::-webkit-scrollbar {
         width: 18px;
         height: 18px;
         }
         &::-webkit-scrollbar-thumb {
             border-radius: 10px;
-            background-color: #fdd25b;
+            background-color: #7DDF4E;
             background-clip: padding-box;
             border: 3px solid transparent;
         }
@@ -21,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
 
     a{
         text-decoration: none;
-        color: black;
+        color: #1C1C1C;
     }
 
     div{
