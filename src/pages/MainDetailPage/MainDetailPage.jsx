@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../MainPage/modal';
 import { detailchallenge } from '../../services/mainaxios'; 
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 
  
@@ -16,26 +17,23 @@ const categoryMap = {
 };
 
 function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
-    const [challengeDetail, setChallengeDetail] = useState(null);
+    
     const navigator = useNavigate();
 
-    useEffect(() => {
-        if (selectedItem?.challengeId) {
-            detailchallenge(selectedItem.challengeId).then(data => {
-                setChallengeDetail(data);
-            }).catch(error => {
-                console.error("챌린지를 불러오는데 실패했습니다.", error);
-            });
-        }
-    }, [selectedItem]);
+    
+    const { data: challengeDetail} = useQuery(['challengeDetail', selectedItem?.challengeId], () => detailchallenge(selectedItem?.challengeId), {
+        enabled: !!selectedItem?.challengeId, 
+    });
 
-    const translatedCategory = categoryMap[challengeDetail?.category] || '';
+    const translatedCategory = categoryMap[challengeDetail?.responseDto?.category] || '';
+    const isParticipating = challengeDetail?.responseDto?.currentMemberIdList?.includes(Number(challengeDetail?.loginMemberId))
+    const isLoggedOut = challengeDetail?.loginMemberId === "No members logged in";
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <img 
-                src={challengeDetail?.thumbnailImageUrl} 
-                alt={challengeDetail?.title}
+                src={challengeDetail?.responseDto?.thumbnailImageUrl} 
+                alt={challengeDetail?.responseDto?.title}
                 style={{ 
                     maxWidth: '430px', 
                     maxHeight: '220px',
@@ -53,7 +51,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     fontWeight:'800',
                     marginBottom:'5px'
                 }}>
-                    {challengeDetail?.title}
+                    {challengeDetail?.responseDto?.title}
                 </div>
                 <div style={{
                     fontSize:'14px',
@@ -69,7 +67,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     marginBottom:'25px',
                     lineHeight:'1.5'
                 }}>
-                    {challengeDetail?.description}
+                    {challengeDetail?.responseDto?.description}
                 </div>
                             
                 <div style={{
@@ -92,44 +90,54 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     </div>
 
                     <div style={{fontSize:'14px', color:'#626262'}}>
-                        <div style={{marginBottom:'10px',}}>{challengeDetail?.startDate} ~ {challengeDetail?.dueDate}</div>
-                        <div style={{marginBottom:'10px',}}>{challengeDetail?.frequency}</div>
-                        <div style={{marginBottom:'10px',}}>{challengeDetail?.currentAttendance}명 / {challengeDetail?.limitAttendance}명</div>
-                        <div>{challengeDetail?.authExplanation}</div>
+                        <div style={{marginBottom:'10px',}}>{challengeDetail?.responseDto?.startDate} ~ {challengeDetail?.responseDto?.dueDate}</div>
+                        <div style={{marginBottom:'10px',}}>{challengeDetail?.responseDto?.frequency}</div>
+                        <div style={{marginBottom:'10px',}}>{challengeDetail?.responseDto?.currentAttendance}명 / {challengeDetail?.responseDto?.limitAttendance}명</div>
+                        <div>{challengeDetail?.responseDto?.authExplanation}</div>
                     </div>
                 </div>
             </div>
-               <div style={{
-                display:'flex',
-                gap:'10px'
-               }}>
-            <button onClick={() => applyForChallenge(challengeDetail?.challengeId)} style={{
-                fontFamily:'Noto Sans KR, sans-serif',
-                width:'220px',
-                height:'48px',
-                marginTop:'10px',
-                backgroundColor:'#636363',
-                border:'none',
-                color: 'white',
-                fontSize:'15px',
-                borderRadius: '4px',
-                fontWeight:'500',
-                cursor: 'pointer'
-            }}>참여 신청하기</button>
-             <button onClick={()=>{navigator('/room')}} style={{
-                fontFamily:'Noto Sans KR, sans-serif',
-                width:'220px',
-                height:'48px',
-                marginTop:'10px',
-                backgroundColor:'#4f5aff',
-                border:'none',
-                color: 'white',
-                fontSize:'15px',
-                borderRadius: '4px',
-                fontWeight:'500',
-                cursor: 'pointer'
-            }}>챌린지방 입장하기</button>
-            </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+    
+            {isParticipating ? (
+                <button onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId}}); }} style={{
+                    fontFamily: 'Noto Sans KR, sans-serif',
+                    width: '220px',
+                    height: '48px',
+                    marginTop: '10px',
+                    backgroundColor: '#4f5aff',
+                    border: 'none',
+                    color: 'white',
+                    fontSize: '15px',
+                    borderRadius: '4px',
+                    fontWeight: '500',
+                    cursor: 'pointer'
+                }}>챌린지방 입장하기</button>
+            ) : (
+                <button onClick={() => {
+                    if (isLoggedOut) {
+                        alert("로그인이 필요합니다.");
+                        navigator('/signin');
+                    } else {
+                        applyForChallenge(challengeDetail?.responseDto?.challengeId);
+                        }
+                }} style={{
+                    fontFamily: 'Noto Sans KR, sans-serif',
+                    width: '220px',
+                    height: '48px',
+                    marginTop: '10px',
+                    backgroundColor: '#636363',
+                    border: 'none',
+                    color: 'white',
+                    fontSize: '15px',
+                    borderRadius: '4px',
+                    fontWeight: '500',
+                    cursor: 'pointer'
+                }}>참여 신청하기</button>
+            )}
+</div>
+
+
         </Modal>
     );
 }

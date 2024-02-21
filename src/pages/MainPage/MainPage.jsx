@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { getChallenge, entryChallenge } from '../../services/mainaxios';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import MainDetailPage from '../MainDetailPage/MainDetailPage';
 import { BiSearch } from 'react-icons/bi';
@@ -18,18 +18,25 @@ function MainPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [visibleItems, setVisibleItems] = useState(12); // 초기에 보이는 아이템 수 (4개 * 3줄)
 
+
+  const queryClient = useQueryClient();
+
+
   const { isLoading, isError, data } = useQuery(
     ['challenge', show, searchQuery],
     () => getChallenge(show, searchQuery),
     { refetchOnWindowFocus: false }
   );
-  
 
-  const mutation = useMutation(
+    const mutation = useMutation(
     (challengeId) => entryChallenge(challengeId),
     {
       onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
-      alert(successMessage);},
+      alert(successMessage);
+      console.log('메인이 움지깅요');
+      queryClient.invalidateQueries('challenge'); // 쿼리 갱신
+      },
+      
       onError: (error) => {
         const errorMessage = error.response?.data?.message || '참여 신청 실패!';
         alert(errorMessage);
