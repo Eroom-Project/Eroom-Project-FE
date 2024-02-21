@@ -1,65 +1,100 @@
-import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import React, { useState, useEffect } from 'react';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
-function Chat({ challengeId, memberId }) {
-  const [socket, setSocket] = useState(null);
+function Chat({ challengeId, memberId  }) {
+  const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+
+  
+
 
   useEffect(() => {
-    const newSocket = io('/ws-stomp');
-    setSocket(newSocket);
+    // SockJS와 Stomp 클라이언트 초기화
+    const socket = new SockJS(`https://api.eroom-challenge.com/ws-stomp`);
+    const client = new Client({
+      brokerURL:`ws://api.eroom-challenge.com/ws-stomp`,
+      webSocketFactory: () => socket, 
+      
+      debug: function (str) {
+        console.log('상태!', str);
+      },
+      onConnect: () => {
+        console.log('연결됨');
+        setStompClient(client);
 
-    // console.log(`챌린지 아이디: ${challengeId} ///  멤버 아이디: ${memberId}`);
 
-    newSocket.emit('join room', { challengeId, memberId });
-    // console.log(`입장 요청  챌린지 아디: ${challengeId} 멤버아디: ${memberId}`);
 
-    newSocket.on('receive message', (message) => {
-      // console.log('Received message:', message);
-      setMessages((prevMessages) => [...prevMessages, message]);
+        console.log(`memberId 타입: ${typeof Number(memberId)}, challengeId 타입: ${typeof challengeId}`);
+
+
+        // 구독 설정
+        client.subscribe(
+          `/sub/chat/challenge/${challengeId}`,
+          (message) => {
+            const receivedMessage = JSON.parse(message);
+            console.log('메세지 받음~', receivedMessage);
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              receivedMessage,
+            ]);
+          },
+          { memberId :Number(memberId), challengeId, type: 'JOIN' } // 헤더에 타입 지정
+        );
+      },
+      // 연결 오류 시 처리
+      onStompError: (frame) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
+      },
     });
 
+    // Stomp 클라이언트 연결
+    client.activate();
+
     return () => {
-      // console.log('연결 끈김');
-      newSocket.close();
+      // 컴포넌트 언마운트 시 연결 해제
+      if (client.active) {
+        client.deactivate();
+      }
     };
-  }, [challengeId, memberId]);
+  }, [challengeId]);
 
   const sendMessage = () => {
-    // console.log(`테스트 메세시지: '안녕하세요', 챌린지아디: ${challengeId} 멤버아디: ${memberId}`);
-    socket.emit('send message', { message: '안녕하세요', challengeId, memberId });
+    if (stompClient && stompClient.connected) {
+      const ChatMessage = {
+        MessageType : 'CHAT',
+        message: newMessage,
+        sender : '재현'
+       
+      };
+      console.log('내가간다',ChatMessage)
+      // 메시지 전송
+      stompClient.publish({
+        destination: '/pub/chat.sendMessage',
+        body: JSON.stringify(ChatMessage),
+        headers: {
+          memberId :Number(memberId),
+          challengeId
+        }
+      });
+
+      setNewMessage('');
+    }
   };
 
   return (
-    <div style={{ padding: '10px', backgroundColor: 'white', borderRadius: '6px' }}>
-      <button onClick={sendMessage} style={{
-        backgroundColor: '#C7B9FF', 
-        color: 'white', 
-        border: 'none', 
-        borderRadius: '4px', 
-        padding: '10px 20px', 
-        cursor: 'pointer'
-      }}>
-        메시지 보내기
-      </button>
-      <div style={{ marginTop: '20px' }}>
-        <h2 style={{ color: 'gray' }}>수신 메시지:</h2>
-        <ul style={{
-          listStyle: 'none', 
-          padding: 0
-        }}>
-          {messages.map((msg, index) => (
-            <li key={index} style={{
-              backgroundColor: '#f0f0f0', 
-              padding: '10px', 
-              marginBottom: '10px', 
-              borderRadius: '10px'
-            }}>
-              {msg.message}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div>
+      {messages.map((message, i) => (
+        <div key={i}>{message.content}</div>
+      ))}
+      <input
+        type="text"
+        value={newMessage}
+        onChange={(event) => setNewMessage(event.target.value)}
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 }
