@@ -13,7 +13,6 @@ function Chat({ challengeId, memberId }) {
       brokerURL: `ws://api.eroom-challenge.com/ws-stomp`,
       webSocketFactory: () => socket,
       connectHeaders: {
-        memberId: String(memberId), 
         challengeId: String(challengeId),
       },
       debug: function (str) {
@@ -22,6 +21,8 @@ function Chat({ challengeId, memberId }) {
       onConnect: () => {
         console.log('Connected');
         setStompClient(client);
+        
+        console.log(client)
                 
         // 구독 설정
         client.subscribe(
@@ -56,11 +57,13 @@ function Chat({ challengeId, memberId }) {
       const ChatMessage = {
         messagesType: 'CHAT',
         message: newMessage,
-        sender: '재현',
-      };
+        memberId: String(memberId),
+        challengeId: String(challengeId),
+
+        };
       console.log('Sending message', ChatMessage);
       stompClient.publish({
-        destination: '/pub/chat.sendMessage',
+        destination: `/pub/chat.sendMessage/${challengeId}`,
         body: JSON.stringify(ChatMessage),
         });
 
@@ -71,7 +74,7 @@ function Chat({ challengeId, memberId }) {
   return (
     <div>
       {messages.map((message, i) => (
-        <div key={i}>{message.content}</div>
+        <div key={i}>{message.message}</div>
       ))}
       <input
         type="text"
