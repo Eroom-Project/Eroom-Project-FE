@@ -6,21 +6,70 @@ export const Message = styled.span`
     margin-left: 5px;
     
 `
+export const Background = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+`
+export const ImgBack = styled.div`
+    position: relative;
+    width: 100%;
+    
+`
+export const Img1 = styled.img`
+    position: absolute;
+    top: 100px;
+    left: 10%;
+    width: 15% ;
+`
+export const Img2 = styled.img`
+    position: absolute;
+    top: 120px;
+    left: 61%;
+    width: 13%;
+`
+export const Img3 = styled.img`
+    position: absolute;
+    top: 460px;
+    left: 25%;
+    width: 18%;
+`
+export const Img4 = styled.img`
+    position: absolute;
+    top: 400px;
+    left: 83%;
+    width: 20%;
+`
+export const Img5 = styled.img`
+    position: absolute;
+    top: 630px;
+    left: -3%;
+    width: 20%;
+`
+export const Img6 = styled.img`
+    position: absolute;
+    top: 800px;
+    left: 51%;
+    width: 18%;
+`
 
-export const Back = styled.div`
+export const SignBack = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #F2F2F2;
     width: 100%;
     height: 100vh;
+    position: absolute;
+    backdrop-filter: blur(5px);
 `
 export const MainForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    border: 1px solid #F2F2F2;
     background-color: #FFFF;
     padding: 34px 32px;
     border-radius: 10px;
