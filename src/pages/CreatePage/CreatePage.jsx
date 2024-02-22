@@ -74,6 +74,7 @@ function CreatePage() {
       resetStartDate();
       resetDueDate();
       resetImage();
+      setSelectedFrequency();
     },
     onError: () => {
       alert('챌린지 생성에 실패했습니다.');
@@ -119,19 +120,22 @@ function CreatePage() {
 
 
   return (
-    <>
+    <div>
       <div style={{
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        width: '1200px',
-        height: '160px',
-        fontSize: '32px',
-        fontWeight: '700',
-        backgroundColor: 'gray',
-        margin: '0 auto',
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundImage: 'URL(/img/CreateHeaderImg.png)',
+        backgroundSize:'cover',
+        backgroundPosition:'center',
+        width:'100%',
+        height:'300px',
+        marginBottom:'60px'
       }}>
-        &nbsp;&nbsp; 챌린지를 만들어주세요
+       <div style={{
+          fontSize:'40px',
+          fontWeight:'900'
+        }}>챌린지를 만들어 주세요</div>
       </div>
       <FormContainer>
         <Form onSubmit={handleSubmit}>
@@ -188,12 +192,12 @@ function CreatePage() {
                     fontFamily:'Noto Sans KR, sans-serif',
                     width: '105px',
                     height: '48px',
-                    backgroundColor: selectedFrequency === option ? '#626262' : '#FFFFFF',
+                    backgroundColor: selectedFrequency === option ? 'black' : '#FFFFFF',
                     border: '1px solid #626262',
                     borderRadius: '50px',
                     fontWeight: '700',
                     fontSize: '15px',
-                    color: selectedFrequency === option ? '#FFFFFF' : '#000000',
+                    color: selectedFrequency === option ? '#FFFFFF' : '#888888',
                   }}
                 >
                   {option}
@@ -215,9 +219,12 @@ function CreatePage() {
           }}>
             <div>
               <TitleText>참여 인원</TitleText>
-              <InputStyle type="number" value={limitAttendance} onChange={handleLimitAttendanceChange} style={{
-                width: '300px'
-              }}
+              <InputStyle type="number" value={limitAttendance} onChange={handleLimitAttendanceChange} min='0' max="50" 
+              onInput={(e) => {
+              if (e.target.value.length > e.target.maxLength)
+              e.target.value = e.target.value.slice(0, e.target.maxLength);
+              }} maxLength={2}
+              style={{width: '300px'}}
               />
             </div>
 
@@ -250,7 +257,8 @@ function CreatePage() {
             border: '2px dashed #C3C3C3',
             textAlign: 'center',
             borderRadius: '10px',
-            backgroundColor: ' #F9F9F9'
+            backgroundColor: ' #F9F9F9',
+            marginBottom:'20px'
           }}>
             <input {...getInputProps()} />
             {
@@ -285,17 +293,18 @@ function CreatePage() {
               fontFamily:'Noto Sans KR, sans-serif',
               width: '344px',
               height: '48px',
-              border: '1px solid #626262',
-              backgroundColor: ' #626262',
+              borderRadius:'6px',
+              backgroundColor: 'black',
               color: ' #ffffff',
               fontWeight: '700',
               fontSize: '15px',
+              cursor:'pointer'
             }}>저장하기</button>
           </div>
 
         </Form>
       </FormContainer>
-    </>
+    </div>
   );
 }
 

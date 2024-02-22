@@ -84,8 +84,21 @@ function MainPage() {
 
   return (
     <div>
-      <div>
-        <h1>챌린지를 시작하세요</h1>
+      <div style={{
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundImage: 'URL(/img/MainHeaderImg.png)',
+        backgroundSize:'cover',
+        backgroundPosition:'center',
+        width:'100%',
+        height:'300px',
+        marginBottom:'60px'
+      }}>
+        <div style={{
+          fontSize:'40px',
+          fontWeight:'900'
+        }}>챌린지를 시작하세요!</div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <SearchContainer>
@@ -132,11 +145,13 @@ function MainPage() {
     <CardImage src={item.thumbnailImageUrl} alt={item.title} />
     
     <AttendanceText>
-      {item.currentAttendance} / {item.limitAttendance} 명
+      {item.currentAttendance} / {item.limitAttendance} 명 <img src='img/Userion.png'/>
     </AttendanceText>
     
-    <TitleText>{item.title}</TitleText> 
     <FrequencyText>{item.frequency}</FrequencyText>
+    <TitleText>{item.title}</TitleText> 
+    <Nickname>{item.nickname}</Nickname>
+    
   </Card>
 ))}
       </CardsContainer>
@@ -187,8 +202,8 @@ const CardsContainer = styled.div`
 `;
 
 const Card = styled.div`
-  width: 270px;
-  height: 267px;
+  width: 284px;
+  height: 320px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -206,34 +221,37 @@ const Card = styled.div`
   `;
 
 const CardImage = styled.img`
-  width: 250px;
-  height: 180px;
+  width: 284px;
+  height: 200px;
   object-fit: cover;
   border-radius: 10px;
-`;
+  `;
 
 const AttendanceText = styled.div`
+  display:flex;
+  gap:2px;
   position: absolute; 
   top: 15px; 
   right: 15px; 
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 4px 8px;
+  background-color: #FFE5B3  ;
+  color: #D75329;
+  padding: 4px 4px;
   border-radius: 4px;
   font-size: 12px;
 `;
 
 const FrequencyText = styled.div`
   
-  background-color: rgba(0, 0, 0, 0.1);
-  color: #000000;
+  background-color: #F87C54;
+  color: white;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
+  font-weight: 600;
+  margin-top:20px;
 `;
 
 const TitleText = styled.div`
-  
   width:230px;
   font-size: 18px;
   font-weight: 700;
@@ -242,8 +260,12 @@ const TitleText = styled.div`
   white-space: nowrap;    
   text-overflow: ellipsis;
   overflow:hidden;
-  
   `;
+
+const Nickname = styled.div`
+  font-size : 14px;
+  color : #9D9D9D;
+`
 
 const MoreButton = styled.button`
   font-family: 'Noto Sans KR', sans-serif;
@@ -254,6 +276,7 @@ const MoreButton = styled.button`
   color: white;
   border: none;
   border-radius: 5px;
+  font-weight:500;
   cursor: pointer;
   &:hover {
     background-color: #0056b3;
@@ -266,13 +289,14 @@ const FilterButton = styled.div`
   justify-content : center;
   width : 80px;
   font-size: 14px;
-  background-color: rgba(169, 169, 169, 0.3); 
-  color: #000; 
+  font-weight: 500;
+  background-color: #FFE0A5;
+  color: #87300A;
   border-radius: 50px; 
   padding: 8px 16px; 
   cursor: pointer;
   &:hover {
-    background-color: rgba(169, 169, 169, 0.5); 
+    background-color:  #f7b946;
   }
 `;
 

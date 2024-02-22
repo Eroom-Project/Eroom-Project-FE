@@ -37,6 +37,8 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
         alert(errorMessage);
     }
   });
+ 
+  
 
   const handleRemoveFile = (event) => {
     event.stopPropagation();

@@ -12,7 +12,7 @@ const getChallenge = async (show, searchQuery) => {
     url += `?query=${searchQuery}`;
   }
   const response = await api.get(url);
-    return response.data.data;
+  return response.data.data;
   };
 
 const entryChallenge = async (challengeId) => {
