@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 const Modal = ({ children, isOpen, onClose }) => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    // isOpen이 true일 때만 이벤트 리스너를 추가
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup 함수에서 이벤트 리스너를 제거
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]); // 의존성 배열에 isOpen과 onClose를 추가
+
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -15,7 +33,6 @@ const Modal = ({ children, isOpen, onClose }) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      
     }}>
       <div style={{
         display:'flex',
@@ -28,7 +45,6 @@ const Modal = ({ children, isOpen, onClose }) => {
         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
         width:'478px',
         height:'640px',
-        
       }}>
         <button 
           onClick={onClose}
