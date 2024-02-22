@@ -19,31 +19,48 @@ function Chat({ challengeId, memberId }) {
         console.log('지금 이런일이 일어나고 있어요!', str);
       },
       onConnect: () => {
-        console.log('Connected');
+        console.log('연결되었음!');
         setStompClient(client);
+  
+        // JOIN 메시지 보내기
+        const joinMessage = {
+          messagesType: 'JOIN',
+          memberId: String(memberId),
+          challengeId: String(challengeId),
+          };
+
+        console.log('조인 보냄', joinMessage);
         
-        console.log(client)
-                
+        client.publish({
+          destination: `/pub/chat.sendMessage/${challengeId}`,
+          body: JSON.stringify(joinMessage),
+        });
+  
         // 구독 설정
-        client.subscribe(
-          `/sub/chat/challenge/${challengeId}`,
-          (message) => {
-            console.log('aaaaaaaaaaaaaaaa', message.body ); // 파싱된 메시지 내용을 출력
-            const receivedMessage = JSON.parse(message.body );
+        client.subscribe(`/sub/chat/challenge/${challengeId}`, (message) => {
+          console.log('서버에서 보냈음', message.body);
+          const receivedMessage = JSON.parse(message.body);
+  
+          // "JOIN" 메시지 타입 처리
+          if (receivedMessage.sender === 'JOIN') {
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { message: `${receivedMessage.sender}님이 입장하셨습니다.` },
+            ]);
+          } else {
             setMessages((prevMessages) => [
               ...prevMessages,
               receivedMessage,
             ]);
-            console.log('bbbbbbbbbbbbbbbbb',receivedMessage ); // 파싱된 메시지 내용을 출력
-          },
-          );
+          }
+        });
       },
       onStompError: (frame) => {
         console.error('Broker reported error: ' + frame.headers['message']);
         console.error('Additional details: ' + frame.body);
       },
     });
-    
+  
     client.activate();
 
     return () => {
@@ -51,21 +68,21 @@ function Chat({ challengeId, memberId }) {
         client.deactivate();
       }
     };
-  }, [challengeId, memberId]); 
+  }, [challengeId, memberId. message]);
+
   const sendMessage = () => {
     if (stompClient && stompClient.connected) {
-      const ChatMessage = {
+      const chatMessage = {
         messagesType: 'CHAT',
         message: newMessage,
         memberId: String(memberId),
         challengeId: String(challengeId),
-
-        };
-      console.log('Sending message', ChatMessage);
+      };
+      console.log('채팅보냄', chatMessage);
       stompClient.publish({
         destination: `/pub/chat.sendMessage/${challengeId}`,
-        body: JSON.stringify(ChatMessage),
-        });
+        body: JSON.stringify(chatMessage),
+      });
 
       setNewMessage('');
     }

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { useDropzone } from 'react-dropzone';
 import { useMutation } from 'react-query';
 import { challengeAuth } from '../../services/mainaxios';
+import api from '../../services/api';
 
 const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   const [authContent, setAuthContent] = useState('');
@@ -37,6 +38,8 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     }
   });
  
+  
+
   const handleRemoveFile = (event) => {
     event.stopPropagation();
     setAuthImageUrl(null);
