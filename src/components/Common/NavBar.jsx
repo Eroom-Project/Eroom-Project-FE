@@ -26,7 +26,10 @@ function NavBar() {
     const removeCookies = async () => {
         console.log(accessState)
         if (accessState === true) {
+            const resToken = await api.post(`/api/token`,{})
             const res = await api.post('/api/logout', {})
+
+            console.log(resToken)
             console.log(res)
             if (res.status === 200) {
                 window.localStorage.removeItem("localaccess")

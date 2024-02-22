@@ -156,12 +156,12 @@ function SignInPage() {
     return (
         <Background>
             <ImgBack>
-                <Img1 src="/img/BackMongu.png" ref={el => ref.current[0]=el} data-value="-2" alt="" />
-                <Img2 src="/img/BackKoji.png" ref={el => ref.current[1]=el} data-value="6" alt="" />
-                <Img3 src="/img/BackDanja.png" ref={el => ref.current[2]=el} data-value="4" alt="" />
-                <Img4 src="/img/BackRoro.png" ref={el => ref.current[3]=el} data-value="-6" alt="" />
-                <Img5 src="/img/BackBoori.png" ref={el => ref.current[4]=el} data-value="-9" alt="" />
-                <Img6 src="/img/BackPoopoo.png" ref={el => ref.current[5]=el} data-value="-5" alt="" />
+                <Img1 src="/img/SignPage/BackMongu.png" ref={el => ref.current[0]=el} data-value="-2" alt="" />
+                <Img2 src="/img/SignPage/BackKoji.png" ref={el => ref.current[1]=el} data-value="6" alt="" />
+                <Img3 src="/img/SignPage/BackDanja.png" ref={el => ref.current[2]=el} data-value="4" alt="" />
+                <Img4 src="/img/SignPage/BackRoro.png" ref={el => ref.current[3]=el} data-value="-6" alt="" />
+                <Img5 src="/img/SignPage/BackBoori.png" ref={el => ref.current[4]=el} data-value="-9" alt="" />
+                <Img6 src="/img/SignPage/BackPoopoo.png" ref={el => ref.current[5]=el} data-value="-5" alt="" />
             </ImgBack>
             <SignBack>
                 <MainForm>
