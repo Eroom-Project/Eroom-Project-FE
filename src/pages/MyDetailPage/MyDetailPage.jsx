@@ -24,7 +24,7 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
 
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room")
+        navigate("/room",{state:{challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.responseDto.loginMemberId}})
     }
     return (
         <>

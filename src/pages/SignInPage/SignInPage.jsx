@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import api from '../../services/api';
 import { setCookie } from '../../services/Cookie';
 import KakaoSignIn from './KakaoSignIn';
@@ -124,7 +124,7 @@ function SignInPage() {
         return (auth.email && auth.password ?
             <Button color={"#5EC75E"} type='button' onClick={signIn}>로그인</Button>
             :
-            <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
+            <Button color={"#1C1C1C"} type='button'>정보를 입력해 주세요</Button>)
     }
 
     const handleOnKey = (e) => {
@@ -132,15 +132,36 @@ function SignInPage() {
             signIn()
         }
     }
+    ///////
+    const ref = useRef([])
+
+    useEffect(()=>{
+        console.log(ref)
+        
+        const parallax = (e) => {
+            ref.current.forEach(function(value){
+                let moving = value.getAttribute("data-value")
+                let x  = (e.clientX * moving) / 250
+                let y  = (e.clientY * moving) / 250
+                value.style.transform = "translateX(" + x +"px) translateY(" + y +"px)"
+            })
+        }
+        console.log(ref)
+        document.addEventListener("mousemove", parallax);
+        return () => {
+            document.removeEventListener("mousemove", parallax);
+        }
+        
+    }, [])
     return (
         <Background>
             <ImgBack>
-                <Img1 src="/img/BackMongu.png" alt="" />
-                <Img2 src="/img/BackKoji.png" alt="" />
-                <Img3 src="/img/BackDanja.png" alt="" />
-                <Img4 src="/img/BackRoro.png" alt="" />
-                <Img5 src="/img/BackBoori.png" alt="" />
-                <Img6 src="/img/BackPoopoo.png" alt="" />
+                <Img1 src="/img/SignPage/BackMongu.png" ref={el => ref.current[0]=el} data-value="-2" alt="" />
+                <Img2 src="/img/SignPage/BackKoji.png" ref={el => ref.current[1]=el} data-value="6" alt="" />
+                <Img3 src="/img/SignPage/BackDanja.png" ref={el => ref.current[2]=el} data-value="4" alt="" />
+                <Img4 src="/img/SignPage/BackRoro.png" ref={el => ref.current[3]=el} data-value="-6" alt="" />
+                <Img5 src="/img/SignPage/BackBoori.png" ref={el => ref.current[4]=el} data-value="-9" alt="" />
+                <Img6 src="/img/SignPage/BackPoopoo.png" ref={el => ref.current[5]=el} data-value="-5" alt="" />
             </ImgBack>
             <SignBack>
                 <MainForm>

@@ -68,7 +68,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
             <div style={{ display: 'flex', gap: '10px' }}>
     
             {isParticipating ? (
-                <StyledButton onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId}}); }} 
+                <StyledButton onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title }}); }} 
                 backgroundColor = '#4f5aff'
                 >챌린지방 입장하기</StyledButton>
             ) : (

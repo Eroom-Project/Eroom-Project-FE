@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthPage from '../AuthPage/AuthPage';
 import AuthResult from '../AuthResultPage/AuthResultPage';
 import Chat from './Chat';
 import { useLocation } from 'react-router-dom';
+import api from '../../services/api';
 
 function RoomPage() {
     const [isChatOpen, setIsChatOpen] = useState(false); 
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isAuthResultOpen, setIsAuthResultOpen] = useState(false);
-    
     const location = useLocation();
-    const { challengeId,  memberId } = location.state || {};
+    const { challengeId,  memberId, title } = location.state || {};
     
+    
+
     return (
         <div style={{
             maxWidth: '1400px',
@@ -64,21 +66,26 @@ function RoomPage() {
                 </div>
                 <div style={{
                 position: 'absolute',
-                top: '50%', 
-                right: isChatOpen ? '500px' : '20px', 
+                top: '9%', 
+                right: isChatOpen ? '500px' : '150px', 
                 transform: 'translateY(-50%)', 
                 zIndex: 20, 
             }}>
                 <button onClick={() => setIsChatOpen(!isChatOpen)} style={{
                     cursor: 'pointer',
                     position: 'absolute',
-                    left: '-30px',
+                    left: '90px',
                     top: '50%',
                     transform: 'translateY(-50%) rotate(0deg)',
                     fontFamily:'Noto Sans KR, sans-serif',
                     fontSize:'20px',
-                    backgroundColor:'white',
+                    backgroundColor:'black',
+                    textAlign:'center',
+                    color:'white',
                     border:'none',
+                    borderRadius:'50px',
+                    width:'40px',
+                    height:'40px',
                     fontWeight:'1000'
                     }}>
                     {isChatOpen ? '>' : '<'}
@@ -88,25 +95,19 @@ function RoomPage() {
                 <div  style={{
                     position: 'absolute',
                     right: '0', 
-                    width: '500px', 
+                    width: '380px', 
                     height: '100%', 
                     backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                    border: '1px solid #ccc', 
-                    padding: '20px', 
+                    // border: '1px solid #ccc', 
+                    padding: '10px', 
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)',
                     display: isChatOpen ? 'block' : 'none', 
 }}>
-                    <Chat challengeId={challengeId} memberId ={memberId } />
+                    <Chat challengeId={challengeId} memberId ={memberId} title={title} />
                 </div>
 
                 </div>
                 
-                
-            
-
-            
-            
-
             <AuthPage isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} challengeId={challengeId}  />
             <AuthResult isOpen={isAuthResultOpen} onClose={() => setIsAuthResultOpen(false)} challengeId={challengeId} />
         </div>

@@ -28,14 +28,14 @@ const createChallenge = async (form) => {
   return response.data;
 };
 
-const challengeAuth = async (form, challengeId,) => {
+const challengeAuth = async (form, challengeId) => {
   const resToken = await api.post(`/api/token`,{})
   const response = await api.post(`/api/challenge/${challengeId}/auth`, form);
   return response.data;
 };
 
 const authResult = async (challengeId) =>{
-      const resToken = await api.post(`/api/token`,{})
+  const resToken = await api.post(`/api/token`,{})
       const response = await api.get(`/api/challenge/${challengeId}/auth`)
       return response.data.data;
 }

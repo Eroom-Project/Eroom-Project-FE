@@ -48,6 +48,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    token()
     if (!authContent) {
       alert('인증 내용을 작성해주세요.');
       return; 
@@ -68,6 +69,10 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   
   if (!isOpen) return null;
 
+  const token = async() => {
+    const resToken = await api.post(`/api/token`,{})
+    console.log(resToken)
+  }
   return ReactDOM.createPortal(
     <div style={{
       position: 'fixed',
@@ -211,7 +216,9 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
           backgroundColor:'#636363',
           color:'white',
           fontWeight:'5 00'
-          }}>
+          }}
+          
+          >
             인증하기</button>
       </form>
     </div>,

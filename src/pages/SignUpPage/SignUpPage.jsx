@@ -203,7 +203,7 @@ function SignUpPage() {
         return (auth.email && auth.password && auth.checkPassword && auth.nickname && check.email && check.nickname ?
             <Button color={"#5EC75E"} type='button' onClick={signUp}>회원가입하기</Button>
             :
-            <Button color={"#636363"} type='button'>정보를 입력해 주세요</Button>)
+            <Button color={"#1C1C1C"} type='button'>정보를 입력해 주세요</Button>)
     }
 
     return (

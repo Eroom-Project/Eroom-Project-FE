@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 function HomePage() {
     const navigate = useNavigate();
@@ -7,59 +8,26 @@ function HomePage() {
     const handleLook = () => {
         navigate('/main');
     };
-    
+
     const handleStart = () => {
         navigate('/signup');
     };
 
     return (
-        <>
+        <MainForm>
             {/* 첫 번째 섹션: 홈페이지 소개 */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <div style={{
-                    justifyContent: 'center',
-                    width: '100%',
-                    maxWidth: '1920px',
-                    height: '700px',
-                    backgroundColor: '#F0FDE9',
-                    marginTop: '-50px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    marginBottom: '50px'
-                }}>
-                    <img src='img/home1.png' style={{ width: '30vh', marginBottom: '20px' }} />
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                        lineHeight: '1.2'
-                    }}>
-                        <div style={{ fontSize: "40px", fontWeight: '700', marginBottom: '20px' }}>
+            <Box1>
+                <ContentsBox>
+                    <Img src='img/home1.png'/>
+                        <Box1Title1>
                             끝없는 공부,<br /> 혼자가 아니라 같이 이룸
-                        </div>
-                        <div style={{ fontSize: '24px', fontWeight: '400', color: '#2C2C2C', marginBottom: '20px' }}>
+                        </Box1Title1>
+                        <Box1Title2>
                             시험 공부부터 자기계발까지 당신의 꿈이 담긴 방,<br />이름에서 꿈을 향해 '<span style={{ fontWeight: '700' }}>함께</span>' 도전하세요
-                        </div>
-                        <button onClick={handleLook} style={{
-                            width: '228px',
-                            height: '64px',
-                            margin: '0 auto',
-                            backgroundColor: '#67CB71',
-                            borderRadius: '8px',
-                            border: '#67CB71',
-                            fontSize: '24px',
-                            color: 'white',
-                            fontWeight: '700',
-                            cursor:'pointer'
-                            
-
-
-                        }}>이룸 둘러보기</button>
-                    </div>
-                </div>
-            </div>
+                        </Box1Title2>
+                        <Box1Button onClick={handleLook}>이룸 둘러보기</Box1Button>
+                </ContentsBox>
+            </Box1>
 
             {/* 두 번째 섹션: 챌린지 소개 */}
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', marginBottom: '50px' }}>
@@ -78,12 +46,12 @@ function HomePage() {
             </div>
 
             {/* 세 번째 섹션: 대화를 통한 학습 */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Box3>
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '1920px',
+                    width: '100%',
                     height: '500px',
                     backgroundImage: 'url(img/home3.png)',
                     fontSize: '24px',
@@ -102,7 +70,7 @@ function HomePage() {
                     <img src='img/home3-1.png' />
                     <img src='img/home3-2.png' />
                 </div>
-            </div>
+            </Box3>
 
             {/* 네 번째 섹션: 커뮤니티 소개 */}
             <div style={{
@@ -163,11 +131,81 @@ function HomePage() {
                     fontSize: '24px',
                     color: 'white',
                     fontWeight: '700',
-                    cursor:'pointer'
+                    cursor: 'pointer'
                 }}>이룸 시작하기</button>
             </div>
-        </>
+        </MainForm>
     );
 }
 
 export default HomePage;
+
+const MainForm = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -50px;
+`
+const Box1 = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 976px;
+    background-color: #F0FDE9;
+    margin-bottom: 70px;
+`
+const Box3 = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 976px;
+    margin-bottom: 70px;
+`
+
+const ContentsBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 70px;
+`
+
+const Img = styled.img`
+    width: 30%;
+    margin-bottom: 20px;
+`
+
+const Box1Title1 = styled.p`
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 3rem;
+    margin-bottom: 20px;
+`
+const Box1Title2 = styled.p`
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 2.2rem;
+    margin-bottom: 20px;
+    color: #2C2C2C;
+`
+
+const Box1Button = styled.button`
+    font-family: 'Noto Sans KR', sans-serif; 
+    width: 228px;
+    height: 64px;
+    background-color: #67CB71;
+    border: none;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+`
