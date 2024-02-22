@@ -7,6 +7,7 @@ function Chat({ challengeId, memberId, title }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [lastMessageTime, setLastMessageTime] = useState(0);
+  const [chatList, setChatList] = useState([]);
   
   const formatDateTime = (receivedMessage) => {
     const utcDate = new Date(receivedMessage.time); 
@@ -51,7 +52,7 @@ function Chat({ challengeId, memberId, title }) {
   
         // JOIN 메시지 보내기
         const joinMessage = {
-          messagesType: 'JOIN',
+          type: 'JOIN',
           memberId: String(memberId),
           challengeId: String(challengeId),
           };
@@ -72,16 +73,29 @@ function Chat({ challengeId, memberId, title }) {
 
 
           // "JOIN" 메시지 타입 처리
-          if (receivedMessage.messagesType === 'JOIN') {
+          if (receivedMessage.type === 'JOIN') {
             setMessages((prevMessages) => [
               ...prevMessages,
               { message: `${receivedMessage.sender}님이 입장하셨습니다.` },
             ]);
-          } else if(receivedMessage.messagesType === 'LEAVE'){
+            setChatList(prevList =>{
+              const isExisting = prevList.some(user => user.memberId === receivedMessage.memberId);
+              if(!isExisting) {
+                return [...prevList, {
+                  memberId : receivedMessage.memberId,
+                  sender : receivedMessage.sender,
+                  profileImageUrl :receivedMessage.profileImageUrl
+                }]
+              }
+              return prevList
+            })
+          } else if(receivedMessage.type === 'LEAVE'){
             setMessages((prevMessages) => [
             ...prevMessages,
             { message: `${receivedMessage.sender}님이 나가셨습니다.` },
-          ]);} else {
+          ]);
+        setChatList(prevList => prevList.filter(user => user.memberId !== receivedMessage.memberId))
+        } else {
             setMessages((prevMessages) => [
               ...prevMessages,
               receivedMessage,
@@ -114,7 +128,7 @@ function Chat({ challengeId, memberId, title }) {
 
     if (stompClient && stompClient.connected && newMessage.trim() !== '') {
       const chatMessage = {
-        messagesType: 'CHAT',
+        type: 'CHAT',
         message: newMessage,
         memberId: String(memberId),
         challengeId: String(challengeId),
@@ -153,8 +167,23 @@ function Chat({ challengeId, memberId, title }) {
         
         
       }}> 
-        <img src='img/send.png' style={{width:'16px', height:'16px'}}/>메세지함
+        <img src='img/send.png' style={{width:'16px', height:'16px'}}/>
+        메세지함
         </div>
+        <div style={{
+  display: 'flex',
+  flexWrap: 'wrap', 
+  alignItems: 'center',
+  padding: '10px',
+  borderBottom: '1px solid #DADADA',
+}}>
+  {chatList.map((user, index) => (
+    <div key={index} style={{ display: 'flex', flexDirection:'column' ,alignItems: 'center', marginRight: '10px',gap:'5px', fontSize:'12px',fontWeight:'500' }}>
+      <img src={user.profileImageUrl} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '15px', marginRight: '5px' }} />
+      <span>{user.sender}</span>
+    </div>
+  ))}
+</div>
     <div style={{
       display:'flex',
       flexDirection:'column',
@@ -164,7 +193,7 @@ function Chat({ challengeId, memberId, title }) {
     }}>
     <div style={{
   width: '360px',
-  height: '780px',
+  height: '730px',
   marginBottom: '20px',
   // border: '2px solid black',
   overflow: 'auto',
@@ -180,7 +209,7 @@ function Chat({ challengeId, memberId, title }) {
       style={{
         display: 'flex',
         flexDirection:'column',
-        alignItems: message.messagesType === 'CHAT' ? (memberId === message.memberId ? 'flex-end' : 'flex-start') : 'center',
+        alignItems: message.type === 'CHAT' ? (memberId === message.memberId ? 'flex-end' : 'flex-start') : 'center',
         padding: '5px',
         maxWidth: '100%',
       }}
@@ -190,17 +219,17 @@ function Chat({ challengeId, memberId, title }) {
           maxWidth: '70%',
           padding: '10px',
           borderRadius: '10px',
-          backgroundColor: message.messagesType === 'CHAT' ? (memberId === message.memberId ? '#CDFFB5' : '#b1daf7') : '#EFEFEF',
+          backgroundColor: message.type === 'CHAT' ? (memberId === message.memberId ? '#CDFFB5' : '#b1daf7') : '#EFEFEF',
           border: message.messagesType === 'JOIN' || message.messagesType === 'LEAVE' ? '1px solid #DADADA' : 'none',
           textAlign: 'left',
         }}
       >
-        {message.messagesType === 'CHAT' && memberId !== message.memberId && (
+        {message.type === 'CHAT' && memberId !== message.memberId && (
           <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{message.sender}</div>
         )}
         {message.message}
       </div>
-      {message.messagesType === 'CHAT' && <div style={{ fontSize: '9px', marginTop: '5px' }}>{formatDateTime(message)}</div>}
+      {message.type === 'CHAT' && <div style={{ fontSize: '9px', marginTop: '5px' }}>{formatDateTime(message)}</div>}
     </div>
   ))}
   <div ref={messagesEndRef} />
@@ -234,7 +263,7 @@ function Chat({ challengeId, memberId, title }) {
         cursor:'pointer'
       }}
       
-      ><img src='img/send.png' style={{
+      ><img src={'img/send.png'} style={{
         width:'15px',
         height:'15px',
         display:'flex'
