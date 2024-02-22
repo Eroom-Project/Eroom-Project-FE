@@ -77,7 +77,11 @@ function Chat({ challengeId, memberId, title }) {
               ...prevMessages,
               { message: `${receivedMessage.sender}님이 입장하셨습니다.` },
             ]);
-          } else {
+          } else if(receivedMessage.messagesType === 'LEAVE'){
+            setMessages((prevMessages) => [
+            ...prevMessages,
+            { message: `${receivedMessage.sender}님이 나가셨습니다.` },
+          ]);} else {
             setMessages((prevMessages) => [
               ...prevMessages,
               receivedMessage,
@@ -104,7 +108,7 @@ function Chat({ challengeId, memberId, title }) {
   const sendMessage = () => {
     const now = Date.now();
     if (now - lastMessageTime < 500) { 
-      alert('메시지를 너무 자주 보내지 마세요.'); // 사용자에게 경고
+      alert('메시지를 너무 자주 보내지 마세요.');
       return; 
     }
 
