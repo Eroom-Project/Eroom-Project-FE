@@ -17,41 +17,11 @@ export const ImgBack = styled.div`
     width: 100%;
     
 `
-export const Img1 = styled.img`
+export const Img = styled.img`
     position: absolute;
-    top: 100px;
-    left: 10%;
-    width: 15% ;
-`
-export const Img2 = styled.img`
-    position: absolute;
-    top: 120px;
-    left: 61%;
-    width: 13%;
-`
-export const Img3 = styled.img`
-    position: absolute;
-    top: 460px;
-    left: 25%;
-    width: 18%;
-`
-export const Img4 = styled.img`
-    position: absolute;
-    top: 400px;
-    left: 83%;
-    width: 20%;
-`
-export const Img5 = styled.img`
-    position: absolute;
-    top: 630px;
-    left: -3%;
-    width: 20%;
-`
-export const Img6 = styled.img`
-    position: absolute;
-    top: 800px;
-    left: 51%;
-    width: 18%;
+    top: ${(props)=>props.top};
+    left: ${(props)=>props.left};
+    width: ${(props)=>props.width};
 `
 
 export const SignBack = styled.div`

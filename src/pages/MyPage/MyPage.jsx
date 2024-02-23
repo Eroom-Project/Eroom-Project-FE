@@ -34,7 +34,7 @@ const H1Box = styled.div`
     align-items: center;
     min-width: 1200px;
     width: 100%;
-    margin: 0px auto;
+    margin: 40px auto 0px 0px;
 `
 const H1 = styled.div`
     font-size: 28px;

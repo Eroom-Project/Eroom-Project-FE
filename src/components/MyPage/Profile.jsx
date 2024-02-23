@@ -545,6 +545,7 @@ const Profile = styled.div`
 const ImgLabel = styled.label`
     margin-right: auto;
     border-radius: 7px;
+    font-weight: 500;
     color: ${(props) => props.color};
     padding: ${(props) => props.padding};
     background-color: ${(props) => props.backColor};
