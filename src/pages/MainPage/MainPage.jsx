@@ -33,7 +33,6 @@ function MainPage() {
     {
       onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
       alert(successMessage);
-      console.log('메인이 움지깅요');
       queryClient.invalidateQueries('challenge'); // 쿼리 갱신
       },
       

@@ -114,7 +114,7 @@ function Chellange() {
                                             <Img src={value.thumbnailImageUrl} alt="img" />
                                             <CurrentUsers>
                                                 {value.currentAttendance}/{value.limitAttendance}명
-                                                <img src="/img/userIon.png" alt="currentuser" />
+                                                <img src="/img/userIcon.png" alt="currentuser" />
                                             </CurrentUsers>
                                         </ContentsTop>
                                         <ContentsBottom>
