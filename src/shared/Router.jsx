@@ -12,6 +12,7 @@ import RoomPage from '../pages/RoomPage/RoomPage'
 import Layout from '../components/Common/Layout'
 
 
+
 function Router() {
     return (
         <BrowserRouter>
@@ -26,7 +27,7 @@ function Router() {
                     <Route path="/main" element={<MainDetailPage />} />
                     <Route path="/create" element={<CreatePage />} />
                     <Route path="/room" element={<RoomPage />} />
-                </Route>
+                    </Route>
             </Routes>
         </BrowserRouter>
     )

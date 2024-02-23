@@ -6,7 +6,7 @@ import { challengeAuth } from '../../services/mainaxios';
 import api from '../../services/api';
 
 const AuthPage = ({ isOpen, onClose, challengeId  }) => {
-  const [authContent, setAuthContent] = useState('');
+  const [authContents, setAuthContents] = useState('');
   const [authImageUrl, setAuthImageUrl] = useState(null);
   const [authVideoUrl, setAuthVideoUrl] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
@@ -25,7 +25,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     onSuccess: (data) => {
       const successMessage = data?.message || '챌린지 인증 등록 성공';
       alert(successMessage);
-      setAuthContent('');
+      setAuthContents('');
       setAuthImageUrl('');
       setAuthVideoUrl('');
       setUploadedFileName('');
@@ -49,13 +49,13 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     token()
-    if (!authContent) {
+    if (!authContents) {
       alert('인증 내용을 작성해주세요.');
       return; 
     }
     
     const authCreateData = {
-      authContent,
+      authContents,
       authVideoUrl,
       authStatus
     }
@@ -134,8 +134,8 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
           type="text"
           maxLength ='200'
           placeholder="내용을 입력하세요.(200자 이내)"
-          value={authContent}
-          onChange={(e) => setAuthContent(e.target.value)}
+          value={authContents}
+          onChange={(e) => setAuthContents(e.target.value)}
           style={{ 
             width: '90%', 
             margin: '0 10px',
