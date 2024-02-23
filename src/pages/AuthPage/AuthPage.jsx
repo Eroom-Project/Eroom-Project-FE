@@ -71,8 +71,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
 
   const token = async() => {
     const resToken = await api.post(`/api/token`,{})
-    console.log(resToken)
-  }
+    }
   return ReactDOM.createPortal(
     <div style={{
       position: 'fixed',
