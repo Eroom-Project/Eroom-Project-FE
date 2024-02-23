@@ -1,7 +1,7 @@
 import React from 'react'
+import styled from 'styled-components'
 import { useQuery } from 'react-query'
 import { getChallengeDetail } from '../../services/Query'
-import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
 function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
@@ -44,7 +44,7 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
                                     {challengeDetailData.data.responseDto.title}
                                 </Title>
                                 <Category>
-                                    {`○ ${challengeDetailData.data.responseDto.category}`}
+                                    {`${challengeDetailData.data.responseDto.category}`}
                                 </Category>
                                 <Description>
                                     {challengeDetailData.data.responseDto.description}
@@ -150,7 +150,7 @@ const Title = styled.div`
 const Category = styled.div`
     font-size: 14px;
     font-weight: 400;
-    color: gray;
+    color: #9D9D9D;
 `
 const Description = styled.div`
     font-size: 14px;

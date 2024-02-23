@@ -1,16 +1,10 @@
 import React, { useState } from 'react'
 import api from '../../services/api'
 import { useNavigate } from 'react-router-dom'
+import SignBacks from '../../components/SignPage/SignBacks'
 import {
     Message,
     Background,
-    ImgBack,
-    Img1,
-    Img2,
-    Img3,
-    Img4,
-    Img5,
-    Img6,
     SignBack,
     MainForm,
     Form,
@@ -164,6 +158,12 @@ function SignUpPage() {
         }
     }
 
+    const handleOnKey = (e) => {
+        if (e.key === 'Enter') {
+            signUp()
+        }
+    }
+
     // massage state를 통해 state 출력 
     const message = (name) => {
         switch (name) {
@@ -208,14 +208,7 @@ function SignUpPage() {
 
     return (
         <Background>
-            <ImgBack>
-            <Img1 src="/img/BackMongu.png" alt="" />
-                <Img2 src="/img/BackKoji.png" alt="" />
-                <Img3 src="/img/BackDanja.png" alt="" />
-                <Img4 src="/img/BackRoro.png" alt="" />
-                <Img5 src="/img/BackBoori.png" alt="" />
-                <Img6 src="/img/BackPoopoo.png" alt="" />
-            </ImgBack>
+            <SignBacks/>
             <SignBack>
                 <MainForm >
                     <H1>회원가입</H1>
@@ -233,6 +226,7 @@ function SignUpPage() {
                                     onChange={(e) => {
                                         handleInputChange(e)
                                     }}
+                                    onKeyDown={handleOnKey}
                                 />
                                 <AuthButton onClick={emailCheck}>
                                     중복<br />
@@ -251,6 +245,7 @@ function SignUpPage() {
                                     onBlur={() => { handlerBlur("nickname") }}
                                     value={input.nickname}
                                     onChange={(e) => { handleInputChange(e) }}
+                                    onKeyDown={handleOnKey}
                                 />
                                 <AuthButton onClick={nickNameCheck}>
                                     중복<br />
@@ -268,6 +263,7 @@ function SignUpPage() {
                                 onBlur={() => { handlerBlur("password") }}
                                 value={input.password}
                                 onChange={(e) => { handleInputChange(e) }}
+                                onKeyDown={handleOnKey}
                             />
                         </InputBox>
                         <InputBox>
@@ -280,6 +276,7 @@ function SignUpPage() {
                                 onBlur={() => { handlerBlur("checkPassword") }}
                                 value={input.checkPassword}
                                 onChange={(e) => { handleInputChange(e) }}
+                                onKeyDown={handleOnKey}
                             />
                         </InputBox>
                         {button()}
