@@ -41,11 +41,11 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                 <div style={{fontSize:'20px',fontWeight:'800', marginBottom:'5px'}}>
                     {challengeDetail?.responseDto?.title}
                 </div>
-                <div style={{fontSize:'14px', color:'#626262', marginBottom:'20px'}}>
+                <div style={{fontSize:'14px', color:'#626262', marginBottom:'10px'}}>
                     {translatedCategory}
                 </div>
                 
-                <div style={{height:'65px', fontSize:'14px', marginBottom:'25px', lineHeight:'1.5'}}>
+                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5', overflow:'auto'}}>
                     {challengeDetail?.responseDto?.description}
                 </div>
                             
