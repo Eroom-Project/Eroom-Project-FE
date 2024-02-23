@@ -145,7 +145,7 @@ function MainPage() {
     <CardImage src={item.thumbnailImageUrl} alt={item.title} />
     
     <AttendanceText>
-      {item.currentAttendance} / {item.limitAttendance} 명 <img src='img/Userion.png'/>
+      {item.currentAttendance} / {item.limitAttendance} 명 <img src='img/userIcon.png'/>
     </AttendanceText>
     
     <FrequencyText>{item.frequency}</FrequencyText>
@@ -189,6 +189,8 @@ const OptionsContainer = styled.div`
   margin: 10px;
   width: 1200px;
   margin: 0 auto; 
+  font-size: 15px;
+  font-weight: 500;
   `;
 
 const CardsContainer = styled.div`
@@ -288,7 +290,7 @@ const FilterButton = styled.div`
   display: flex;
   justify-content : center;
   width : 80px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   background-color: #FFE0A5;
   color: #87300A;

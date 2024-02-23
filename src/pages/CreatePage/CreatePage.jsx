@@ -3,6 +3,8 @@ import { useMutation } from 'react-query';
 import { createChallenge } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function useInput(initialValue) {
@@ -24,6 +26,8 @@ function CreatePage() {
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
+
+  const navigate = useNavigate();
   
   const countMap = {
     '매일': '매일',
@@ -50,9 +54,27 @@ function CreatePage() {
   };
 
   const onDrop = useCallback(acceptedFiles => {
-    setImage(acceptedFiles[0]);
-    setUploadedFileName(acceptedFiles[0].name);
+    if (acceptedFiles.length === 0) {
+      return;
+    }
+  
+    const file = acceptedFiles[0];
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxFileSize) {
+      alert('파일 크기가 10MB를 초과할 수 없습니다.');
+      return;
+    }
+  
+    
+    const isImageFile = file.type.match('image/(jpeg|png)');
+    if (isImageFile) {
+      setImage(file);
+      setUploadedFileName(file.name);
+    } else {
+      alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
+    }
   }, []);
+  
 
   const handleRemoveFile = (event) => {
     event.stopPropagation();
@@ -60,9 +82,13 @@ function CreatePage() {
     setUploadedFileName('');
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive  } = useDropzone({ onDrop,
+  accept: 'image/jpeg, image/png',
+  });
 
-  const { mutate, isLoading, isError } = useMutation(createChallenge, {
+  const today = new Date().toISOString().split('T')[0];
+
+  const { mutate } = useMutation(createChallenge, {
     onSuccess: () => {
       alert('챌린지 이룸 생성 성공');
       resetTitle();
@@ -75,6 +101,7 @@ function CreatePage() {
       resetDueDate();
       resetImage();
       setSelectedFrequency();
+      navigate('/main');
     },
     onError: () => {
       alert('챌린지 생성에 실패했습니다.');
@@ -90,12 +117,8 @@ function CreatePage() {
       alert('모든 내용을 작성해주세요.');
       return; 
     }
-
-    if (new Date(startDate) > new Date(dueDate)) {
-      alert('시작일은 종료일보다 이전이어야 합니다.');
-      return; 
-    }
-  
+    
+    
     const challengeCreateData = {
       title,
       category,
@@ -114,8 +137,9 @@ function CreatePage() {
     if (thumbnailImageUrl) {
       form.append('thumbnailImageUrl', thumbnailImageUrl);
     }
-  
+    
     mutate(form);
+    
   };
 
 
@@ -171,14 +195,14 @@ function CreatePage() {
           </div>
           <div>
             <TitleText>챌린지 소개</TitleText>
-            <textarea value={description} onChange={handleDescriptionChange} style={{
+            <textarea value={description} onChange={handleDescriptionChange} maxLength={1000} placeholder='챌린지를 소개해주세요' style={{
               width: '1200px',
               height: '150px',
               border: '1px solid #C3C3C3',
               borderRadius: '6px',
               fontStyle: 'normal',
               fontWeight: '400',
-              fontSize: '14px'
+              fontSize: '14px'              
             }} />
           </div>
           <div>
@@ -207,7 +231,7 @@ function CreatePage() {
           </div>
           <div>
             <TitleText>인증 방법</TitleText>
-            <InputStyle type="text" value={authExplanation} onChange={handleAuthExplanationChange} style={{
+            <InputStyle type="text" value={authExplanation} onChange={handleAuthExplanationChange} maxLength={25} placeholder='인증방식을 간단히 설명해주세요(25자 이내)' style={{
               width: '1200px'
             }} />
           </div>
@@ -233,7 +257,7 @@ function CreatePage() {
               marginBottom: '20px',
             }}>
               <TitleText>시작일</TitleText>
-              <InputStyle type="date" value={startDate} onChange={handleStartDateChange} style={{
+              <InputStyle type="date" value={startDate} onChange={handleStartDateChange} min={today} style={{
                 width: '312px',
                 padding: '0 10px'
               }} />
@@ -249,42 +273,38 @@ function CreatePage() {
           </div>
 
           <div {...getRootProps()} style={{
-            display:'flex',
-            alignItems:'center',
-            justifyContent:'center',
-            width:'1200px',
-            height:'97px',
-            border: '2px dashed #C3C3C3',
-            textAlign: 'center',
-            borderRadius: '10px',
-            backgroundColor: ' #F9F9F9',
-            marginBottom:'20px'
-          }}>
-            <input {...getInputProps()} />
-            {
-              uploadedFileName ?
-                (<div>
-                  <p>{uploadedFileName} <button type="button" onClick={handleRemoveFile} style={{
-                    marginLeft: '10px', cursor: 'pointer', radius: '10px',
-                  }}>X
-                  </button></p>
-                </div>) :
-                (isDragActive ?
-                  <p style={{ lineHeight: '1.5' }}>파일을 여기에 드롭하세요.</p>
-                  :
-                  <>
-                    <div>
-                      <p style={{ lineHeight: '1.5' }}>
-                        여기에 파일을 끌어다주세요.<br />
-                        <span style={{ fontSize: '12px', color: 'grey' }}>최대 10MB</span><br />
-                        <span style={{ textDecoration: 'underline' }}>또는 클릭하여 파일을 선택하세요.</span>
-                      </p>
-                    </div>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '1200px',
+  height: '97px',
+  border: '2px dashed #C3C3C3',
+  textAlign: 'center',
+  borderRadius: '10px',
+  backgroundColor: '#F9F9F9',
+  marginBottom: '20px'
+}}>
+  <input {...getInputProps()} />
+  {uploadedFileName ? (
+    <div>
+      <p>{uploadedFileName} <button type="button" onClick={handleRemoveFile} style={{
+        marginLeft: '10px', cursor: 'pointer', borderRadius: '10px',
+      }}>X</button></p>
+    </div>
+  ) : isDragActive ? (
+    <p style={{ lineHeight: '1.5' }}>파일을 여기에 드롭하세요.</p>
+  ) : (
+    <div>
+      <p style={{ lineHeight: '1.5' }}>
+        여기에 파일을 끌어다주세요.<br />
+        <span style={{ fontSize: '12px', color: 'grey' }}>최대 10MB</span><br />
+        <span style={{ textDecoration: 'underline' }}>또는 클릭하여 파일을 선택하세요.</span>
+      </p>
+    </div>
+  )}
+ 
+</div>
 
-                  </>
-                )
-            }
-          </div>
           <div style={{
             display: 'flex',
             justifyContent: 'center'

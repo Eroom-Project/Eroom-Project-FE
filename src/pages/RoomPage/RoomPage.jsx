@@ -19,16 +19,17 @@ function RoomPage() {
             maxWidth: '1400px',
             margin: '0 auto',
             display: 'flex',
-            justifyContent: 'space-between',
-            height: '100vh'
+            justifyContent: 'center',
+            height: '80%'
         }}>
            <div style={{
                 backgroundImage:'url(img/RoomBackImg.png)',
-                width:'1200px',
-                height:'980px',
+                width:'100vh',
+                height:'90vh',
                 backgroundPosition:'center',
                 backgroundSize:'cover',
-                position:'relative'
+                position:'relative',
+                
                 }}>
                 
                 <div style={{
@@ -74,29 +75,30 @@ function RoomPage() {
                 <button onClick={() => setIsChatOpen(!isChatOpen)} style={{
                     cursor: 'pointer',
                     position: 'absolute',
-                    left: '90px',
+                    left: '10px',
                     top: '50%',
                     transform: 'translateY(-50%) rotate(0deg)',
                     fontFamily:'Noto Sans KR, sans-serif',
-                    fontSize:'20px',
+                    fontSize:'15px',
                     backgroundColor:'black',
                     textAlign:'center',
                     color:'white',
                     border:'none',
                     borderRadius:'50px',
-                    width:'40px',
+                    width:'100px',
                     height:'40px',
                     fontWeight:'1000'
                     }}>
-                    {isChatOpen ? '>' : '<'}
+                    {isChatOpen ? '닫기' : '채팅방 열기'}
                 </button>
             </div>
-            
-                <div  style={{
+            <div style={{position:'relative'}}>
+            <div  style={{
                     position: 'absolute',
+                    
                     right: '0', 
                     width: '380px', 
-                    height: '100%', 
+                    height: '90vh', 
                     backgroundColor: 'rgba(255, 255, 255, 0.8)',
                     // border: '1px solid #ccc', 
                     padding: '10px', 
@@ -105,6 +107,8 @@ function RoomPage() {
 }}>
                     <Chat challengeId={challengeId} memberId ={memberId} title={title} />
                 </div>
+            </div>
+                
 
                 </div>
                 
