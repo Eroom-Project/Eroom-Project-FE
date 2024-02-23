@@ -8,6 +8,8 @@ function Chat({ challengeId, memberId, title }) {
   const [newMessage, setNewMessage] = useState('');
   const [lastMessageTime, setLastMessageTime] = useState(0);
   const [chatList, setChatList] = useState([]);
+  const [messageCount, setMessageCount] = useState(0);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   
   const formatDateTime = (receivedMessage) => {
     const utcDate = new Date(receivedMessage.time); 
@@ -21,6 +23,7 @@ function Chat({ challengeId, memberId, title }) {
 };
 
 
+  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -29,6 +32,14 @@ function Chat({ challengeId, memberId, title }) {
     }
   };
   const messagesEndRef = useRef(null);    
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMessageCount(0); // 1초마다 메시지 카운트 초기화
+    }, 1000);
+  return () => clearInterval(interval);
+  }, []);
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -120,13 +131,24 @@ function Chat({ challengeId, memberId, title }) {
   }, [challengeId, memberId]);
 
   const sendMessage = () => {
-    const now = Date.now();
-    if (now - lastMessageTime < 500) { 
-      alert('메시지를 너무 자주 보내지 마세요.');
-      return; 
+    // const now = Date.now();
+    // if (now - lastMessageTime < 500) { 
+    //   alert('메시지를 너무 자주 보내지 마세요.');
+    //   return; 
+    // }
+    if(isButtonDisabled){
+  alert('채팅금지입니다. 잠시 후 다시 시도해주세요')
+  return;
+    }
+    if (messageCount >= 3) {
+      setIsButtonDisabled(true);
+      setTimeout(() => setIsButtonDisabled(false), 5000); 
+      alert('메시지를 너무 자주 보냈습니다. 5초 후 다시 시도해주세요.');
+      return;
     }
 
     if (stompClient && stompClient.connected && newMessage.trim() !== '') {
+      setMessageCount(prevCount => prevCount + 1);
       const chatMessage = {
         type: 'CHAT',
         message: newMessage,
@@ -140,7 +162,7 @@ function Chat({ challengeId, memberId, title }) {
       });
 
       setNewMessage('');
-      setLastMessageTime(now); 
+      // setLastMessageTime(now); 
     }
   };
   
@@ -223,7 +245,7 @@ function Chat({ challengeId, memberId, title }) {
         maxWidth: '70%',
       }}
     >
-      {/* 프로필 확이ㄴ 필요 */}
+      
       {memberId !== message.memberId && message.type === 'CHAT' && (
         <div style={{
           display:'flex',
@@ -295,7 +317,7 @@ function Chat({ challengeId, memberId, title }) {
           outline:'none'
         }}
         />
-      <button onClick={sendMessage} style={{
+      <button onClick={sendMessage}  style={{
         border:'none',
         backgroundColor:'white',
         cursor:'pointer'
