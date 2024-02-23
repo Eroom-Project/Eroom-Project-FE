@@ -18,7 +18,6 @@ const getChallenge = async (show, searchQuery) => {
 const entryChallenge = async (challengeId) => {
   const resToken = await api.post(`/api/token`,{})
   const response = await api.post(`/api/challenge/${challengeId}`);
-  console.log(response);
   return response.data;
 };
 
@@ -49,7 +48,6 @@ const postAuthStatus = async (authId, authStatus, challengeId) =>{
 
 const detailchallenge = async(challengeId) =>{
   const response = await api.get(`/api/challenge/${challengeId}`)
-  console.log(response.data)
   return response.data.data;
 }
 

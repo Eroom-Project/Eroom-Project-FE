@@ -21,10 +21,10 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
     if (challengeDetailData.isError) {
         console.log("에러")
     }
-
+    
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room",{state:{challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.responseDto.loginMemberId}})
+        navigate("/room",{state:{challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId}})
     }
     return (
         <>
