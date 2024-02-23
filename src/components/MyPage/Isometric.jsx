@@ -16,22 +16,13 @@ function Isometric() {
     }
     return (
         <MainBox>
-            <H6>My-Room</H6>
+            <H6>E-ROOM</H6>
             <MyRoom>
-                {
-                //chellangeData.data.myroomInfo.floor
-                chellangeData.data&&
-                <Img src={"/img/img4.jpg"} alt="Room" />
-                }
-                
+                <Img src={"/img/MyPage/BackGround.png"} alt="Room" />
             </MyRoom>
-            <H6>My-Brick</H6>
+            <H6>BRICK</H6>
             <Brick>
-            {
-                //chellangeData.data.myroomInfo.brick
-                chellangeData.data&&
                 <Img src={"/img/characters.png"} alt="" />
-                }
             </Brick>
         </MainBox>
     )
@@ -78,6 +69,6 @@ const H6 = styled.div`
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    font-size: 12px;
     margin: 0px 0px 10px 0px;
+    font-weight: 500;
 `

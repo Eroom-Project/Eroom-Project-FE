@@ -1,18 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import api from '../../services/api';
-import { setCookie } from '../../services/Cookie';
 import KakaoSignIn from './KakaoSignIn';
 import { useNavigate } from 'react-router-dom';
+import SignBacks from '../../components/SignPage/SignBacks';
 import {
     Message,
     Background,
-    ImgBack,
-    Img1,
-    Img2,
-    Img3,
-    Img4,
-    Img5,
-    Img6,
     SignBack,
     MainForm,
     Form,
@@ -132,37 +125,10 @@ function SignInPage() {
             signIn()
         }
     }
-    ///////
-    const ref = useRef([])
 
-    useEffect(()=>{
-        console.log(ref)
-        
-        const parallax = (e) => {
-            ref.current.forEach(function(value){
-                let moving = value.getAttribute("data-value")
-                let x  = (e.clientX * moving) / 250
-                let y  = (e.clientY * moving) / 250
-                value.style.transform = "translateX(" + x +"px) translateY(" + y +"px)"
-            })
-        }
-        console.log(ref)
-        document.addEventListener("mousemove", parallax);
-        return () => {
-            document.removeEventListener("mousemove", parallax);
-        }
-        
-    }, [])
     return (
         <Background>
-            <ImgBack>
-                <Img1 src="/img/SignPage/BackMongu.png" ref={el => ref.current[0]=el} data-value="-2" alt="" />
-                <Img2 src="/img/SignPage/BackKoji.png" ref={el => ref.current[1]=el} data-value="6" alt="" />
-                <Img3 src="/img/SignPage/BackDanja.png" ref={el => ref.current[2]=el} data-value="4" alt="" />
-                <Img4 src="/img/SignPage/BackRoro.png" ref={el => ref.current[3]=el} data-value="-6" alt="" />
-                <Img5 src="/img/SignPage/BackBoori.png" ref={el => ref.current[4]=el} data-value="-9" alt="" />
-                <Img6 src="/img/SignPage/BackPoopoo.png" ref={el => ref.current[5]=el} data-value="-5" alt="" />
-            </ImgBack>
+            <SignBacks/>
             <SignBack>
                 <MainForm>
                     <Form>

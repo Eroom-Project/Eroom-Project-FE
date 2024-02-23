@@ -26,7 +26,7 @@ function NavBar() {
     const removeCookies = async () => {
         console.log(accessState)
         if (accessState === true) {
-            const resToken = await api.post(`/api/token`,{})
+            const resToken = await api.post(`/api/token`, {})
             const res = await api.post('/api/logout', {})
 
             console.log(resToken)
@@ -34,7 +34,6 @@ function NavBar() {
             if (res.status === 200) {
                 window.localStorage.removeItem("localaccess")
                 setAccessState(false)
-                alert(res.data.message)
                 navigate("/")
             }
         }
@@ -45,21 +44,22 @@ function NavBar() {
             <MainBox>
                 <Main>
                     <Info>
-                        <Link to="/"><Span> E-Room</Span></Link>
-                        <Link to="/main"><Span> 챌린지 리스트</Span></Link>
-                        <Link to="/create"><Span> 챌린지 생성하기</Span></Link>
+                        <Link to="/"><Logo src="/img/NavBar/Logo.png" alt="logo" /></Link>
+                        <Link to="/main"><Span> E-Room 리스트</Span></Link>
+                        {accessState === true && <Link to="/create"><Span> E-Room 생성하기</Span></Link>
+}
                     </Info>
-                    <SignIn>
-                        {
-                            accessState === true ?
-                                <>
-                                    <Link to="/mypage"><Span> 마이페이지</Span></Link>
-                                    <Span onClick={removeCookies}>로그아웃</Span>
-                                </>
-                                :
+                    {
+                        accessState === true ?
+                                <SignIn>
+                                    <Link to="/mypage"><User src="/img/NavBar/user.png" alt="user" /></Link>
+                                    <Sign src="/img/NavBar/log-in.png" alt="sign" onClick={removeCookies}/>
+                                </SignIn>
+                            :
+                            <SignIn>
                                 <Link to="/signin"><Span> 로그인</Span></Link>
-                        }
-                    </SignIn>
+                            </SignIn>
+                    }
                 </Main>
                 <Hr />
             </MainBox>
@@ -70,6 +70,19 @@ function NavBar() {
 
 export default NavBar
 
+const Logo = styled.img`
+    width: 130px;
+    margin-right: 20px;
+`
+const Sign = styled.img`
+    width: 20px;
+    cursor: pointer;
+`
+const User = styled.img`
+    width: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+`
 const MainBox = styled.div`
     display: flex;
     flex-direction: column;
@@ -77,9 +90,10 @@ const MainBox = styled.div`
     justify-content: center;
     position: sticky;
     top: 0px;
-    background-color: white;
     width: 100%;
-    `
+    z-index: 1000;
+    background-color: white;
+`
 const Main = styled.div`
     display: flex;
     flex-direction: row;
@@ -87,12 +101,12 @@ const Main = styled.div`
     justify-content: space-between;
     max-width: 1200px;
     width: 100%;
-    height: 50px;
+    padding: 25px 0px;
 `
 const Hr = styled.div`
     width: 100%;
     border: none;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #F2F2F2;
 `
 const Info = styled.div`
     display: flex;
@@ -106,6 +120,6 @@ const SignIn = styled.div`
 `
 
 const Span = styled.span`
-    margin: 0px 5px;
+    margin: 0px 10px;
     cursor: pointer;
 `

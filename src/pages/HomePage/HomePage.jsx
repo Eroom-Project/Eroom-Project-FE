@@ -18,7 +18,20 @@ function HomePage() {
             {/* 첫 번째 섹션: 홈페이지 소개 */}
             <Box1>
                 <ContentsBox>
-                    <Img src='img/home1.png'/>
+                    <MainImgBox>
+                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"30%"} left={"-10%"} />
+                        <Img src='img/HomePage/1RoroBack.png' rotate={"30deg"} top={"15%"} left={"7%"} />
+                        <div>
+                            <MainImg src="img/HomePage/1Roro.png" alt="mainimg" top={"50%"} left={"50%"} width={"25vh"} />
+                            <MainImg src="img/HomePage/1RoroBody.png" alt="mainimg" top={"78%"} left={"70%"} width={"5vh"} />
+                            <MainImg src="img/HomePage/1RoroHand.png" alt="mainimg" top={"62%"} left={"80%"} width={"8vh"} />
+                        </div>
+                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"7%"} left={"50%"} />
+                        <Img src='img/HomePage/1RoroBack.png' rotate={"30deg"} top={"30%"} left={"65%"} />
+                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"50%"} left={"13%"} />
+                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"50%"} left={"50%"} />
+                    </MainImgBox>
+                    <Contents>
                         <Box1Title1>
                             끝없는 공부,<br /> 혼자가 아니라 같이 이룸
                         </Box1Title1>
@@ -26,6 +39,7 @@ function HomePage() {
                             시험 공부부터 자기계발까지 당신의 꿈이 담긴 방,<br />이름에서 꿈을 향해 '<span style={{ fontWeight: '700' }}>함께</span>' 도전하세요
                         </Box1Title2>
                         <Box1Button onClick={handleLook}>이룸 둘러보기</Box1Button>
+                    </Contents>
                 </ContentsBox>
             </Box1>
 
@@ -145,7 +159,6 @@ const MainForm = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: -50px;
 `
 const Box1 = styled.div`
     display: flex;
@@ -153,35 +166,47 @@ const Box1 = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 976px;
+    height: 100vh;
     background-color: #F0FDE9;
-    margin-bottom: 70px;
-`
-const Box3 = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 976px;
     margin-bottom: 70px;
 `
 
 const ContentsBox = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-align: center;
     width: 100%;
-    margin-bottom: 70px;
+    height: 100%;
 `
 
+const MainImgBox = styled.div`
+    position: relative;
+    width: 50vh;
+    height: 50vh;
+    `
+const MainImg = styled.img`
+    position: absolute;
+    top: ${(props) => props.top};
+    left: ${(props) => props.left};
+    transform: translate(-${(props) => props.top},-${(props) => props.left});
+    width: ${(props) => props.width};
+    `
 const Img = styled.img`
-    width: 30%;
-    margin-bottom: 20px;
+    position: absolute;
+    top:${(props) => props.top};
+    left:${(props) => props.left};
+    transform: translate(-${(props) => props.top},-${(props) => props.left});
+    width: 20vh;
+    transform: rotate(${(props) => props.rotate});
 `
 
+const Contents = styled.div`
+    position: absolute;
+    top: 50%;
+`
 const Box1Title1 = styled.p`
     font-size: 40px;
     font-weight: 700;
@@ -208,4 +233,14 @@ const Box1Button = styled.button`
     color: white;
     margin-top: 20px;
     cursor: pointer;
+`
+
+const Box3 = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 976px;
+    margin-bottom: 70px;
 `
