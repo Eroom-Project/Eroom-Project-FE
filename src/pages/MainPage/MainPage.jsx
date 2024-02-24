@@ -144,6 +144,13 @@ function MainPage() {
       {isError && <FeedbackContainer>
         <img src='img/icon (6).png' alt='에러이미지'/>
         오류가 발생했습니다.</FeedbackContainer>}
+      
+        {!isLoading && !isError && data?.length === 0 && (
+        <FeedbackContainer>
+           <img src='img/icon (4).png' alt='에러이미지' /> <br />"{searchQuery}" 검색 결과가 없습니다.
+        </FeedbackContainer>
+)}
+
       <CardsContainer>
       {Array.isArray(data) && data?.slice(0, visibleItems).map((item, challengeId) => (
   <Card key={challengeId} onClick={() => openModal(item)}>
