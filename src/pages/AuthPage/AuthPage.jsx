@@ -176,7 +176,8 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
           }}>동영상 링크</div>
         <input
           type="text"
-          placeholder="링크를 입력하세요."
+          placeholder="링크를 입력하세요.(500자 이내)"
+          maxLength={500}
           value={authVideoUrl}
           onChange={(e) => setAuthVideoUrl(e.target.value)}
           style={{ 
@@ -232,7 +233,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
           height:'48px',
           border:'none',
           borderRadius:'6px',
-          backgroundColor:'#636363',
+          backgroundColor:'black',
           color:'white',
           fontWeight:'5 00'
           }}

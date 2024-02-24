@@ -3,6 +3,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
 
+
 function Chat({ challengeId, memberId, title }) {
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -23,7 +24,7 @@ function Chat({ challengeId, memberId, title }) {
 };
 
 
-  const navigate = useNavigate();
+const navigate = useNavigate()
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -59,8 +60,7 @@ function Chat({ challengeId, memberId, title }) {
         setStompClient(client);
   
 
-       
-        // JOIN 메시지 보내기
+       // JOIN 메시지 보내기
         const joinMessage = {
           type: 'JOIN',
           memberId: String(memberId),
@@ -76,17 +76,18 @@ function Chat({ challengeId, memberId, title }) {
           const receivedMessage = JSON.parse(message.body);
           console.log('bbbbbbbbbbbbbbbbbb',receivedMessage)
          
-    //       const memberIdCount = receivedMessage.reduce((acc, member) => {
-    //         acc[member.memberId] = (acc[member.memberId] || 0) + 1;
-    //         return acc;
-    //     }, {});
-
-    //     if(memberIdCount[memberId] >= 2){
-    //     alert('중복된 접속입니다.');
-    //     navigate('/main');
-    //     return; 
-    // } 
-         
+          if(Array.isArray(receivedMessage)){
+            const memberIdCount = receivedMessage.reduce((acc, member) => {
+              acc[member.memberId] = (acc[member.memberId] || 0) + 1;
+              return acc;
+          }, {});
+  
+          if(memberIdCount[memberId] > 1){
+          alert('중복된 접속입니다.');
+          navigate('/main');
+          return; 
+      }}
+          
           //참가자 리스트 처리
           if (Array.isArray(receivedMessage) && receivedMessage.length > 0) {
             const updatedChatList = receivedMessage.map(user => ({
@@ -95,20 +96,20 @@ function Chat({ challengeId, memberId, title }) {
             }));
             setChatList(updatedChatList);
           }
-          console.log('cccccccccccccccccccc',receivedMessage)
+          
           // "JOIN" 메시지 타입 처리
           if (receivedMessage.type === 'JOIN') {
             setMessages((prevMessages) => [
               ...prevMessages,
               { message: `${receivedMessage.sender}님이 입장하셨습니다.` },
             ]);
-           
+                     
           } else if(receivedMessage.type === 'LEAVE'){
             setMessages((prevMessages) => [
             ...prevMessages,
             { message: `${receivedMessage.sender}님이 나가셨습니다.` },
           ]);
-        
+                  
         } else if(receivedMessage.type === 'CHAT'){
             setMessages((prevMessages) => [
               ...prevMessages,
@@ -173,7 +174,8 @@ function Chat({ challengeId, memberId, title }) {
         fontSize:'24px',
         fontWeight:'700',
         height:'30px',
-        width:'45vh',
+        width:'30vh',
+        maxWidth:'380px',
         marginBottom:'10px',
         overflow:'auto'
         
@@ -187,9 +189,7 @@ function Chat({ challengeId, memberId, title }) {
         borderTop:'1px solid #DADADA',
         fontSize:'16px',
         marginBottom:'10px'
-        
-        
-      }}> 
+        }}> 
         <img src='img/send.png' style={{width:'16px', height:'16px'}}/>
         메세지함
         </div>
@@ -260,7 +260,8 @@ function Chat({ challengeId, memberId, title }) {
           border:'1px solid #ffffff',
           borderRadius:'50px',
           marginRight:'2px',
-          marginTop:'5px'
+          marginTop:'5px',
+          flexShrink:'0'
         }}>
           
           </div>
@@ -275,12 +276,16 @@ function Chat({ challengeId, memberId, title }) {
           textAlign: 'left',
           display: 'flex',
           flexDirection: 'column',
+          overflowWrap:'break-word',
+          wordBreak:'break-all',
+          flexShrink: 1,
+          minWidth: 0,
         }}
       >
         {message.type === 'CHAT' && memberId !== message.memberId && (
-          <div style={{ fontWeight: '500', marginBottom: '5px', fontSize: '12px' }}>{message.sender}</div>
+          <div style={{ fontWeight: '900', marginBottom: '5px', fontSize: '12px' }}>{message.sender}</div>
         )}
-        <div style={{ fontSize: '14px' }}>{message.message}</div>
+        <div style={{ fontSize: '14px', maxwidth:'245px' }}>{message.message}</div>
       </div>
     </div>
     {message.type === 'CHAT' && (

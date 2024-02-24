@@ -278,18 +278,20 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     <>
         <EditContainer expanded={expandedIndex === item.authId}>
         
-            <div>비디오 링크: {item.authVideoUrl}</div>
+            <div>링크: {item.authVideoUrl}</div>
             <div>{item.authContents}</div>
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 marginBottom:'5PX'
                 }}>
+                <a href={item.authImageUrl} target="_blank" rel="noopener noreferrer" style={{display: 'inline-block'}}>
                 <img src={item.authImageUrl} alt="Auth Image" style={{
                     width: '190px',
                     maxHeight:'180px',
                     objectFit: 'contain',
                 }} />
+                </a>
             </div>
         </EditContainer>
             
@@ -359,8 +361,8 @@ const AuthCard = styled.div`
 const SmallGrayButton = styled.button`
     font-Family: Noto Sans KR, sans-serif;
     font-Size: 15px;
-    background-Color: #636363;
-    border: 1px solid #636363;
+    background-Color: black;
+    border: 1px solid black;
     border-Radius: 6px;
     color: white;
     width: 66px;
@@ -381,8 +383,8 @@ const SmallWhiteButton = styled.button`
 const GrayButton = styled.button`
     font-Family: Noto Sans KR, sans-serif;
     font-Size: 15px;
-    background-Color: #636363;
-    border: 1px solid #636363;
+    background-Color: black;
+    border: 1px solid black;
     border-Radius: 6px;
     color: white;
     width: 239px;
