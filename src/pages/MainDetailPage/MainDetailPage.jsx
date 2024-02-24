@@ -92,7 +92,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     } else {
                         applyForChallenge(challengeDetail?.responseDto?.challengeId);
                         }
-                }} backgroundColor= 'black' color={butcolor}>참여 신청하기</StyledButton>
+                }} backgroundColor= 'black' color='white'>참여 신청하기</StyledButton>
             )}
 </div>
 
