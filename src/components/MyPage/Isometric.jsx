@@ -18,11 +18,13 @@ function Isometric() {
         <MainBox>
             <H6>E-ROOM</H6>
             <MyRoom>
-                <Img src={"/img/MyPage/BackGround.png"} alt="Room" />
+                공사중입니다.
+                {/* <Img src={"/img/MyPage/BackGround.png"} alt="Room" /> */}
             </MyRoom>
             <H6>BRICK</H6>
             <Brick>
-                <Img src={"/img/characters.png"} alt="" />
+                공사중입니다.
+                {/* <Img src={"/img/characters.png"} alt="" /> */}
             </Brick>
         </MainBox>
     )
@@ -36,27 +38,34 @@ const MainBox = styled.div`
     width: 100%;
 `
 const MyRoom = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
     max-width: 574px;
     min-width: 440px;
-    height: 450px;
+    height: 355px;
     /* border: 1px solid gray; */
     border-radius: 8px;
     margin-bottom: 25px;
-
+    background-color: #F2F2F2;
     overflow: hidden;
 `
+
 const Brick = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     min-width: 440px;
     height: 150px;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     border-radius: 8px;
     overflow: hidden;
-    
+    background-color: #F2F2F2;
 `
 const Img = styled.img`
     object-fit: cover;
@@ -70,5 +79,5 @@ const H6 = styled.div`
     align-items: flex-start;
     justify-content: flex-start;
     margin: 0px 0px 10px 0px;
-    font-weight: 500;
+    font-weight: 700;
 `
