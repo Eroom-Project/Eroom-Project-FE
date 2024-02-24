@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import api from '../../services/api'
 import { useNavigate } from 'react-router-dom';
 import { setCookie } from '../../services/Cookie';
+import SignBacks from '../../components/SignPage/SignBacks';
 
 function Redirection() {
     const navigate = useNavigate()
@@ -15,7 +16,7 @@ function Redirection() {
     const postKakao = async () => {
         try {
             const res = await api.get("/auth/callback/kakao",
-            { params: { code } })
+                { params: { code } })
             console.log(res.status)
             if (res.status === 200) {
                 window.localStorage.setItem("localaccess", true)
@@ -31,9 +32,7 @@ function Redirection() {
     }, [])
 
     return (
-        <div>
-            로그인 중입니다.
-        </div>
+        <SignBacks />
     )
 }
 
