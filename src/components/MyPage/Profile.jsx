@@ -592,7 +592,7 @@ const ImgBox2 = styled.div`
     }
 `
 const Img = styled.img`
-    display: flex;
+    height: 100%;
     object-fit: cover;
 `
 
