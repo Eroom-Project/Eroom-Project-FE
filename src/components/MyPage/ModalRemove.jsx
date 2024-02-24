@@ -6,7 +6,6 @@ import { QueryClient, useMutation, useQueryClient } from 'react-query'
 import { deleteChallenge } from '../../services/Query'
 
 function ModalRemove({ modalRemoveOpen, challengeId }) {
-
     const queryClient = useQueryClient();
     const mutation = useMutation(deleteChallenge, {
         onSuccess: () => {
@@ -16,6 +15,7 @@ function ModalRemove({ modalRemoveOpen, challengeId }) {
     })
 
     const remove = (e) => {
+        console.log('aaaaaaa',challengeId)
         mutation.mutate(challengeId)
         modalRemoveOpen(challengeId, e)
         alert("챌린지가 삭제됐습니다.")

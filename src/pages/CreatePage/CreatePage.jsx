@@ -200,7 +200,7 @@ function CreatePage() {
               borderRadius: '6px',
               fontStyle: 'normal',
               fontWeight: '400',
-              fontSize: '14px'              
+              fontSize: '14px',
             }} />
           </div>
           <div>

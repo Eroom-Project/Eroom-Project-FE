@@ -33,7 +33,7 @@ function MainPage() {
     {
       onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
       alert(successMessage);
-      queryClient.invalidateQueries('challenge'); // 쿼리 갱신
+      queryClient.invalidateQueries('challenge'); 
       },
       
       onError: (error) => {
@@ -44,6 +44,7 @@ function MainPage() {
   );
   
   const categoryMap = {
+    전체 :'전체',
     IT: 'IT',
     인문: 'HUMANITIES',
     수학: 'MATH',
@@ -69,7 +70,7 @@ function MainPage() {
   const handleSearch = () => {
     setSearchQuery(input);
     setShow('');
-    setInput('');
+    
   };
 
   const openModal = (item) => {
@@ -105,6 +106,11 @@ function MainPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder='함께하고 싶은 챌린지를 찾아보세요!'
+            onKeyDown={(e)=>{
+              if(e.key ==='Enter'){
+                handleSearch();
+              }
+            }}
           />
           <SearchButton onClick={handleSearch}>
             <BiSearch size={20} color='#6c6c6c' />
@@ -222,7 +228,7 @@ const Card = styled.div`
   `;
 
 const CardImage = styled.img`
-  width: 284px;
+  width: 264px;
   height: 200px;
   object-fit: cover;
   border-radius: 10px;
@@ -254,6 +260,7 @@ const FrequencyText = styled.div`
 
 const TitleText = styled.div`
   width:230px;
+  height:20px;
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
