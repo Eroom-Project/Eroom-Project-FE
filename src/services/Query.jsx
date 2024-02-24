@@ -12,6 +12,7 @@ const getChallengeDetail = async(challengeId) => {
 
 /// 챌린지 삭제 완료
 const deleteChallenge = async(challengeId) => {
+    
     try{
         const resToken = await api.post(`/api/token`,{})
         const res = await api.delete(`/api/challenge/${challengeId}`)
