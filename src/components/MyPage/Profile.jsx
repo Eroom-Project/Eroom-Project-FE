@@ -451,7 +451,7 @@ function MyPage() {
                                 </InnerBox>
                             </InputBox>
 
-                            <H6>비밀번호: {message("password")}</H6>
+                            <H6>새 비밀번호: {message("password")}</H6>
                             {
                                 openChangeState.password === true ?
                                     <>
@@ -470,7 +470,7 @@ function MyPage() {
                                             </InnerBox>
                                         </InputBox>
                                         <InputBox>
-                                            <H6>비밀번호 확인: {message("checkPassword")}</H6>
+                                            <H6>새 비밀번호 확인: {message("checkPassword")}</H6>
                                             <InnerBox>
                                                 <Input
                                                     type="password"
