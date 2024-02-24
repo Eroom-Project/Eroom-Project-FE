@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { useNavigate } from 'react-router-dom';
 
 function Chat({ challengeId, memberId, title }) {
   const [stompClient, setStompClient] = useState(null);
@@ -22,7 +23,7 @@ function Chat({ challengeId, memberId, title }) {
 };
 
 
-  
+  const navigate = useNavigate();
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -57,25 +58,35 @@ function Chat({ challengeId, memberId, title }) {
       onConnect: () => {
         setStompClient(client);
   
+
+       
         // JOIN 메시지 보내기
         const joinMessage = {
           type: 'JOIN',
           memberId: String(memberId),
           challengeId: String(challengeId),
           };
-
-        
         
         client.publish({
           destination: `/pub/chat.sendMessage/${challengeId}`,
           body: JSON.stringify(joinMessage),
-        });
-  
-        // 구독 설정
+          });
+                  
         client.subscribe(`/sub/chat/challenge/${challengeId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
-          
-          
+          console.log('bbbbbbbbbbbbbbbbbb',receivedMessage)
+         
+    //       const memberIdCount = receivedMessage.reduce((acc, member) => {
+    //         acc[member.memberId] = (acc[member.memberId] || 0) + 1;
+    //         return acc;
+    //     }, {});
+
+    //     if(memberIdCount[memberId] >= 2){
+    //     alert('중복된 접속입니다.');
+    //     navigate('/main');
+    //     return; 
+    // } 
+         
           //참가자 리스트 처리
           if (Array.isArray(receivedMessage) && receivedMessage.length > 0) {
             const updatedChatList = receivedMessage.map(user => ({
@@ -84,7 +95,7 @@ function Chat({ challengeId, memberId, title }) {
             }));
             setChatList(updatedChatList);
           }
-          
+          console.log('cccccccccccccccccccc',receivedMessage)
           // "JOIN" 메시지 타입 처리
           if (receivedMessage.type === 'JOIN') {
             setMessages((prevMessages) => [
@@ -162,8 +173,9 @@ function Chat({ challengeId, memberId, title }) {
         fontSize:'24px',
         fontWeight:'700',
         height:'30px',
-        width:'90vh',
-        marginBottom:'10px'
+        width:'45vh',
+        marginBottom:'10px',
+        overflow:'auto'
         
         }}>{title} </div>
       <div style={{
