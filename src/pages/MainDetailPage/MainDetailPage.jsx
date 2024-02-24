@@ -51,7 +51,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     {translatedCategory}
                 </div>
                 
-                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5'}}>
+                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5', whiteSpace:'pre-wrap'}}>
                     {challengeDetail?.responseDto?.description}
                 </div>
                 </div>            

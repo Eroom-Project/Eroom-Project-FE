@@ -33,7 +33,7 @@ function MainPage() {
     {
       onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
       alert(successMessage);
-      queryClient.invalidateQueries('challenge'); // 쿼리 갱신
+      queryClient.invalidateQueries('challenge'); 
       },
       
       onError: (error) => {
@@ -69,7 +69,7 @@ function MainPage() {
   const handleSearch = () => {
     setSearchQuery(input);
     setShow('');
-    setInput('');
+    
   };
 
   const openModal = (item) => {
@@ -105,6 +105,11 @@ function MainPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder='함께하고 싶은 챌린지를 찾아보세요!'
+            onKeyDown={(e)=>{
+              if(e.key ==='Enter'){
+                handleSearch();
+              }
+            }}
           />
           <SearchButton onClick={handleSearch}>
             <BiSearch size={20} color='#6c6c6c' />
