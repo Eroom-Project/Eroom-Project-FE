@@ -51,7 +51,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     {translatedCategory}
                 </div>
                 
-                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5'}}>
+                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5', whiteSpace:'pre-wrap'}}>
                     {challengeDetail?.responseDto?.description}
                 </div>
                 </div>            
@@ -115,6 +115,7 @@ const StyledButton = styled.button`
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
+
 
    &:hover{
     background-color: ${props => props.backgroundColor}
