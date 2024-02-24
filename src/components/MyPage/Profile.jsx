@@ -97,7 +97,6 @@ function MyPage() {
                     ...auth,
                     image: true
                 })
-                alert("이미지 변경이 완료됐습니다.")
             }
         }
     }, [input.image])
