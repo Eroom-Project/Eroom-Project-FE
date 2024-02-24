@@ -369,7 +369,9 @@ function MyPage() {
     const buttonPassword = (name) => {
         if (auth.password && auth.checkPassword) {
             return <Button2 type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button2>
-        } else {
+        } else if(openChangeState.password) {
+            return <Button2 type='button' onClick={() => { openChange(name) }}>취소하기</Button2>
+        }else {
             return <Button2 type='button' onClick={() => { openChange(name) }}>수정하기</Button2>
         }
     }
@@ -450,8 +452,9 @@ function MyPage() {
                                     {buttonNickname("nickname")}
                                 </InnerBox>
                             </InputBox>
-
-                            <H6>새 비밀번호: {message("password")}</H6>
+                                    { 
+                                        openChangeState.password? <H6>새 비밀번호: {message("password")}</H6> : <H6>비밀번호: {message("password")}</H6> 
+                                    }
                             {
                                 openChangeState.password === true ?
                                     <>
