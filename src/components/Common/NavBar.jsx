@@ -28,7 +28,7 @@ function NavBar() {
         if (accessState === true) {
             const resToken = await api.post(`/api/token`, {})
             const res = await api.post('/api/logout', {})
-
+            alert("로그아웃 됐습니다.")
             console.log(resToken)
             console.log(res)
             if (res.status === 200) {
