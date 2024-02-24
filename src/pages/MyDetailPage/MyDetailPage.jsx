@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { getChallengeDetail } from '../../services/Query'
 import { useNavigate } from 'react-router-dom'
 
-function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
+function MyDetailPage({ challengeId, modalOpen, chellangeState }) {
     const challengeDetailData = useQuery(
         ['challengeDetailData', challengeId],
         () => getChallengeDetail(challengeId),)
@@ -22,9 +22,19 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
         console.log("에러")
     }
 
+    const categoryMap = {
+        IT: 'IT',
+        HUMANITIES: '인문',
+        MATH: '수학',
+        SCIENCE: '과학',
+        ARTS_AND_PHYSICAL_EDUCATION: '예체능',
+        FOREIGN_LANGUAGE: '외국어',
+        ETC: '기타',
+    };
+    const translatedCategory = categoryMap[challengeDetailData?.data?.responseDto?.category] || ''
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room",{state:{challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.responseDto.loginMemberId}})
+        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId , title: challengeDetailData?.data.responseDto.title} })
     }
     return (
         <>
@@ -32,7 +42,7 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
             </Back>
             <MainBox>
                 <ContentsBox>
-                <X src ="/img/x.png" alt="close" onClick={modalOpen}/>
+                        <X src="/img/x.png" alt="close" onClick={modalOpen}/>
                     {
                         challengeDetailData.data &&
                         <>
@@ -44,7 +54,7 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
                                     {challengeDetailData.data.responseDto.title}
                                 </Title>
                                 <Category>
-                                    {`${challengeDetailData.data.responseDto.category}`}
+                                    {translatedCategory}
                                 </Category>
                                 <Description>
                                     {challengeDetailData.data.responseDto.description}
@@ -67,10 +77,10 @@ function MyDetailPage({ challengeId, modalOpen , chellangeState}) {
                         </>
                     }
                     {
-                    chellangeState.finish === true? 
-                    <Button>종료된 챌린지</Button> 
-                    : 
-                    <Button onClick={roomIn}>챌린지방 입장하기</Button>
+                        chellangeState.finish === true ?
+                            <Button>종료된 챌린지</Button>
+                            :
+                            <Button onClick={roomIn}>챌린지방 입장하기</Button>
                     }
                 </ContentsBox>
             </MainBox>
@@ -88,9 +98,11 @@ const Back = styled.div`
     height: 100%;
     backdrop-filter: blur(10px);
     background-color: rgba(116, 116, 116, 0.281);
+    z-index: 1;
 `
+
 const X = styled.img`
-    margin-left: auto;
+    margin-left: 100%;
     font-weight: 500;
     cursor: pointer;
 `
@@ -103,6 +115,7 @@ const MainBox = styled.div`
     height: 700px;
     padding: 23px 24px;
     border-radius: 10px;
+    z-index: 1;
 `
 
 const ContentsBox = styled.div`
@@ -128,7 +141,7 @@ const TitleBox = styled.div`
     gap: 10px;
     width: 100%;
     height: 150px;
-    overflow: scroll;
+    overflow: auto;
     &::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -136,16 +149,17 @@ const TitleBox = styled.div`
   }
   &::-webkit-scrollbar-thumb {
     width: 1px;
-    background-color: #2f3542;
+    border-radius: 10px;
+    background-color: #dfdddd;
   }
   &::-webkit-scrollbar-track {
-    border-radius: 10px;
     background-color: #F2F2F2;
   }
 `
 const Title = styled.div`
     font-size: 18px;
     font-weight: 700;
+    line-height: 1.2;
 `
 const Category = styled.div`
     font-size: 14px;
@@ -155,6 +169,7 @@ const Category = styled.div`
 const Description = styled.div`
     font-size: 14px;
     font-weight: 500;
+    line-height: 1.5;
 `
 const InfoBox = styled.div`
     display: flex;
