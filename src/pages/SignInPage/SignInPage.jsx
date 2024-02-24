@@ -109,7 +109,7 @@ function SignInPage() {
         return (auth[name] ?
             <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
             :
-            <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 입력해주세요. </Message>)
+            <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>)
     }
 
 
@@ -117,7 +117,7 @@ function SignInPage() {
         return (auth.email && auth.password ?
             <Button color={"#5EC75E"} type='button' onClick={signIn}>로그인</Button>
             :
-            <Button color={"#1C1C1C"} type='button'>정보를 입력해 주세요</Button>)
+            <Button color={"#1C1C1C"} type='button'>양식에 맞게 입력해주세요.</Button>)
     }
 
     const handleOnKey = (e) => {

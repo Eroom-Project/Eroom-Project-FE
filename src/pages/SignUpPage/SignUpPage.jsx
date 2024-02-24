@@ -36,8 +36,10 @@ function SignUpPage() {
             if (res.data.message === "사용 가능한 email입니다.") {
                 setCheck({ ...check, email: true })
                 alert(res.data.message)
-            } else {
-                alert("이미 존재하는 이메일입니다.")
+            } else if(res.data.message === "유효하지 않은 이메일 형식입니다."){
+                alert(res.data.message)
+            }else {
+                alert(res.data.message)
             }
         } catch (error) {
             console.log(`서버 에러: ${error}`)
@@ -54,10 +56,11 @@ function SignUpPage() {
             if (res.data.message === "사용 가능한 닉네임입니다.") {
                 setCheck({ ...check, nickname: true })
                 alert(res.data.message)
+            } else if(res.data.message === "닉네임은 3자 이상 10자 이하로 입력해 주세요."){
+                alert(res.data.message)
             } else {
-                alert("이미 존재하는 닉네임입니다.")
+                alert(res.data.message)
             }
-
         } catch (error) {
             console.log(`서버 에러: ${error}`)
         }
@@ -173,7 +176,7 @@ function SignUpPage() {
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>
                 }
             case "nickname":
                 if (auth[name] && check.nickname) {
@@ -181,18 +184,18 @@ function SignUpPage() {
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>
                 }
             case "password":
                 return (
                     auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                         :
-                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>)
             case "checkPassword":
                 return (
                     auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                         :
-                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>)
             default:
                 <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
         }
