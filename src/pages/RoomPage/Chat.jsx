@@ -175,7 +175,8 @@ const navigate = useNavigate()
         fontWeight:'700',
         height:'30px',
         width:'30vh',
-        maxWidth:'380px',
+        minWidth:'360px',
+        maxWidth:'360px',
         marginBottom:'10px',
         overflow:'auto'
         
