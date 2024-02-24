@@ -13,11 +13,28 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   const [authStatus,setAuthStatus] = useState('WAITING');
 
   const onDrop = useCallback(acceptedFiles => {
-    setAuthImageUrl(acceptedFiles[0]);
-    setUploadedFileName(acceptedFiles[0].name);
-    });
-
+    if (acceptedFiles.length === 0) {
+      return;
+    }
+  
+    const file = acceptedFiles[0];
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxFileSize) {
+      alert('파일 크기가 10MB를 초과할 수 없습니다.');
+      return;
+    }
+  
     
+    const isImageFile = file.type.match('image/(jpeg|png)');
+    if (isImageFile) {
+      setAuthImageUrl(file);
+      setUploadedFileName(file.name);
+    } else {
+      alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
+    }
+  }, []);
+   
+   
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -46,6 +63,9 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     setUploadedFileName('');
   };
 
+
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     token()
