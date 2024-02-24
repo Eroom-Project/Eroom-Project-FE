@@ -117,8 +117,11 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     // 삭제 핸들러
     const handleDelete = (authId) => {
         
-        deleteMutation.mutate(authId); 
-    };
+        const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
+        if (isConfirmed) {
+            deleteMutation.mutate(authId); 
+        }
+      };
 
     // 리더 여부 확인
     
