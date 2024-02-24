@@ -90,7 +90,7 @@ function Chellange() {
                                             <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
                                         </MyPageModalPotal>
                                     }
-                                    {modalRemoveState === true &&
+                                    {modalRemoveState === true && modalChallengeId === value.challengeId &&
                                         <MyPageRemovePotal>
                                             <ModalRemove modalRemoveOpen={modalRemoveOpen} challengeId={value.challengeId} />
                                         </MyPageRemovePotal>
