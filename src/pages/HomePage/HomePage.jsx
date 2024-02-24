@@ -9,10 +9,6 @@ function HomePage() {
         navigate('/main');
     };
 
-    const handleStart = () => {
-        navigate('/signup');
-    };
-
     return (
         <MainForm>
             {/* 첫 번째 섹션: 홈페이지 소개 */}
@@ -135,7 +131,7 @@ function HomePage() {
                 <div style={{ fontSize: "40px", fontWeight: '700', marginBottom: '20px', lineHeight: '1.5' }}>
                     당신의 꿈을 이뤄보시겠어요?
                 </div>
-                <button onClick={handleStart} style={{
+                <button onClick={handleLook} style={{
                     width: '228px',
                     height: '64px',
                     margin: '0 auto',
