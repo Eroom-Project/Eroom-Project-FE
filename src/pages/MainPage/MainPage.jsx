@@ -44,6 +44,7 @@ function MainPage() {
   );
   
   const categoryMap = {
+    전체 :'전체',
     IT: 'IT',
     인문: 'HUMANITIES',
     수학: 'MATH',
@@ -227,7 +228,7 @@ const Card = styled.div`
   `;
 
 const CardImage = styled.img`
-  width: 284px;
+  width: 264px;
   height: 200px;
   object-fit: cover;
   border-radius: 10px;
@@ -259,6 +260,7 @@ const FrequencyText = styled.div`
 
 const TitleText = styled.div`
   width:230px;
+  height:20px;
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
