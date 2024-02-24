@@ -151,7 +151,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
           }}>인증내용</div>
         <input
           type="text"
-          maxLength ='200'
+          maxLength ={200}
           placeholder="내용을 입력하세요.(200자 이내)"
           value={authContents}
           onChange={(e) => setAuthContents(e.target.value)}

@@ -80,6 +80,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         setExpandedIndex(prevIndex => prevIndex === authId ? null : authId);
     };
 
+    
     // 수정 모드 토글 핸들러
     const handleEdit = (item) => {
         setEditMode(prevMode => (prevMode === item.authId ? null : item.authId)); 
@@ -112,6 +113,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             formData.append('authImageUrl', editImage);
         }
         updateMutation.mutate({ authId, formData, challengeId });
+        alert('저장 되었습니다.')
     };
 
     // 삭제 핸들러
@@ -121,6 +123,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         if (isConfirmed) {
             deleteMutation.mutate(authId); 
         }
+        alert('삭제되었습니다.')
       };
 
     // 리더 여부 확인
@@ -178,6 +181,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     
                 {isLoading && <FeedbackContainer> <img src='img/icon (5).png' alt='로딩이미지' /> 로딩중입니다.</FeedbackContainer>}
                 {error && <FeedbackContainer> <img src='img/icon (6).png' alt='에러이미지' /> 오류가 발생했습니다.</FeedbackContainer>}
+                {!isLoading && !error && data?.authResponseDtoList?.length === 0 && (<FeedbackContainer> <img src='img/icon (4).png' alt='에러이미지' /> <br /> 인증 내용이 없습니다.</FeedbackContainer>)}
             
                 <div style={{
                     overflowY:'auto'
@@ -241,13 +245,17 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
 
 {isEditing ? (
     <EditContainer expanded={expandedIndex === item.authId}>
+        <div style={{fonts:'15px', fontWeight:'700',marginBottom:'5px'}}>비디오 링크</div>
         <TextArea
             value={authVideoUrl}
             onChange={(e) => setAuthVideoUrl(e.target.value)}
+            maxLength={500}
             />
+            <div style={{fonts:'15px', fontWeight:'700',marginBottom:'5px'}}>인증 내용</div>
         <TextArea
             value={authContents}
             onChange={(e) => setAuthContents(e.target.value)}
+            maxLength={200}
             />
         <DropZoneStyle {...getRootProps()}>
   <input {...getInputProps()} />
@@ -281,8 +289,10 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     <>
         <EditContainer expanded={expandedIndex === item.authId}>
         
-            <div>링크: {item.authVideoUrl}</div>
-            <div>{item.authContents}</div>
+            <div style={{fontSize:'14px',fontWeight:'700',marginBottom:'5px'}}>링크</div>
+            <div style={{marginBottom:'10px',backgroundColor:'white',borderRadius:'6px',padding:'0 5px', minHeight:'30px', display:'flex', alignItems:'center'}}>{item.authVideoUrl}</div>
+            <div style={{fontSize:'14px',fontWeight:'700',marginBottom:'5px'}}>인증내용</div>
+            <div style={{marginBottom:'10px',backgroundColor:'white',borderRadius:'6px', padding:'0 5px',minHeight:'30px' ,display:'flex', alignItems:'center'}}>{item.authContents}</div>
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -315,9 +325,21 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             >{isEditing ? '저장' : '수정'}</GrayButton>
 
         <WhiteButton
-            onClick={() => handleDelete(item.authId)}
-            type='button'
-            >삭제</WhiteButton>
+            onClick={() => {
+            if (isEditing) {
+            setEditMode(null); 
+            setEditImage(null); 
+            setAuthVideoUrl('');
+            setAuthContents('');
+            } else {
+            handleDelete(item.authId); 
+    }
+  }}
+  type='button'
+>
+  {isEditing ? '이전' : '삭제'}
+</WhiteButton>
+
     </div>
 )}
                         </AuthCard>
@@ -419,7 +441,7 @@ const TextArea = styled.textarea`
 const EditContainer = styled.div`
     display: ${props => props.expanded ? 'block' : 'none'};
     padding: 10px;
-    background-color: #F2F2F2;
+    background-color: #e2f0f8;
     width: 474px;
     height: auto;
     border-radius: 4px;
@@ -428,6 +450,7 @@ const EditContainer = styled.div`
     word-wrap: break-word;
     font-size: 12px;
     line-height: 1.4;
+    
 `;
 
 const DropZoneStyle = styled.div`
