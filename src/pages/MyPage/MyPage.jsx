@@ -45,7 +45,7 @@ const Hr = styled.div`
     width: 100%;
     border: none;
     border-bottom: 1px solid #F2F2F2;
-    margin: 40px 0px;
+    margin: 40px 0px 50px 0px;
 `
 const MainBox = styled.div`
     display: flex;

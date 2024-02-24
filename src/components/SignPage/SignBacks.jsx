@@ -12,7 +12,7 @@ function SignBacks() {
         
         const parallax = (e) => {
             ref.current.forEach(function(value){
-                let moving = value.getAttribute("data-value")
+                let moving = value?.getAttribute("data-value")
                 let x  = (e.clientX * moving) / 250
                 let y  = (e.clientY * moving) / 250
                 value.style.transform = "translateX(" + x +"px) translateY(" + y +"px)"

@@ -8,10 +8,11 @@ import ModalRemove from './ModalRemove'
 
 function Chellange() {
 
+
     const chellangeData = useQuery('chellangeData', getProfile)
 
     if (chellangeData.data) {
-        // console.log(chellangeData.data.challengeList)
+        console.log(chellangeData.data.challengeList)
     }
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")
@@ -36,7 +37,8 @@ function Chellange() {
             modalState ? setModalState(false) : setModalState(true)
         )
     }
-    const modalRemoveOpen = (challengeId) => {
+    const modalRemoveOpen = (challengeId, e) => {
+        e.stopPropagation();
         setModalChallengeId(challengeId)
         return (
             modalRemoveState ? setmodalRemoveState(false) : setmodalRemoveState(true)
@@ -62,7 +64,7 @@ function Chellange() {
                                             <Img src={value.thumbnailImageUrl} alt="img" />
                                             <CurrentUsers>
                                                 {value.currentAttendance}/{value.limitAttendance}명
-                                                <img src="/img/userIon.png" alt="currentuser" />
+                                                <img src="/img/userIcon.png" alt="currentuser" />
                                             </CurrentUsers>
                                         </ContentsTop>
                                         <ContentsBottom>
@@ -74,9 +76,10 @@ function Chellange() {
                                             </Title>
                                             <NickNameBox>
                                                 <NickName>
+                                                    {value.creatorNickname}
                                                 </NickName>
                                                 <IconBox>
-                                                    <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={modalRemoveOpen}/>
+                                                    <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={(e) => { modalRemoveOpen(value.challengeId, e) }} />
                                                 </IconBox>
                                             </NickNameBox>
                                         </ContentsBottom>
@@ -89,7 +92,7 @@ function Chellange() {
                                     }
                                     {modalRemoveState === true &&
                                         <MyPageRemovePotal>
-                                            <ModalRemove />
+                                            <ModalRemove modalRemoveOpen={modalRemoveOpen} challengeId={value.challengeId} />
                                         </MyPageRemovePotal>
                                     }
                                 </>
@@ -126,21 +129,19 @@ function Chellange() {
                                             </Title>
                                             <NickNameBox>
                                                 <NickName>
+                                                    {value.creatorNickname}
                                                 </NickName>
-                                                <IconBox>
-                                                    <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={modalRemoveOpen}/>
-                                                </IconBox>
                                             </NickNameBox>
                                         </ContentsBottom>
                                     </Contents>
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState}/>
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true &&
-                                        <MyPageRemovePotal>
+                                        <MyPageRemovePotal >
                                             <ModalRemove />
                                         </MyPageRemovePotal>
                                     }
@@ -161,7 +162,7 @@ function Chellange() {
                                             <Img src={value.thumbnailImageUrl} alt="img" />
                                             <CurrentUsers>
                                                 {value.currentAttendance}/{value.limitAttendance}명
-                                                <img src="/img/userIon.png" alt="currentuser" />
+                                                <img src="/img/userIcon.png" alt="currentuser" />
                                             </CurrentUsers>
                                         </ContentsTop>
                                         <ContentsBottom>
@@ -173,10 +174,8 @@ function Chellange() {
                                             </Title>
                                             <NickNameBox>
                                                 <NickName>
+                                                    {value.creatorNickname}
                                                 </NickName>
-                                                <IconBox>
-                                                    <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={modalRemoveOpen}/>
-                                                </IconBox>
                                             </NickNameBox>
                                         </ContentsBottom>
                                     </Contents>
@@ -230,7 +229,7 @@ export default Chellange
 
 const H3 = styled.div`
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 700;
     margin-right: 26px;
     opacity: ${(props) => props.opacity};
     cursor: pointer;
@@ -249,7 +248,7 @@ const ContentsBox = styled.div`
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    min-height: 300px;
+    min-height: 350px;
     margin-bottom: 20px;
 `
 const ContentsGrid = styled.div`
@@ -261,15 +260,16 @@ const ContentsGrid = styled.div`
     gap: 20px 10px;
 `
 const Contents = styled.div`
-    width: 100%;
-    border: 1px solid #636363;
+    width: 284px;
+    height: 320px;
+    border: 1px solid #9D9D9D;
     justify-self: center;
     border-radius: 10px;
     cursor: pointer;
 `
 const ContentsTop = styled.div`
     width: 100%;
-    padding-bottom: 70%;
+    padding-bottom: 200px;
     overflow: hidden;
     position: relative;
 `
@@ -297,16 +297,21 @@ const Img = styled.img`
 const ContentsBottom = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 10px 10px;
+    padding: 16px 10px;
+    gap: 8px;
 `
 const Title = styled.div`
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `
 const NickNameBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    height: 20px;
 `
 const NickName = styled.div`
     color:#9D9D9D;
@@ -315,14 +320,17 @@ const IconBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-left: auto;
 `
 const Icon = styled.img`
-    width: 10px;
+    width: 23px;
 `
 const Day = styled.div`
-    margin-top: 5%;
+    font-size: 12px;
+    /* width: 47px;
+    height: 20px; */
     margin-right: auto;
-    padding: 3px;
+    padding: 4px 8px;
     color: #FFFFFF;
     background-color: #F87C54;
     border-radius: 3px;

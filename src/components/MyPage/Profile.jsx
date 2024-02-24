@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import api from '../../services/api'
 import styled from 'styled-components'
-import { getProfile } from '../../services/Query'
-import { useQuery } from 'react-query'
+import { changeProfileDatas, checkPassword, getProfile } from '../../services/Query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { MyPagePasswordPotal } from './Potal'
+import ModalPassword from './ModalPassword'
 
 function MyPage() {
 
@@ -20,6 +22,19 @@ function MyPage() {
         console.log("에러!")
     }
 
+    const queryClient = useQueryClient()
+    const mutation = useMutation(changeProfileDatas, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("profileData")
+            setAuth({
+                ...auth,
+                image: false,
+                nickname: false,
+                password: false,
+                checkPassword: false
+            })
+        }
+    })
     // img state
 
     const handleImg = (e) => {
@@ -29,7 +44,7 @@ function MyPage() {
             reader.onload = function (e) {
                 setThumbnail({
                     ...thumbnail,
-                    url: e.target.result
+                    image: e.target.result
                 })
             }
 
@@ -37,19 +52,19 @@ function MyPage() {
         } else {
             setThumbnail({
                 ...thumbnail,
-                url: ""
+                image: ""
             })
         }
         if (file) {
             console.log(file)
-            return setInput({ ...input, url: file })
+            return setInput({ ...input, image: file })
         } else {
-            return setInput({ ...input, url: "" })
+            return setInput({ ...input, image: "" })
         }
     }
 
     const [thumbnail, setThumbnail] = useState({
-        url:""
+        image: ""
     })
 
     // input value
@@ -58,30 +73,31 @@ function MyPage() {
         password: '',
         nickname: '',
         checkPassword: '',
-        url: '',
+        image: '',
     })
 
-    // url 유효성 검사
+    // image 유효성 검사
     useEffect(() => {
-        // console.log(input.url.includes('data'))
-        // if (input.url.includes('data')) {
+        // base64로 변환 시켰을시 유효성 검사
+        // console.log(input.image.includes('data'))
+        // if (input.image.includes('data')) {
         //     setAuth({
         //         ...auth,
-        //         url: true
+        //         image: true
         //     })
-        //     console.log(input.url)
+        //     console.log(input.image)
         // }
-        if(input.url.name){
-            console.log(input.url)
-            console.log(input.url.name)
-            if (input.url.name.includes('.png') || input.url.name.includes('.jpg') || input.url.name.includes('.jpeg')) {
+        if (input.image.name) {
+            console.log(input.image)
+            console.log(input.image.name)
+            if (input.image.name.includes('.png') || input.image.name.includes('.jpg') || input.image.name.includes('.jpeg')) {
                 setAuth({
                     ...auth,
-                    url: true
+                    image: true
                 })
             }
         }
-    }, [input.url])
+    }, [input.image])
 
 
     // 중복확인 주소 확인하기
@@ -105,20 +121,24 @@ function MyPage() {
 
     // 닉네임 중복확인
     const nickNameCheck = async () => {
-        try {
-            const res = await api.get("/api/signup/nickname", {
-                params: { nickname: input.nickname }
-            })
-            console.log(res)
-            if (res.data.message === "사용 가능한 닉네임입니다.") {
-                setCheck({ ...check, nickname: true })
-                alert(res.data.message)
-            } else {
-                alert("이미 존재하는 닉네임입니다.")
-            }
+        if (auth.nickname) {
+            try {
+                const res = await api.get("/api/signup/nickname", {
+                    params: { nickname: input.nickname }
+                })
+                console.log(res)
+                if (res.data.message === "사용 가능한 닉네임입니다.") {
+                    setCheck({ ...check, nickname: true })
+                    alert(res.data.message)
+                } else {
+                    alert("이미 존재하는 닉네임입니다.")
+                }
 
-        } catch (error) {
-            console.log(`서버 에러: ${error}`)
+            } catch (error) {
+                console.log(`서버 에러: ${error}`)
+            }
+        } else {
+            alert("형식이 올바르지 않습니다.")
         }
     }
 
@@ -184,347 +204,298 @@ function MyPage() {
         });
     }
 
-    // 유효성 검사 통과 후 상태 값
+    // 유효성 검사 통과 후 상태 값 (email: false 빠짐)
     const [auth, setAuth] = useState({
-        email: false,
-        password: false,
-        checkPassword: false,
+        image: false,
         nickname: false,
-        url: false
+        password: false,
+        checkPassword: false
     })
 
-    console.log(check.email)
-    console.log(auth)
-
-    // 유효성 검사 통과 했을 때 회원정보 수정 가능
-    const changeData = async () => {
-        try {
-            const newUser = {
-                email: auth.email ? input.email : profileData.data.memberInfo.email,
-                password: auth.password ? input.password : "",
-                nickname: auth.nickname ? input.nickname : profileData.data.memberInfo.nickname,
-            }
-
-            const formData = new FormData();
-
-            formData.append('data',new Blob([JSON.stringify(newUser)], { type: "application/json" }))
-
-            if(auth.url){
-                formData.append('profileImageUrl', input.url)
-            }else{
-                formData.append('profileImageUrl', profileData.data.memberInfo.profileImageUrl)
-            }
-            
-
-            // 폼 데이터 보기
-            Object.entries(newUser).forEach(item => formData.append(item[0], item[1]));
-            let entries = formData.entries()
-            for (const pair of entries) {
-                console.log(pair[0] + ',' + pair[1]);
-            }
-
-            console.log(thumbnail)
-
-            setThumbnail({
-                ...thumbnail,
-                url: ''
-            })
-            // 폼 데이터 형식 변환해서 보내기(URLSearchParams: 객체를 fordata형식으로 만들어줌)
-            const response = await api.put("/api/member/profile", formData)
-            console.log(response.data)
-            alert("회원 정보 수정이 완료됐습니다.")
-
-        } catch (error) {
-            console.log(error)
-            alert('회원 정보 수정에 문제가 있습니다.')
+    // 이미지 바뀌면 유효성 검사 통과 후 이미지 서버로
+    // 인피니티뜨는지 보기
+    useEffect(() => {
+        if (auth.image === true) {
+            sendImg()
         }
+    }, [auth.image])
+
+
+
+    const sendImg = () => {
+        mutation.mutate({
+            name: "image",
+            auth,
+            input
+        })
+        console.log("뮤테이트로 이미지 보냈습니다.")
     }
 
-    /// test
-    // const newUser = {
-    //     email: auth.email? input.email : "쿼리 원래 데이터 넣기",
-    //     password: auth.password? input.password : "쿼리 원래 데이터 넣기",
-    //     nickname: auth.nickname? input.nickname : "쿼리 원래 데이터 넣기",
-    //     url: auth.url? input.url : "쿼리 원래 데이터 넣기"
+
+
+    // 유효성 검사 통과 했을 때 회원정보 수정 가능(기존 데이터 묶어 보내기 로직)
+    // const changeData = async () => {
+    //     try {
+    //         const newUser = {
+    //             email: auth.email ? input.email : profileData.data.memberInfo.email,
+    //             password: auth.password ? input.password : "",
+    //             nickname: auth.nickname ? input.nickname : profileData.data.memberInfo.nickname,
+    //         }
+
+    //         const formData = new FormData();
+    //         /// 이 로직은 객체가 문자열이 아니기 때문에 stringify 감싸주는 것 같다.
+    //         formData.append('data', new Blob([JSON.stringify(newUser)], { type: "application/json" }))
+
+    //         if (auth.image) {
+    //             formData.append('profileImageUrl', input.image)
+    //         } else {
+    //             formData.append('profileImageUrl', profileData.data.memberInfo.profileImageUrl)
+    //         }
+
+
+    //         // 폼 데이터 보기
+    //         Object.entries(newUser).forEach(item => formData.append(item[0], item[1]));
+    //         let entries = formData.entries()
+    //         for (const pair of entries) {
+    //             console.log(pair[0] + ',' + pair[1]);
+    //         }
+
+    //         console.log(thumbnail)
+
+    //         setThumbnail({
+    //             ...thumbnail,
+    //             image: ''
+    //         })
+    //         // 폼 데이터 형식 변환해서 보내기(URLSearchParams: 객체를 fordata형식으로 만들어줌)
+    //         const response = await api.put("/api/member/profile", formData)
+    //         console.log(response.data)
+    //         alert("회원 정보 수정이 완료됐습니다.")
+
+    //     } catch (error) {
+    //         console.log(error)
+    //         alert('회원 정보 수정에 문제가 있습니다.')
+    //     }
     // }
-    // console.log(newUser)
 
-    //// 인풋 수정하기
-    const emailRef = useRef()
-    const nameRef = useRef()
-    const passwordRef = useRef()
-    const checkRef = useRef()
+    // 수정 펼침 state
+    const [openChangeState, setopenChangeState] = useState({
+        image: false,
+        email: false,
+        nickname: false,
+        password: false,
+    })
 
-    const [readOnly, setReadOnly] = useState(true)
 
-    const handleTrueReadOnly = () => {
-        if (readOnly) {
-            emailRef.current.removeAttribute("readOnly")
-            nameRef.current.removeAttribute("readOnly")
-            passwordRef.current.removeAttribute("readOnly")
-            checkRef.current.removeAttribute("readOnly")
-            setReadOnly(false)
-        } else {
-            setInput({
-                ...input,
-                email: '',
-                password: '',
-                nickname: '',
-                checkPassword: '',
-                url: ''
-            })
-        
-            emailRef.current.setAttribute("readOnly", "readOnly")
-            nameRef.current.setAttribute("readOnly", "readOnly")
-            passwordRef.current.setAttribute("readOnly", "readOnly")
-            checkRef.current.setAttribute("readOnly", "readOnly")
-            setAuth({
-                ...auth,
-                email: false,
-                password: false,
-                checkPassword: false,
-                nickname: false,
-                url: false
-            })
-            setReadOnly(true)
+
+    const openChange = (name) => {
+        switch (name) {
+            case "email":
+                openChangeState.email === false ?
+                    setopenChangeState({ ...openChangeState, image: false, email: true, nickname: false, password: false }) :
+                    setopenChangeState({ ...openChangeState, image: false, email: false, nickname: false, password: false })
+                break
+            case "nickname":
+                openChangeState.nickname === false ?
+                    setopenChangeState({ ...openChangeState, image: false, email: false, nickname: true, password: false }) :
+                    setopenChangeState({ ...openChangeState, image: false, email: false, nickname: false, password: false })
+                break
+            case "password":
+                setPasswordModal(true)
+                break
+            default:
+                return ""
         }
     }
 
-    const handleFalseReadOnly = () => {
-        if (readOnly === false) {
-            // console.log(readOnly)
-            changeData()
-            setInput({
-                ...input,
-                email: '',
-                password: '',
-                nickname: '',
-                checkPassword: '',
-                url: ''
-            })
-            emailRef.current.setAttribute("readOnly", "readOnly")
-            nameRef.current.setAttribute("readOnly", "readOnly")
-            passwordRef.current.setAttribute("readOnly", "readOnly")
-            checkRef.current.setAttribute("readOnly", "readOnly")
-            setAuth({
-                ...auth,
-                email: false,
-                password: false,
-                checkPassword: false,
-                nickname: false,
-                url: false
-            })
-            setReadOnly(true)
-        }
-    }
+    // 비밀번호 인증 모달 state
+    const [passwordModal, setPasswordModal] = useState(false)
+
+
     // massage state를 통해 state 출력 
     const message = (name) => {
         switch (name) {
-            case "email":
-                if (auth[name] && check.email) {
-                    return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
-                } else if (auth[name]) {
-                    return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
-                } else {
-                    return <Message focus={focusState[name] && readOnly === false ? "block" : "none"} style={{ color: "red" }}> 이메일 양식을 입력해주세요. </Message>
-                }
+            // case "email":
+            //     if (auth[name] && check.email) {
+            //         return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+            //     } else if (auth[name]) {
+            //         return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
+            //     } else {
+            //         return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 이메일 양식을 입력해주세요. </Message>
+            //     }
             case "nickname":
                 if (auth[name] && check.nickname) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] && readOnly === false ? "block" : "none"} style={{ color: "red" }}> 닉네은 3~10글자입니다. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 닉네은 3~10글자입니다. </Message>
                 }
             case "password":
                 return (
                     auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                         :
-                        <Message focus={focusState[name] && readOnly === false ? "block" : "none"} style={{ color: "red" }}> 비밀번호는 영문, 숫자, 특문 조합 8~15글자입니다. </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호는 영문, 숫자, 특문 조합 8~15글자입니다. </Message>)
             case "checkPassword":
                 return (
                     auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                         :
-                        <Message focus={focusState[name] && readOnly === false ? "block" : "none"} style={{ color: "red" }}> 비밀번호를 확인해주세요 </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호를 확인해주세요 </Message>)
             default:
-                <Message focus={focusState[name] && readOnly === false ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
+                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
         }
     }
 
 
-    const button = () => {
-        if (readOnly === false) {
-            if (auth.email || auth.nickname) {
-                if (check.email) {
-                    return <Button color={"#5EC75E"} type='button' onClick={handleFalseReadOnly}>수정완료</Button>
-                } else if (check.nickname) {
-                    return <Button color={"#5EC75E"} type='button' onClick={handleFalseReadOnly}>수정완료</Button>
-                } else {
-                    return <Button color={"#636363"} bcolor={"#444444"} type='button' onClick={handleTrueReadOnly}>수정하기</Button>
-                }
-            } else if (auth.url) {
-                return <Button color={"#5EC75E"} type='button' onClick={handleFalseReadOnly}>수정완료</Button>
-            } else if (auth.password && auth.checkPassword) {
-                return <Button color={"#5EC75E"} type='button' onClick={handleFalseReadOnly}>수정완료</Button>
+    // 수정하기 버튼
+    const buttonNickname = (name) => {
+        if (auth.nickname) {
+            if (check.email) {
+                return <Button type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button>
+            } else if (check.nickname) {
+                return <Button type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button>
             } else {
-                return <Button color={"#636363"} bcolor={"#444444"} type='button' onClick={handleTrueReadOnly}>수정하기</Button>
+                return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
             }
         } else {
-            return <Button color={"#636363"} bcolor={"#444444"} type='button' onClick={handleTrueReadOnly}>수정하기</Button>
+            return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
         }
     }
+
+    const buttonPassword = (name) => {
+        if (auth.password && auth.checkPassword) {
+            return <Button type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button>
+        } else {
+            return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
+        }
+    }
+
+    // useEffect(()=> {
+    //     if(openChangeState && openChangeState.password === true){
+    //         console.log("open",openChangeState)
+    //     }
+    // }, [openChangeState.password])
+
     return (
         <>
             <Profile>
                 <MainForm>
-                    {
-                        readOnly === false ?
-                            <>
-                                <ImgLabel backColor={"#636363"} color={"#FFFF"} padding={"10px"} hover={"#444444"} cursor={"pointer"} for="file">
-                                    이미지 변경하기
-                                </ImgLabel>
-                                <ImgInput
-                                    id="file"
-                                    type='file'
-                                    name='url'
-                                    accept='image/jpg, image/jpeg, image/png'
-                                    onChange={(e) => handleImg(e)}
-                                />
-                            </>
-                            :
-                            <>
-                                <ImgLabel backColor={"#FFFF"} color={"#636363"} padding={"10px 10px 10px 0px"} hover={"#FFFF"} cursor={""}>
-                                    프로필 이미지
-                                </ImgLabel>
-                                <ImgInput
-                                    type='file'
-                                    id="file"
-                                />
-                            </>
-                    }
+                    <ProfileImgBox>
+                        <H6 style={{ margin: "0px" }}>프로필 이미지:</H6>
+                        <ImgInput
+                            id="file"
+                            type='file'
+                            name='image'
+                            accept='image/jpg, image/jpeg, image/png'
+                            onChange={(e) => handleImg(e)}
+                        />
+                        <ImgHeader src='/img/MyPage/profile.png' />
+                        <ImgLabel for="file">
+                            수정하기
+                        </ImgLabel>
+                    </ProfileImgBox>
+
                     <Form>
-                        {   
-                            // profileData.data.memberInfo.profileImageUrl
-                            readOnly === false?
-                                <ImgBox>
-                                    <Img src={
-                                        thumbnail.url.includes('data')? thumbnail.url : profileData.data.memberInfo.profileImageUrl
-                                    } alt="미리보기" />
-                                </ImgBox>
-                                :
-                                <ImgBox2>
-                                    <Img src={
-                                        profileData.data && profileData.data.memberInfo.profileImageUrl
-                                    } alt="미리보기" />
-                                </ImgBox2>
-                        }
-                        <InputBox>
-                            <H6>이메일: {message("email")}</H6>
-                            <InnerBox>
-                                {
-                                    profileData.data &&
-                                    <Input
-                                        type="text"
-                                        name="email"
-                                        placeholder={profileData.data.memberInfo.email}
-                                        onFocus={() => { handlerFocus("email") }}
-                                        onBlur={() => { handlerBlur("email") }}
-                                        value={input.email}
-                                        onChange={(e) => { handleInputChange(e) }}
-                                        ref={emailRef}
-                                        readOnly
-                                    />
-                                }
-                                {
-                                    readOnly === false ?
-                                        <AuthButton opacity={"1"} width={"60px"} onClick={emailCheck}>
-                                            중복<br />
-                                            확인
-                                        </AuthButton>
-                                        :
-                                        <AuthButton opacity={"0"} width={"0px"} onClick={emailCheck}>
-                                        </AuthButton>
-                                }
-                            </InnerBox>
-                        </InputBox>
-                        <InputBox>
-                            <H6>닉네임: {message("nickname")}</H6>
-                            <InnerBox>
-                                {
-                                    profileData.data &&
-                                    <Input
-                                        type="text"
-                                        name="nickname"
-                                        placeholder={profileData.data.memberInfo.nickname}
-                                        onFocus={() => { handlerFocus("nickname") }}
-                                        onBlur={() => { handlerBlur("nickname") }}
-                                        value={input.nickname}
-                                        onChange={(e) => { handleInputChange(e) }}
-                                        ref={nameRef}
-                                        readOnly
-                                    />
-                                }
-                                {
-                                    readOnly === false ?
-                                        <AuthButton opacity={"1"} width={"60px"} onClick={nickNameCheck}>
-                                            중복<br />
-                                            확인
-                                        </AuthButton>
-                                        :
-                                        <AuthButton opacity={"0"} width={"0px"} onClick={nickNameCheck}>
-                                        </AuthButton>
-                                }
+                        <ImgBox>
+                            {
+                                // profileData.data.memberInfo.profileImageUrl
+                                profileData.data &&
+                                <Img src={
+                                    thumbnail.image.includes('data') ? thumbnail.image : profileData.data.memberInfo.profileImageUrl
+                                } alt="미리보기" />
+                            }
+                        </ImgBox>
+                        <Hr />
 
-                            </InnerBox>
-                        </InputBox>
-                        <InputBox>
+                        <BottomContents>
+                            <InputBox>
+                                <H6>이메일: {message("email")}</H6>
+                                <InnerBox height={"48px"}>
+                                    {
+                                        <InnerBox2>
+                                            {profileData.data && profileData.data.memberInfo.email}
+                                        </InnerBox2>
+                                    }
+                                </InnerBox>
+                            </InputBox>
+                            <InputBox>
+                                <H6>닉네임: {message("nickname")}</H6>
+                                <InnerBox>
+                                    {
+                                        openChangeState.nickname === true ?
+
+                                            <>
+                                                <Input
+                                                    type="text"
+                                                    name="nickname"
+                                                    placeholder="닉네임을 입력해주세요"
+                                                    onFocus={() => { handlerFocus("nickname") }}
+                                                    onBlur={() => { handlerBlur("nickname") }}
+                                                    value={input.nickname}
+                                                    onChange={(e) => { handleInputChange(e) }}
+                                                />
+                                                <Button onClick={nickNameCheck}>
+                                                    중복 확인
+                                                </Button>
+                                            </>
+                                            :
+                                            <InnerBox2>
+                                                {profileData.data?.memberInfo.nickname}
+                                            </InnerBox2>
+                                    }
+                                    {buttonNickname("nickname")}
+                                </InnerBox>
+                            </InputBox>
+
                             <H6>비밀번호: {message("password")}</H6>
-                            <Input
-                                type="password"
-                                name="password"
-                                placeholder="*******"
-                                onFocus={() => { handlerFocus("password") }}
-                                onBlur={() => { handlerBlur("password") }}
-                                value={input.password}
-                                onChange={(e) => { handleInputChange(e) }}
-                                ref={passwordRef}
-                                readOnly
-                            />
-                        </InputBox>
-
+                            {
+                                openChangeState.password === true ?
+                                    <>
+                                        <InputBox>
+                                            <InnerBox>
+                                                <Input
+                                                    type="password"
+                                                    name="password"
+                                                    placeholder='비밀번호를 입력해주세요.'
+                                                    onFocus={() => { handlerFocus("password") }}
+                                                    onBlur={() => { handlerBlur("password") }}
+                                                    value={input.password}
+                                                    onChange={(e) => { handleInputChange(e) }}
+                                                />
+                                                {buttonPassword("password")}
+                                            </InnerBox>
+                                        </InputBox>
+                                        <InputBox>
+                                            <H6>비밀번호 확인: {message("checkPassword")}</H6>
+                                            <InnerBox>
+                                                <Input
+                                                    type="password"
+                                                    name="checkPassword"
+                                                    placeholder='비밀번호를 확인해주세요.'
+                                                    onFocus={() => { handlerFocus("checkPassword") }}
+                                                    onBlur={() => { handlerBlur("checkPassword") }}
+                                                    value={input.checkPassword}
+                                                    onChange={(e) => { handleInputChange(e) }}
+                                                />
+                                            </InnerBox>
+                                        </InputBox>
+                                    </> :
+                                    <InputBox>
+                                        <InnerBox>
+                                            <InnerBox2>
+                                                비밀번호 수정은 오른쪽 버튼을 누르고 추가 인증을 진행해 주세요.
+                                            </InnerBox2>
+                                            {buttonPassword("password")}
+                                        </InnerBox>
+                                    </InputBox>
+                            }
+                        </BottomContents>
                         {
-                            readOnly === false ?
-                                <InputBox1>
-                                    <H62>비밀번호 확인: {message("checkPassword")}</H62>
-                                    <Input
-                                        type="password"
-                                        name="checkPassword"
-                                        placeholder='비밀번호를 확인해주세요.'
-                                        onFocus={() => { handlerFocus("checkPassword") }}
-                                        onBlur={() => { handlerBlur("checkPassword") }}
-                                        value={input.checkPassword}
-                                        onChange={(e) => { handleInputChange(e) }}
-                                        ref={checkRef}
-                                    />
-                                </InputBox1>
-                                :
-                                <InputBox2>
-                                    <H63>비밀번호 확인: {message("checkPassword")}</H63>
-                                    <Input
-                                        type="password"
-                                        name="checkPassword"
-                                        placeholder='비밀번호를 확인해주세요.'
-                                        onFocus={() => { handlerFocus("checkPassword") }}
-                                        onBlur={() => { handlerBlur("checkPassword") }}
-                                        value={input.checkPassword}
-                                        onChange={(e) => { handleInputChange(e) }}
-                                        ref={checkRef}
-                                        readOnly
-                                    />
-                                </InputBox2>
+                            passwordModal &&
+                            <MyPagePasswordPotal>
+                                <ModalPassword setPasswordModal={setPasswordModal} openChangeState={openChangeState} setopenChangeState={setopenChangeState} />
+                            </MyPagePasswordPotal>
                         }
                     </Form>
-                    {button()}
                 </MainForm>
             </Profile>
 
@@ -540,46 +511,62 @@ const Profile = styled.div`
     align-items: center;
     justify-content: flex-start;
     width: 100%;
+    
 `
-
+const ImgHeader = styled.img`
+    position: absolute;
+    top: -10px;
+    right: 25%;
+    width: 100px;
+    z-index: 1;
+`
 const ImgLabel = styled.label`
-    margin-right: auto;
-    border-radius: 7px;
+    position: absolute;
+    top: -13px;
+    right: 26%;
+    margin-left: auto;
+    font-family: 'Noto Sans KR', sans-serif;
     font-weight: 500;
-    color: ${(props) => props.color};
-    padding: ${(props) => props.padding};
-    background-color: ${(props) => props.backColor};
-    cursor: ${(props) => props.cursor};
-    transition: 1s;
-    &:hover{
-    background-color: ${(props) => props.hover};
-    }
+    font-size: 14px;
+    padding: 30px 20px;
+    border: none;
+    border-radius: 50%;
+    color: #1C1C1C;;
+    cursor: pointer;
+    z-index: 1;
+
 `
 const ImgInput = styled.input`
     display: none;
 `
+
 const ImgBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 180px;
+    height: 180px;
     overflow: hidden;
     border: 1px solid #636363;
     border-radius: 100%;
-    margin: 0px auto;
-    animation: imgDown  1s forwards;
-
-        @keyframes imgDown  {
-        0%{
-            width: 250px;
-            height: 250px;
-        }
-        to{
-            width: 150px;
-            height: 150px;
-            transform: rotate( 360deg )
-        }
-    }
+    margin: 30px auto;
+    
 `
+
+const Hr = styled.div`
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #d6d6d6;
+    margin: 40px 0px 50px 0px;
+`
+const BottomContents = styled.div`
+    width: 100%;
+    border: none;
+    margin: 55px 0px 80px 0px;
+    transition: 1s;
+    
+`
+
 const ImgBox2 = styled.div`
     display: flex;
     justify-content: center;
@@ -606,7 +593,7 @@ const ImgBox2 = styled.div`
 `
 const Img = styled.img`
     display: flex;
-    width: 100%;
+    object-fit: cover;
 `
 
 const Message = styled.span`
@@ -620,9 +607,17 @@ const MainForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
-    background-color: #FFFF;
+    justify-content: flex-start;
     border-radius: 10px;
+    width: 100%;
+    height: 100%;
+`
+
+const ProfileImgBox = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     width: 100%;
 `
 
@@ -630,11 +625,9 @@ const Form = styled.div`
     width: 100%;
     min-width: 440px;
     height: 560px;
-    overflow: hidden;
 `
 const InputBox = styled.div`
     width: 100%;
-    height: 80px;
 `
 const InputBox1 = styled.div`
     width: 100%;
@@ -650,48 +643,42 @@ const InputBox1 = styled.div`
     }
 `
 
-const InputBox2 = styled.div`
-    width: 100%;
-    height: 80px;
-    animation: fadeOut 1s forwards;
-    @keyframes fadeOut {
-        0%{
-            opacity: 1;
-        }
-        to{
-            opacity: 0;
-        }
-    }
-`
-
 const InnerBox = styled.div`
     display: flex;
+    align-items: center;
+    width: 100%;
+    height: ${(props) => props.height};
+    gap:5px;
+`
+const InnerBox2 = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+    gap:5px;
+    border: 1px solid #d6d6d6;
+    padding-left: 8px;
 `
 const AuthButton = styled.button`
-    width: ${(props) => props.width};
-    padding: 0px;
-    margin-left: 5px;
-    border: none;
-    border-radius: 6px;
-    color: #636363;
     font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 400;
+    font-weight: 500;
+    font-size: 14px;
+    width: 113px;
+    height: 48px;
+    border: none;
+    border-radius: 10px;
+    background-color: #FFFF;
+    border: 1px solid #1C1C1C;
+    color: #1C1C1C;;
     cursor: pointer;
-    opacity: ${(props) => props.opacity};
-    overflow: hidden;
-    transition: 1s;
-    white-space: nowrap;
-    &:hover{
-        background-color: #636363;
-        color: #FFFF;
-    }
 `
 const H6 = styled.div`
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    font-size: 12px;
+    font-weight: 700;
     margin: 20px 0px 10px 0px;
 `
 const H62 = styled.div`
@@ -699,8 +686,8 @@ const H62 = styled.div`
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    font-size: 12px;
     margin: 20px 0px 10px 0px;
+    font-weight: 700;
     animation: onH6 1s forwards;
 
 `
@@ -729,16 +716,14 @@ const Button = styled.button`
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 500;
     font-size: 14px;
-    width: 100%;
+    min-width: 113px;
     height: 48px;
     border: none;
-    border-radius: 10px;
-    background-color: ${(props) => props.color};
-    color: white;
-    margin-top: 30px;
+    border-radius: 7px;
+    background-color: #FFFF;
+    border: 1px solid #1C1C1C;
+    color: #1C1C1C;;
+    margin-left: auto;
     cursor: pointer;
-    transition: 1s;
-    &:hover {
-        background-color: ${(props) => props.bcolor};
-    }
+
 `

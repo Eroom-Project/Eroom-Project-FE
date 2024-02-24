@@ -19,24 +19,24 @@ function HomePage() {
             <Box1>
                 <ContentsBox>
                     <MainImgBox>
-                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"30%"} left={"-10%"} />
-                        <Img src='img/HomePage/1RoroBack.png' rotate={"30deg"} top={"15%"} left={"7%"} />
+                        <MainImgBoxImg src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"30%"} left={"-10%"} />
+                        <MainImgBoxImg src='img/HomePage/1RoroBack.png' rotate={"30deg"} top={"15%"} left={"7%"} />
                         <div>
                             <MainImg src="img/HomePage/1Roro.png" alt="mainimg" top={"50%"} left={"50%"} width={"25vh"} />
                             <MainImg src="img/HomePage/1RoroBody.png" alt="mainimg" top={"78%"} left={"70%"} width={"5vh"} />
                             <MainImg src="img/HomePage/1RoroHand.png" alt="mainimg" top={"62%"} left={"80%"} width={"8vh"} />
                         </div>
-                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"7%"} left={"50%"} />
-                        <Img src='img/HomePage/1RoroBack.png' rotate={"30deg"} top={"30%"} left={"65%"} />
-                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"50%"} left={"13%"} />
-                        <Img src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"50%"} left={"50%"} />
+                        <MainImgBoxImg src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"7%"} left={"50%"} />
+                        <MainImgBoxImg src='img/HomePage/1RoroBack.png' rotate={"30deg"} top={"30%"} left={"65%"} />
+                        <MainImgBoxImg src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"50%"} left={"13%"} />
+                        <MainImgBoxImg src='img/HomePage/1RoroBack.png' rotate={"10deg"} top={"50%"} left={"50%"} />
                     </MainImgBox>
                     <Contents>
                         <Box1Title1>
                             끝없는 공부,<br /> 혼자가 아니라 같이 이룸
                         </Box1Title1>
                         <Box1Title2>
-                            시험 공부부터 자기계발까지 당신의 꿈이 담긴 방,<br />이름에서 꿈을 향해 '<span style={{ fontWeight: '700' }}>함께</span>' 도전하세요
+                            시험 공부부터 자기계발까지 당신의 꿈이 담긴 방,<br />이룸에서 꿈을 향해 '<span style={{ fontWeight: '700' }}>함께</span>' 도전하세요
                         </Box1Title2>
                         <Box1Button onClick={handleLook}>이룸 둘러보기</Box1Button>
                     </Contents>
@@ -125,7 +125,7 @@ function HomePage() {
                 marginBottom: '100px'
             }}>
                 <div>
-                    <img src='img/icon (1).png' />
+                    <JumpImg src='img/icon (1).png' />
                     <img src='img/icon (2).png' />
                     <img src='img/icon (3).png' />
                     <img src='img/icon (4).png' />
@@ -194,7 +194,7 @@ const MainImg = styled.img`
     transform: translate(-${(props) => props.top},-${(props) => props.left});
     width: ${(props) => props.width};
     `
-const Img = styled.img`
+const MainImgBoxImg = styled.img`
     position: absolute;
     top:${(props) => props.top};
     left:${(props) => props.left};
@@ -243,4 +243,20 @@ const Box3 = styled.div`
     width: 100%;
     height: 976px;
     margin-bottom: 70px;
+`
+
+/////
+const JumpImg = styled.div`
+    position: absolute;
+    animation: jump  1s infinite;
+
+    @keyframes jump {
+        0%{
+            transform: translate(0%);
+        }
+        to{
+            transform: translate(150%);
+        }
+
+    }
 `
