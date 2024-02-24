@@ -33,6 +33,8 @@ function MyPage() {
                 password: false,
                 checkPassword: false
             })
+            alert("수정 완료됐습니다.")
+            setopenChangeState({...openChangeState, nickname: false, password: false})
         }
     })
     // img state
@@ -95,6 +97,7 @@ function MyPage() {
                     ...auth,
                     image: true
                 })
+                alert("이미지 변경이 완료됐습니다.")
             }
         }
     }, [input.image])
@@ -328,7 +331,7 @@ function MyPage() {
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 닉네은 3~10글자입니다. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 닉네임은 3~10글자입니다. </Message>
                 }
             case "password":
                 return (
@@ -341,7 +344,7 @@ function MyPage() {
                         :
                         <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호를 확인해주세요 </Message>)
             default:
-                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
+                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>
         }
     }
 
@@ -356,6 +359,8 @@ function MyPage() {
             } else {
                 return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
             }
+        } else if(openChangeState?.nickname === true){
+            return <Button type='button' onClick={() => { openChange(name) }}>취소하기</Button>
         } else {
             return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
         }
@@ -363,9 +368,9 @@ function MyPage() {
 
     const buttonPassword = (name) => {
         if (auth.password && auth.checkPassword) {
-            return <Button type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button>
+            return <Button2 type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button2>
         } else {
-            return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
+            return <Button2 type='button' onClick={() => { openChange(name) }}>수정하기</Button2>
         }
     }
 
@@ -550,7 +555,6 @@ const ImgBox = styled.div`
     border: 1px solid #636363;
     border-radius: 100%;
     margin: 30px auto;
-    
 `
 
 const Hr = styled.div`
@@ -563,7 +567,7 @@ const BottomContents = styled.div`
     width: 100%;
     border: none;
     margin: 55px 0px 80px 0px;
-    transition: 1s;
+    
     
 `
 
@@ -624,7 +628,7 @@ const ProfileImgBox = styled.div`
 const Form = styled.div`
     width: 100%;
     min-width: 440px;
-    height: 560px;
+    height: 650px;
 `
 const InputBox = styled.div`
     width: 100%;
@@ -713,6 +717,21 @@ const Input = styled.input`
 `
 
 const Button = styled.button`
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    min-width: 113px;
+    height: 48px;
+    border: none;
+    border-radius: 7px;
+    background-color: #FFFF;
+    border: 1px solid #1C1C1C;
+    color: #1C1C1C;;
+    margin-left: auto;
+    cursor: pointer;
+
+`
+const Button2 = styled.button`
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 500;
     font-size: 14px;

@@ -5,9 +5,7 @@ import { checkPassword } from '../../services/Query'
 
 function ModalPassword({ setPasswordModal, openChangeState, setopenChangeState }) {
 
-    const [value, setValue] = useState({
-        password: ""
-    })
+    const [value, setValue] = useState("")
     // const passwordValue = { ...value, password: value }
     // const currentPassword = useQuery(
     //     ['checkPassword', passwordValue, openChangeState, setopenChangeState],
@@ -46,9 +44,12 @@ function ModalPassword({ setPasswordModal, openChangeState, setopenChangeState }
             <ContentsBox>
                 <img src="/img/smile.png" alt="modal" />
                 <TitleBox>
+                    <Title>
+                    현재 비밀번호를 입력해주세요
+                    </Title>
                     <Input
                         type='password'
-                        placeholder='현재 비밀번호를 입력해주세요'
+                        placeholder=""
                         value={value}
                         onChange={(e) => {
                             setValue(e.target.value)
