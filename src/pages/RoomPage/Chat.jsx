@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { useNavigate } from 'react-router-dom';
+
 
 function Chat({ challengeId, memberId, title }) {
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [lastMessageTime, setLastMessageTime] = useState(0);
   const [chatList, setChatList] = useState([]);
   const [messageCount, setMessageCount] = useState(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -23,7 +24,7 @@ function Chat({ challengeId, memberId, title }) {
 };
 
 
-  
+const navigate = useNavigate()
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -35,7 +36,7 @@ function Chat({ challengeId, memberId, title }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessageCount(0); // 1초마다 메시지 카운트 초기화
+      setMessageCount(0); 
     }, 1000);
   return () => clearInterval(interval);
   }, []);
@@ -51,61 +52,64 @@ function Chat({ challengeId, memberId, title }) {
     const client = new Client({
       brokerURL: `ws://api.eroom-challenge.com/ws-stomp`,
       webSocketFactory: () => socket,
-      connectHeaders: {
-        challengeId: String(challengeId),
-      },
+     
       debug: function (str) {
-        console.log('지금 이런일이 일어나고 있어요!', str);
+        console.log('이벤트', str);
       },
       onConnect: () => {
-        console.log('연결되었음!');
         setStompClient(client);
   
-        // JOIN 메시지 보내기
+
+       // JOIN 메시지 보내기
         const joinMessage = {
           type: 'JOIN',
           memberId: String(memberId),
           challengeId: String(challengeId),
           };
-
-        console.log('조인 보냄', joinMessage);
         
         client.publish({
           destination: `/pub/chat.sendMessage/${challengeId}`,
           body: JSON.stringify(joinMessage),
-        });
-  
-        // 구독 설정
+          });
+                  
         client.subscribe(`/sub/chat/challenge/${challengeId}`, (message) => {
-          console.log('서버에서 보냈음', message.body);
           const receivedMessage = JSON.parse(message.body);
+          console.log('bbbbbbbbbbbbbbbbbb',receivedMessage)
+         
+          if(Array.isArray(receivedMessage)){
+            const memberIdCount = receivedMessage.reduce((acc, member) => {
+              acc[member.memberId] = (acc[member.memberId] || 0) + 1;
+              return acc;
+          }, {});
   
+          if(memberIdCount[memberId] > 1){
+          alert('중복된 접속입니다.');
+          navigate('/main');
+          return; 
+      }}
           
-
-
+          //참가자 리스트 처리
+          if (Array.isArray(receivedMessage) && receivedMessage.length > 0) {
+            const updatedChatList = receivedMessage.map(user => ({
+              sender: user.nickname,
+              profileImageUrl: user.profileImageUrl
+            }));
+            setChatList(updatedChatList);
+          }
+          
           // "JOIN" 메시지 타입 처리
           if (receivedMessage.type === 'JOIN') {
             setMessages((prevMessages) => [
               ...prevMessages,
               { message: `${receivedMessage.sender}님이 입장하셨습니다.` },
             ]);
-            setChatList(prevList =>{
-              const isExisting = prevList.some(user => user.memberId === receivedMessage.memberId);
-              if(!isExisting) {
-                return [...prevList, {
-                  memberId : receivedMessage.memberId,
-                  sender : receivedMessage.sender,
-                  profileImageUrl :receivedMessage.profileImageUrl
-                }]
-              }
-              return prevList
-            })
+                     
           } else if(receivedMessage.type === 'LEAVE'){
             setMessages((prevMessages) => [
             ...prevMessages,
             { message: `${receivedMessage.sender}님이 나가셨습니다.` },
           ]);
-        setChatList(prevList => prevList.filter(user => user.memberId !== receivedMessage.memberId))
+                  
         } else if(receivedMessage.type === 'CHAT'){
             setMessages((prevMessages) => [
               ...prevMessages,
@@ -131,11 +135,7 @@ function Chat({ challengeId, memberId, title }) {
   }, [challengeId, memberId]);
 
   const sendMessage = () => {
-    // const now = Date.now();
-    // if (now - lastMessageTime < 500) { 
-    //   alert('메시지를 너무 자주 보내지 마세요.');
-    //   return; 
-    // }
+   
     if(isButtonDisabled){
   alert('채팅금지입니다. 잠시 후 다시 시도해주세요')
   return;
@@ -155,14 +155,14 @@ function Chat({ challengeId, memberId, title }) {
         memberId: String(memberId),
         challengeId: String(challengeId),
       };
-      console.log('채팅보냄', chatMessage);
+      
       stompClient.publish({
         destination: `/pub/chat.sendMessage/${challengeId}`,
         body: JSON.stringify(chatMessage),
       });
 
       setNewMessage('');
-      // setLastMessageTime(now); 
+      
     }
   };
   
@@ -174,8 +174,11 @@ function Chat({ challengeId, memberId, title }) {
         fontSize:'24px',
         fontWeight:'700',
         height:'30px',
-        width:'90vh',
-        marginBottom:'10px'
+        width:'30vh',
+        minWidth:'360px',
+        maxWidth:'360px',
+        marginBottom:'10px',
+        overflow:'auto'
         
         }}>{title} </div>
       <div style={{
@@ -187,9 +190,7 @@ function Chat({ challengeId, memberId, title }) {
         borderTop:'1px solid #DADADA',
         fontSize:'16px',
         marginBottom:'10px'
-        
-        
-      }}> 
+        }}> 
         <img src='img/send.png' style={{width:'16px', height:'16px'}}/>
         메세지함
         </div>
@@ -260,7 +261,8 @@ function Chat({ challengeId, memberId, title }) {
           border:'1px solid #ffffff',
           borderRadius:'50px',
           marginRight:'2px',
-          marginTop:'5px'
+          marginTop:'5px',
+          flexShrink:'0'
         }}>
           
           </div>
@@ -275,12 +277,16 @@ function Chat({ challengeId, memberId, title }) {
           textAlign: 'left',
           display: 'flex',
           flexDirection: 'column',
+          overflowWrap:'break-word',
+          wordBreak:'break-all',
+          flexShrink: 1,
+          minWidth: 0,
         }}
       >
         {message.type === 'CHAT' && memberId !== message.memberId && (
-          <div style={{ fontWeight: '500', marginBottom: '5px', fontSize: '12px' }}>{message.sender}</div>
+          <div style={{ fontWeight: '900', marginBottom: '5px', fontSize: '12px' }}>{message.sender}</div>
         )}
-        <div style={{ fontSize: '14px' }}>{message.message}</div>
+        <div style={{ fontSize: '14px', maxwidth:'245px' }}>{message.message}</div>
       </div>
     </div>
     {message.type === 'CHAT' && (

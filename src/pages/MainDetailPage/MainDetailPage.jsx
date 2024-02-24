@@ -28,29 +28,35 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
     const translatedCategory = categoryMap[challengeDetail?.responseDto?.category] || '';
     const isParticipating = challengeDetail?.responseDto?.currentMemberIdList?.includes(Number(challengeDetail?.loginMemberId))
     const isLoggedOut = challengeDetail?.loginMemberId === "No members logged in";
+    
+    const startDate = new Date(challengeDetail?.responseDto?.startDate);
+    const now = new Date();
+    const butBack = startDate > now ? `#BBBBBB` : `#4f5aff`
+    const butcolor = startDate > now ? `#000000` : `#ffffff`
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <img 
                 src={challengeDetail?.responseDto?.thumbnailImageUrl} 
                 alt={challengeDetail?.responseDto?.title}
-                style={{ maxWidth: '430px', maxHeight: '220px', width: '430px', height: '220px', objectFit: 'contain',marginBottom:'20px',marginTop:'30px',}} 
+                style={{ maxWidth: '430px', maxHeight: '250px', width: '430px', height: '250px', objectFit: 'contain',marginBottom:'10px',marginTop:'10px',}} 
             />
             
-            <div style={{ width:'430px' }}>
-                <div style={{fontSize:'20px',fontWeight:'800', marginBottom:'5px'}}>
+            <div style={{ width:'430px'}}>
+                <div style={{ maxHeight:'150px',overflow:'auto',marginBottom:'5px'}}>
+                <div style={{fontSize:'18px',fontWeight:'800', marginBottom:'5px', lineHeight:'1.2'}}>
                     {challengeDetail?.responseDto?.title}
                 </div>
-                <div style={{fontSize:'14px', color:'#626262', marginBottom:'10px'}}>
+                <div style={{fontSize:'14px', color:'#626262', marginBottom:'10px',marginTop:'10px'}}>
                     {translatedCategory}
                 </div>
                 
-                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5', overflow:'auto'}}>
+                <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5'}}>
                     {challengeDetail?.responseDto?.description}
                 </div>
-                            
+                </div>            
                 <div style={{height:'124px', backgroundColor:'#F2F2F2', display:'flex', alignItems:'center', padding:'0 20px',borderRadius:'4px',}}>
-                    <div style={{marginRight:'20px', fontSize:'14px', fontWeight:'700'}}>
+                    <div style={{marginRight:'20px', fontSize:'13px', fontWeight:'700'}}>
                         <div style={{marginBottom:'10px',}}>참여기간</div>
                         <div style={{marginBottom:'10px',}}>운영횟수</div>
                         <div style={{marginBottom:'10px',}}>참여인원</div>
@@ -68,8 +74,15 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
             <div style={{ display: 'flex', gap: '10px' }}>
     
             {isParticipating ? (
-                <StyledButton onClick={() => { navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title }}); }} 
-                backgroundColor = '#4f5aff'
+                <StyledButton onClick={() => {
+                  
+                    if (startDate > now) {
+                        alert("챌린지가 시작되기 이전입니다.");
+                    } else {
+                        navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title }});
+                    }
+                }} 
+                backgroundColor = {butBack} color={butcolor}
                 >챌린지방 입장하기</StyledButton>
             ) : (
                 <StyledButton onClick={() => {
@@ -79,7 +92,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     } else {
                         applyForChallenge(challengeDetail?.responseDto?.challengeId);
                         }
-                }} backgroundColor= 'black'>참여 신청하기</StyledButton>
+                }} backgroundColor= 'black' color='white'>참여 신청하기</StyledButton>
             )}
 </div>
 
@@ -97,7 +110,7 @@ const StyledButton = styled.button`
   margin-top: 10px;
   background-color: ${props => props.backgroundColor}; 
   border: none;
-  color: white;
+  color: ${props => props.color}; 
   font-size: 15px;
   border-radius: 4px;
   font-weight: 500;

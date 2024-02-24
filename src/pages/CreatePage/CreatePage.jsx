@@ -82,9 +82,7 @@ function CreatePage() {
     setUploadedFileName('');
   };
 
-  const { getRootProps, getInputProps, isDragActive  } = useDropzone({ onDrop,
-  accept: 'image/jpeg, image/png',
-  });
+  const { getRootProps, getInputProps, isDragActive  } = useDropzone({ onDrop });
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -169,7 +167,7 @@ function CreatePage() {
           }}>
             <div>
               <TitleText>챌린지 이름</TitleText>
-              <InputStyle type="text" value={title} onChange={handleTitleChange} />
+              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={23} placeholder='챌린지 이름을 입력해주세요(20글자 이내)'/>
             </div>
             <div>
               <TitleText>챌린지 주제</TitleText>
