@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { createChallenge } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
@@ -11,8 +11,10 @@ function useInput(initialValue) {
   const [value, setValue] = useState(initialValue);
   const handleChange = (e) => setValue(e.target.value);
   const reset = () => setValue('');
-  return [value, handleChange, reset];
+  const set = (newValue) => setValue(newValue); 
+  return [value, handleChange, reset, set];
 }
+
 
 function CreatePage() {
   const [title, handleTitleChange, resetTitle] = useInput('');
@@ -26,6 +28,35 @@ function CreatePage() {
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
+
+  const [fieldErrors, setFieldErrors] = useState({
+    title: false,
+    category: false,
+    description: false,
+    frequency: false,
+    limitAttendance: false,
+    authExplanation: false,
+    startDate: false,
+    dueDate: false,
+  });
+
+  const validateForm = () => {
+    const errors = {
+      title: !title,
+      category: !category,
+      description: !description,
+      frequency: !frequency,
+      limitAttendance: !limitAttendance,
+      authExplanation: !authExplanation,
+      startDate: !startDate,
+      dueDate: !dueDate,
+    };
+
+    setFieldErrors(errors);
+
+    // 모든 필드가 유효한지 여부를 반환
+    return Object.values(errors).every(isValid => !isValid);
+  };
 
   const navigate = useNavigate();
   
@@ -45,8 +76,7 @@ function CreatePage() {
     event.preventDefault();
     setFrequency(option);
     setSelectedFrequency(option);
-    
-  };
+    };
 
   const resetImage = () => {
     setImage(null);
@@ -99,6 +129,7 @@ function CreatePage() {
       resetDueDate();
       resetImage();
       setSelectedFrequency();
+      clearLocalStorage();
       navigate('/main');
     },
     onError: () => {
@@ -108,12 +139,16 @@ function CreatePage() {
 
   
   const handleSubmit = (e) => {
+    if (new Date(startDate) > new Date(dueDate)) {
+      alert('종료일은 시작일보다 이후여야 합니다.');
+      return;
+    }
     e.preventDefault();
   
    
-    if (!title || !category || !description || !frequency || !limitAttendance || !authExplanation || !startDate || !dueDate) {
+    if (!validateForm()) {
       alert('모든 내용을 작성해주세요.');
-      return; 
+      return;
     }
     
     
@@ -137,9 +172,51 @@ function CreatePage() {
     }
     
     mutate(form);
+    };
     
-  };
+    
+    const saveToLocalStorage = () => {
+      const challengeData = {
+        title,
+        category,
+        description,
+        frequency,
+        limitAttendance,
+        authExplanation,
+        startDate,
+        dueDate,
+      };
+      localStorage.setItem('challengeData', JSON.stringify(challengeData));
+      alert('챌린지가 임시 저장되었습니다.');
+    };
+    
+    
+    const clearLocalStorage = () => {
+      localStorage.removeItem('challengeData');
+    };
 
+    useEffect(() => {
+      
+      const savedData = JSON.parse(localStorage.getItem('challengeData'));
+      if (savedData) {
+        
+        const shouldLoadData = window.confirm('임시 저장된 챌린지가 있습니다. 불러오시겠습니까?');
+        if (shouldLoadData) {
+          
+          handleTitleChange({ target: { value: savedData.title } });
+          handleCategoryChange({ target: { value: savedData.category } });
+          handleDescriptionChange({ target: { value: savedData.description } });
+          setSelectedFrequency(savedData.frequency);
+          handleLimitAttendanceChange({ target: { value: savedData.limitAttendance } });
+          handleAuthExplanationChange({ target: { value: savedData.authExplanation } });
+          handleStartDateChange({ target: { value: savedData.startDate } });
+          handleDueDateChange({ target: { value: savedData.dueDate } });
+        } else {
+          
+          clearLocalStorage();
+        }
+      }
+    }, []);
 
   return (
     <div>
@@ -167,12 +244,12 @@ function CreatePage() {
           }}>
             <div>
               <TitleText>챌린지 이름</TitleText>
-              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={23} placeholder='챌린지 이름을 입력해주세요(20글자 이내)'/>
+              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={23} placeholder='챌린지 이름을 입력해주세요(20글자 이내)' fieldError={fieldErrors.title}/>
             </div>
             <div>
               <TitleText>챌린지 주제</TitleText>
               <select value={category} onChange={handleCategoryChange} style={{
-                border: '1px solid #C3C3C3',
+                border: fieldErrors.category ? '2px solid red' : '1px solid #C3C3C3',
                 borderRadius: '6px',
                 width: '590px',
                 height: '44.95px',
@@ -196,7 +273,7 @@ function CreatePage() {
             <textarea value={description} onChange={handleDescriptionChange} maxLength={1000} placeholder='챌린지를 소개해주세요' style={{
               width: '1200px',
               height: '150px',
-              border: '1px solid #C3C3C3',
+              border: fieldErrors.category ? '2px solid red' : '1px solid #C3C3C3',
               borderRadius: '6px',
               fontStyle: 'normal',
               fontWeight: '400',
@@ -215,7 +292,7 @@ function CreatePage() {
                     width: '105px',
                     height: '48px',
                     backgroundColor: selectedFrequency === option ? 'black' : '#FFFFFF',
-                    border: '1px solid #626262',
+                    border: fieldErrors.category ? '2px solid red' : '1px solid #C3C3C3',
                     borderRadius: '50px',
                     fontWeight: '700',
                     fontSize: '15px',
@@ -229,7 +306,9 @@ function CreatePage() {
           </div>
           <div>
             <TitleText>인증 방법</TitleText>
-            <InputStyle type="text" value={authExplanation} onChange={handleAuthExplanationChange} maxLength={25} placeholder='인증방식을 간단히 설명해주세요(25자 이내)' style={{
+            <InputStyle type="text" value={authExplanation} onChange={handleAuthExplanationChange} maxLength={25} placeholder='인증방식을 간단히 설명해주세요(25자 이내)' 
+              fieldError={fieldErrors.authExplanation}
+              style={{
               width: '1200px'
             }} />
           </div>
@@ -241,7 +320,7 @@ function CreatePage() {
           }}>
             <div>
               <TitleText>참여 인원</TitleText>
-              <InputStyle type="number" value={limitAttendance} onChange={handleLimitAttendanceChange} min='0' max="50" 
+              <InputStyle type="number" value={limitAttendance} onChange={handleLimitAttendanceChange} min='0' max="50" fieldError={fieldErrors.limitAttendance}
               onInput={(e) => {
               if (e.target.value.length > e.target.maxLength)
               e.target.value = e.target.value.slice(0, e.target.maxLength);
@@ -255,14 +334,18 @@ function CreatePage() {
               marginBottom: '20px',
             }}>
               <TitleText>시작일</TitleText>
-              <InputStyle type="date" value={startDate} onChange={handleStartDateChange} min={today} style={{
+              <InputStyle type="date" value={startDate} onChange={handleStartDateChange} min={today} 
+                fieldError={fieldErrors.startDate}
+              style={{
                 width: '312px',
                 padding: '0 10px'
               }} />
             </div>
             <div>
               <TitleText>종료일</TitleText>
-              <InputStyle type="date" value={dueDate} onChange={handleDueDateChange} style={{
+              <InputStyle type="date" value={dueDate} onChange={handleDueDateChange} min={today} 
+              fieldError={fieldErrors.dueDate}
+              style={{
                 width: '312px',
                 padding: '0 10px'
               }}
@@ -305,9 +388,24 @@ function CreatePage() {
 
           <div style={{
             display: 'flex',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            gap:'20px'
           }}>
-            <button type="submit" style={{
+            <button type="button" 
+              onClick={saveToLocalStorage}
+              style={{
+              fontFamily:'Noto Sans KR, sans-serif',
+              width: '344px',
+              height: '48px',
+              borderRadius:'6px',
+              backgroundColor: 'white',
+              color: ' #000000',
+              fontWeight: '700',
+              fontSize: '15px',
+              cursor:'pointer'
+            }}>임시저장하기</button>
+
+<button type="submit" style={{
               fontFamily:'Noto Sans KR, sans-serif',
               width: '344px',
               height: '48px',
@@ -361,7 +459,7 @@ const Form = styled.form`
 `;
 
 const InputStyle = styled.input`
-  border: 1px solid #c3c3c3;
+  border: ${props => props.fieldError ? '2px solid red' : '1px solid #c3c3c3'};
   border-radius: 6px;
   width: 590px;
   height: 40px;
