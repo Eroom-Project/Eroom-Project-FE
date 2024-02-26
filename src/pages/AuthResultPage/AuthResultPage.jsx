@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authResult, postAuthStatus, updateAuthStatus, deleteAuthStatus } from '../../services/mainaxios';
@@ -28,8 +28,17 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     const [authContents, setAuthContents] = useState('');
     const [editImage, setEditImage] = useState(null); 
     const [authVideoUrl, setAuthVideoUrl] = useState('')
+    const [currentFilter, setCurrentFilter] = useState('전체');
     
+
+    const authStateMap={
+        전체 :'ALL',
+        승인 :'APPROVED',
+        거절 : 'DENIED',
+        승인대기 : 'WAITING'
+    }
     
+
 
     // React Query 및 파일 업로드 훅 사용
     const queryClient = useQueryClient();
@@ -53,6 +62,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             }
     });
     
+    
 
     const deleteMutation = useMutation((authId) => deleteAuthStatus({challengeId, authId}), {
         onSuccess: () => {
@@ -67,13 +77,54 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         },
     });
 
-    // 인증 상태 변경 핸들러
+    //ESC 키
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+          if (event.key === 'Escape') {
+            onClose();
+          }
+        };
+    
+        if (isOpen) {
+          document.addEventListener('keydown', handleKeyDown);
+        }
+    
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+      }, [isOpen, onClose]); 
+
+      //인증상태 변경 핸들러
     const handleAuthStatusChange = (e, authId, newStatus) => {
         e.preventDefault();
         e.stopPropagation();
-        
         postAuthStatusMutation.mutate({authId, challengeId, authStatus : newStatus});
     };
+
+    //필터 변경 핸들러
+    const handleFilterChange = (newFilter) => {
+        setCurrentFilter(newFilter);
+        };
+
+    const filteredData = data?.authResponseDtoList?.filter((item) => {
+        if(authStateMap[currentFilter] === 'ALL') {
+            return data?.authResponseDtoList
+        } else if(authStateMap[currentFilter] === 'APPROVED'||'DENIED'||'WAITING'){
+            return item.authStatus === authStateMap[currentFilter];
+        } else {
+            return data?.authResponseDtoList
+        }
+    });
+
+    console.log('이거 담겨있음',filteredData);
+    
+     //배경 선택 모달 닫힘. 
+    const handleBackgroundClick = (event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      };
+    
 
     // 항목 확장/축소 토글 핸들러
     const toggleExpand = (authId) => {
@@ -130,12 +181,15 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     
     const isLeader = data?.memberInfoResponseDto?.loginChallengeEnum === "LEADER";
     
+   
+
     // 모달이 열려있지 않으면 null 반환
     if (!isOpen) return null;
 
     // 모달을 UI
     return ReactDOM.createPortal(
-        <div style={{
+        <div onClick={handleBackgroundClick}
+        style={{
             position: 'fixed',
             top: 0,
             left: 0,
@@ -176,9 +230,20 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
                     display: 'flex',
                     fontSize: '20px',
                     fontWeight: '700',
-                    marginBottom: '10px'
+                    marginBottom: '1px'
                 }}>인증 확인하기</div>
-    
+    <div style={{
+        display:'flex',
+        gap:'10px'
+    }}>
+    {Object.keys(authStateMap).map((option) => (
+    <FilterButton
+      key={option}
+      onClick={() => handleFilterChange(option)}
+      >
+      {option}
+    </FilterButton>
+  ))}</div>
                 {isLoading && <FeedbackContainer> <img src='img/icon (5).png' alt='로딩이미지' /> 로딩중입니다.</FeedbackContainer>}
                 {error && <FeedbackContainer> <img src='img/icon (6).png' alt='에러이미지' /> 오류가 발생했습니다.</FeedbackContainer>}
                 {!isLoading && !error && data?.authResponseDtoList?.length === 0 && (<FeedbackContainer> <img src='img/icon (4).png' alt='에러이미지' /> <br /> 인증 내용이 없습니다.</FeedbackContainer>)}
@@ -186,7 +251,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
                 <div style={{
                     overflowY:'auto'
                 }}>
-                {data?.authResponseDtoList?.map((item) => {
+                {filteredData?.map((item) => {
                     const isWriter = item.memberId === data.memberInfoResponseDto.loginMemberId 
                     if(!isLeader && !isWriter && item.authStatus !== "APPROVED"){
                         return null;
@@ -195,9 +260,15 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
 
                     const isEditing = editMode === item.authId;
 
+                    let dotColor = 'yellow'; 
+                    if (item.authStatus === "APPROVED") {
+                    dotColor = 'green';
+                    } else if (item.authStatus === "DENIED") {
+                    dotColor = 'red';
+                    } 
                                   
                     return (
-                        <AuthCard key={item.authId} >
+                        <AuthCard key={item.authId}  authStatus={item.authStatus}>
                            <div onClick={() => toggleExpand(item.authId)} style={{
     cursor: 'pointer',
     display: 'flex',
@@ -216,11 +287,14 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
             marginRight: '10px'
         }} />
         <div>
+            <div style={{display:'flex', alignItems:'flex-start', gap:'5px'}}>
             <div style={{
                 fontSize: '16px',
                 fontWeight: '700',
                 marginBottom: '10px',
             }}>{item.nickname}</div>
+            <div style={{height:'10px', width:'10px',borderRadius:'50px',backgroundColor:dotColor}}></div>
+            </div>
             <div style={{
                 fontSize: '12px',
                 color: '#A5A5A5'
@@ -287,6 +361,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
     </EditContainer>
 ) : (
     <>
+    
         <EditContainer expanded={expandedIndex === item.authId}>
         
             <div style={{fontSize:'14px',fontWeight:'700',marginBottom:'5px'}}>링크</div>
@@ -465,4 +540,23 @@ const DropZoneStyle = styled.div`
     text-align: center;
     cursor: pointer;
     margin: 0 auto;
+`;
+
+const FilterButton = styled.div`
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  justify-content : center;
+  align-items:center;
+  width : 70px;
+  height:30px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 50px; 
+  padding: 5px 5px; 
+  cursor: pointer;
+  &:hover {
+    background-color:  #979797;
+  }
 `;

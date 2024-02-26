@@ -20,10 +20,18 @@ const Modal = ({ children, isOpen, onClose }) => {
     };
   }, [isOpen, onClose]); // 의존성 배열에 isOpen과 onClose를 추가
 
+  const handleBackgroundClick = (event) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <div style={{
+    <div 
+      onClick={handleBackgroundClick}
+      style={{
       position: 'fixed',
       top: 0,
       left: 0,
@@ -33,6 +41,7 @@ const Modal = ({ children, isOpen, onClose }) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      zIndex:1000
     }}>
       <div style={{
         display:'flex',
