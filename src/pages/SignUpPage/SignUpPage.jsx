@@ -23,8 +23,13 @@ function SignUpPage() {
         email: '',
         password: '',
         nickname: '',
+        checkPassword: ''
     })
 
+    const [checkCurrent, setcheckCurrent] = useState({
+        email: "",
+        nickname: "",
+    })
     // 중복확인 주소 확인하기
     // 이메일 중복확인
     const emailCheck = async () => {
@@ -32,13 +37,16 @@ function SignUpPage() {
             const res = await api.get("/api/signup/email", {
                 params: { email: input.email }
             })
+            setcheckCurrent({ ...checkCurrent, email: input.email })
             console.log(res)
             if (res.data.message === "사용 가능한 email입니다.") {
                 setCheck({ ...check, email: true })
                 alert(res.data.message)
-            } else if(res.data.message === "유효하지 않은 이메일 형식입니다."){
+            } else if (res.data.message === "유효하지 않은 이메일 형식입니다.") {
+                setCheck({ ...check, email: false })
                 alert(res.data.message)
-            }else {
+            } else {
+                setCheck({ ...check, email: false })
                 alert(res.data.message)
             }
         } catch (error) {
@@ -52,13 +60,16 @@ function SignUpPage() {
             const res = await api.get("/api/signup/nickname", {
                 params: { nickname: input.nickname }
             })
+            setcheckCurrent({ ...checkCurrent, nickname: input.nickname })
             console.log(res)
             if (res.data.message === "사용 가능한 닉네임입니다.") {
                 setCheck({ ...check, nickname: true })
                 alert(res.data.message)
-            } else if(res.data.message === "닉네임은 3자 이상 10자 이하로 입력해 주세요."){
+            } else if (res.data.message === "닉네임은 3자 이상 10자 이하로 입력해 주세요.") {
+                setCheck({ ...check, nickname: false })
                 alert(res.data.message)
             } else {
+                setCheck({ ...check, nickname: false })
                 alert(res.data.message)
             }
         } catch (error) {
@@ -120,10 +131,10 @@ function SignUpPage() {
                 state = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/.test(value);
                 break;
             case "checkPassword":
-                state = value === input.password
+                state = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/.test(value) && value === input.password
                 break;
             default:
-                state = true;
+                state = false;
         }
         setAuth({
             ...auth,
@@ -131,7 +142,7 @@ function SignUpPage() {
         });
     }
 
-    // 유효성 검사 통과 후 상태 값
+    // 양식 유효성 검사 통과 후 상태 값
     const [auth, setAuth] = useState({
         email: false,
         password: false,
@@ -139,11 +150,8 @@ function SignUpPage() {
         nickname: false,
     })
 
-    console.log(auth)
-
     // 유효성 검사 통과 했을 때 회원가입 가능
     const signUp = async () => {
-        if (auth.email && auth.password && auth.checkPassword && auth.nickname) {
             try {
                 const newUser = {
                     email: input.email,
@@ -158,7 +166,6 @@ function SignUpPage() {
                 console.log(error)
                 alert('회원가입에 문제가 있습니다.')
             }
-        }
     }
 
     const handleOnKey = (e) => {
@@ -169,41 +176,46 @@ function SignUpPage() {
 
     // massage state를 통해 state 출력 
     const message = (name) => {
+        // console.log("checkCurrent",checkCurrent.email)
+        // console.log("input",input.email)
+        // console.log("auth[name]",auth.email)
+        // console.log("check.email ",check.email )
         switch (name) {
             case "email":
-                if (auth[name] && check.email) {
+                if (auth[name] && check.email && checkCurrent?.email === input?.email) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 이메일 양식을 입력해주세요. </Message>
                 }
             case "nickname":
-                if (auth[name] && check.nickname) {
+                if (auth[name] && check.nickname && checkCurrent.nickname === input.nickname) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 닉네임 양식을 입력해주세요. </Message>
                 }
             case "password":
                 return (
                     auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                         :
-                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호 양식을 입력해주세요. </Message>)
             case "checkPassword":
+                console.log(auth.checkPassword)
                 return (
-                    auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+                    auth[name] && input.password === input.checkPassword ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 비밀번호가 일치합니다. </Message>
                         :
-                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호가 일치하지 않습니다. </Message>)
             default:
-                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> {name}을 입력해주세요. </Message>
+                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 입력해주세요. </Message>
         }
     }
 
     // 유효성검사 중복확인 전부 통과해야 회원가입 가능
     const button = () => {
-        return (auth.email && auth.password && auth.checkPassword && auth.nickname && check.email && check.nickname ?
+        return (auth.email && auth.password && auth.checkPassword && auth.nickname && check.email && checkCurrent.email === input.email && check.nickname && checkCurrent.nickname === input.nickname && input.password === input.checkPassword?
             <Button color={"#5EC75E"} type='button' onClick={signUp}>회원가입하기</Button>
             :
             <Button color={"#1C1C1C"} type='button'>정보를 입력해 주세요</Button>)
@@ -211,7 +223,7 @@ function SignUpPage() {
 
     return (
         <Background>
-            <SignBacks/>
+            <SignBacks />
             <SignBack>
                 <MainForm >
                     <H1>회원가입</H1>
@@ -222,7 +234,7 @@ function SignUpPage() {
                                 <Input
                                     type="text"
                                     name="email"
-                                    placeholder='이메일을 입력해주세요.'
+                                    placeholder='이메일은 @와.을 포함한 형식입니다.'
                                     onFocus={() => { handlerFocus("email") }}
                                     onBlur={() => { handlerBlur("email") }}
                                     value={input.email}

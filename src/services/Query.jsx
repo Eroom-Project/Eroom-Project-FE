@@ -28,17 +28,7 @@ const checkPassword = async(value) => {
     const res = await api.get("/api/member/password",{
         params:{password: value}
     })
-    console.log(res)
-    try{
-        if(res.data.status === "OK"){
-            console.log("비밀번호가 확인되었습니다.")
-            return res.data.status
-        } else {
-            console.log("잘못된 비밀번호입니다.")
-        }
-    }catch(error){
-        console.log("비밀번호 확인 =>"+ error)
-    }
+
 }
 // 프로필 수정 완료
 const changeProfileDatas = async (nameauthinput) => {
