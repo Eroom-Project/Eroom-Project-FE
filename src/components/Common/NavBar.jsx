@@ -36,7 +36,7 @@ export default NavBar
 
 const Logo = styled.img`
     width: 130px;
-    margin-right: 20px;
+    margin-right: 40px;
 `
 const Sign = styled.img`
     width: 22px;
@@ -86,6 +86,6 @@ const SignIn = styled.div`
 `
 
 const Span = styled.span`
-    margin: 0px 10px;
+    margin: 0px 15px;
     cursor: pointer;
 `
