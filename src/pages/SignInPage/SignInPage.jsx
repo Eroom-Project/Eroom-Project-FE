@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import api from '../../services/api';
 import KakaoSignIn from './KakaoSignIn';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import SignBacks from '../../components/SignPage/SignBacks';
 import {
     Message,
@@ -81,9 +81,13 @@ function SignInPage() {
     })
     console.log(auth)
 
+    // 전역으로 로그인 상태 관리
+    const {accessState, setAccessState, setWithExpire} = useOutletContext();
+
     // 토큰 어떻게 들어오는지 보기
     // Authorization: Bearer <token>
     // const dispatch = useDispatch()
+    // 10080
     const signIn = async () => {
         if (auth.email && auth.password) {
             try {
@@ -94,7 +98,8 @@ function SignInPage() {
                 const res = await api.post("/api/login", newUser)
                 console.log(res.status)
                 if (res.status === 200) {
-                    window.localStorage.setItem("localaccess", true)
+                    setWithExpire("localRefresh", true, 10080)
+                    setAccessState(true)
                     navigate("/")
                 }
             } catch (error) {
@@ -109,7 +114,7 @@ function SignInPage() {
         return (auth[name] ?
             <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
             :
-            <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>)
+            <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식을 입력해주세요. </Message>)
     }
 
 
@@ -117,7 +122,7 @@ function SignInPage() {
         return (auth.email && auth.password ?
             <Button color={"#5EC75E"} type='button' onClick={signIn}>로그인</Button>
             :
-            <Button color={"#1C1C1C"} type='button'>양식에 맞게 입력해주세요.</Button>)
+            <Button color={"#1C1C1C"} type='button'>양식을 입력해주세요.</Button>)
     }
 
     const handleOnKey = (e) => {

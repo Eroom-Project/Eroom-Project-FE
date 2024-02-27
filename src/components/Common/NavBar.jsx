@@ -1,43 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { getCookie, removeCookie } from '../../services/Cookie'
-import { Link, useNavigate } from 'react-router-dom'
-import api from '../../services/api'
-function NavBar() {
-
-    const navigate = useNavigate()
-
-    const [accessState, setAccessState] = useState(false)
-
-    const isCookie = async () => {
-        const localaccess = await window.localStorage.getItem("localaccess");
-        if (localaccess) {
-            setAccessState(true)
-        } else {
-            console.log("localaccess cookie not found");
-
-        }
-    }
-
-    useEffect(() => {
-        isCookie()
-    }, [])
-
-    const removeCookies = async () => {
-        console.log(accessState)
-        if (accessState === true) {
-            const resToken = await api.post(`/api/token`, {})
-            const res = await api.post('/api/logout', {})
-            alert("로그아웃 됐습니다.")
-            console.log(resToken)
-            console.log(res)
-            if (res.status === 200) {
-                window.localStorage.removeItem("localaccess")
-                setAccessState(false)
-                navigate("/")
-            }
-        }
-    }
+import { Link} from 'react-router-dom'
+function NavBar({accessState, removeCookies}) {
 
     return (
         <>

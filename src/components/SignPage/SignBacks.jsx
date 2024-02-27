@@ -5,25 +5,25 @@ import {
 } from '../../styles/SignPage/SignPage'
 
 function SignBacks() {
-    const ref = useRef([])
+    const ref = useRef([null, null, null, null, null, null])
 
-    useEffect(()=>{
-        console.log(ref)
-        
+    useEffect(() => {
         const parallax = (e) => {
-            ref.current.forEach(function(value){
-                let moving = value?.getAttribute("data-value")
-                let x  = (e.clientX * moving) / 250
-                let y  = (e.clientY * moving) / 250
-                value.style.transform = "translateX(" + x +"px) translateY(" + y +"px)"
+
+            ref.current.forEach(function (value) {
+                if (value) {
+                    let moving = value?.getAttribute("data-value")
+                    let x = (e.clientX * moving) / 250
+                    let y = (e.clientY * moving) / 250
+                    value.style.transform = "translateX(" + x + "px) translateY(" + y + "px)"
+                }
             })
         }
-        console.log(ref)
         document.addEventListener("mousemove", parallax);
         return () => {
             document.removeEventListener("mousemove", parallax);
         }
-        
+
     }, [])
 
     return (

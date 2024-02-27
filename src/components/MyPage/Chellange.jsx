@@ -47,7 +47,7 @@ function Chellange() {
 
 
     const chellange = () => {
-        // console.log(chellangeData.data)
+        console.log(chellangeData.data.challengeList.length)
         // console.log(currunt)
         if (chellangeData.data) {
             if (chellangeState.create === true) {

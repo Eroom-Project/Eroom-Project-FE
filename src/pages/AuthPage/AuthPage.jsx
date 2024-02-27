@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useDropzone } from 'react-dropzone';
 import { useMutation } from 'react-query';
@@ -11,6 +11,25 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   const [authVideoUrl, setAuthVideoUrl] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [authStatus,setAuthStatus] = useState('WAITING');
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        handleClose();
+      }
+    };
+
+    // isOpen이 true일 때만 이벤트 리스너를 추가
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup 함수에서 이벤트 리스너를 제거
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]); // 의존성 배열에 isOpen과 onClose를 추가
+
 
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length === 0) {
@@ -55,14 +74,33 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     }
   });
  
-  
+  const handleClose = () => {
+    
+    if (authContents || authVideoUrl || uploadedFileName) {
+    
+      if (window.confirm("작성한 내용이 모두 삭제됩니다. 창을 닫으시겠습니까?")) {
+       
+        setAuthContents('');
+        setAuthImageUrl(null);
+        setAuthVideoUrl('');
+        setUploadedFileName('');
+        onClose(); 
+      }
+    } else {
+      onClose(); 
+    } return;
+  };
 
   const handleRemoveFile = (event) => {
     event.stopPropagation();
     setAuthImageUrl(null);
     setUploadedFileName('');
   };
-
+  const handleBackgroundClick = (event) => {
+    if (event.target === event.currentTarget) {
+      handleClose();
+    }
+  };
 
 
   
@@ -93,7 +131,8 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     const resToken = await api.post(`/api/token`,{})
     }
   return ReactDOM.createPortal(
-    <div style={{
+    <div onClick={handleBackgroundClick}
+    style={{
       position: 'fixed',
       top: 0,
       left: 0,
@@ -118,7 +157,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
         alignItems: 'flex-start',
         position: 'relative',
       }} onSubmit={handleSubmit}>
-        <button onClick={onClose} style={{
+        <button onClick={handleClose} style={{
           fontFamily:'Noto Sans KR, sans-serif',
           position: 'absolute',
           top: '10px',
@@ -176,8 +215,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
           }}>동영상 링크</div>
         <input
           type="text"
-          placeholder="링크를 입력하세요.(500자 이내)"
-          maxLength={500}
+          placeholder="인증에 참고할 링크가 있다면 입력해주세요."
           value={authVideoUrl}
           onChange={(e) => setAuthVideoUrl(e.target.value)}
           style={{ 
