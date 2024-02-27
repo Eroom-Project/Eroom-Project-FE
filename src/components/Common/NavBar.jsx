@@ -39,11 +39,11 @@ const Logo = styled.img`
     margin-right: 20px;
 `
 const Sign = styled.img`
-    width: 20px;
+    width: 22px;
     cursor: pointer;
 `
 const User = styled.img`
-    width: 20px;
+    width: 22px;
     margin-right: 20px;
     cursor: pointer;
 `
@@ -54,6 +54,8 @@ const MainBox = styled.div`
     justify-content: center;
     position: sticky;
     top: 0px;
+    font-size: 16px;
+    font-weight: 700;
     width: 100%;
     z-index: 1000;
     background-color: white;
@@ -65,7 +67,7 @@ const Main = styled.div`
     justify-content: space-between;
     max-width: 1200px;
     width: 100%;
-    padding: 25px 0px;
+    height: 100px;
 `
 const Hr = styled.div`
     width: 100%;
