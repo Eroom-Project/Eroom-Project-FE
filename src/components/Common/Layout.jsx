@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavBar from '../../components/Common/NavBar'
-import Footer from '../../components/Common/Footer'
 import api from '../../services/api'
 
 function Layout() {
@@ -12,8 +11,9 @@ function Layout() {
         if (localaccess) {
             setAccessState(true)
         } else {
+            
             setAccessState(false)
-            console.log("localaccess cookie not found");
+            console.log("Layout => localRefresh cookie not found");
         }
     }
 
@@ -33,13 +33,15 @@ function Layout() {
         }
     }
 
-    // 로컬 만료시간 설정
+    // 로컬 만료시간 설정 SignIn에서 쓰는중
     let now = new Date()
     const setWithExpire = (key, value, exp) => {
         const item = { value: value, expires: now.getTime() + exp * 60 * 1000 }
         localStorage.setItem(key,JSON.stringify(item))
     }
 
+    // 나머지는 Layout => LayoutFooter => LayoutAuth로 내려줍니다.
+    // oulet이 사이에 또 있으면 useOuletContext로 바로 못 내리고 한번 거치는 것 같아요
     const getWithExpire = (key) => {
         const itemStr = localStorage.getItem(key)
         if(!itemStr){
@@ -59,15 +61,14 @@ function Layout() {
     }
 
     useEffect(() => {
-        getWithExpire("localRefresh")
         isCookie()
-        console.log(accessState)
+        getWithExpire("localRefresh")
+        console.log("레이아웃",accessState)
     }, [])
     return (
         <>
             <NavBar accessState={accessState} setAccessState={setAccessState} removeCookies={removeCookies} />
-            <Outlet context={{ accessState, setAccessState, setWithExpire}} />
-            {/* <Footer/> */}
+            <Outlet context={{ accessState, setAccessState, setWithExpire, getWithExpire}} />
         </>
     )
 }
