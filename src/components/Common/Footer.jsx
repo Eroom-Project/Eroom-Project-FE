@@ -26,20 +26,23 @@ function Footer() {
                 return <P>‘ 이룸 ’은 개인정보를 다음의 목적 이외의 용도로는 이용하지 않으며 이용 목적이 변경될 경우에는 동의를 받아 처리하겠습니다.</P>
         }
     }
+
     console.log(terms["a"])
     return (
         <Main>
+            {window.location.href !== "https://www.eroom-challenge.com/room" && window.location.href !== "http://localhost:3000/room" &&
             <Contents>
                 <img src="/img/NavBar/Logo.png" alt="logo" style={{width: "100px"}}/>
                 <Hr />
                 <div>
                 <Span onClick={() => { setTerms({ ...terms, a: true, b: false, c: false}) }} weight={terms.a && "700"}>이용목적</Span> | <Span onClick={() => { setTerms({ ...terms, a: false, b: true, c: false}) }}weight={terms.b&&"700"}>개인정보 수집</Span> | <Span onClick={() => { setTerms({ ...terms, a: false, b: false, c: true}) }}weight={terms.c&&"700"}>개인정보 파기</Span>
-                </div>
+                </div> 
                 {terms["a"] === false && terms["b"] === false && terms["c"] === false && handleTerms("a")}
                 {terms["a"] && handleTerms("a")}
                 {terms["b"] && handleTerms("b")}
                 {terms["c"] && handleTerms("c")}
             </Contents>
+            }
         </Main>
     )
 }
