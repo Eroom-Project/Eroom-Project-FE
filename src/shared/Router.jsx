@@ -17,17 +17,17 @@ function Router() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/signin" element={<SignInPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/auth/callback/kakao" element={<Redirection />} />
-                <Route path='/' element={<Layout/>}>
+                <Route path='/' element={<Layout />}>
+                    <Route path="/signin" element={<SignInPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/auth/callback/kakao" element={<Redirection />} />
                     <Route path="/" element={<HomePage />} />
                     <Route path="/mypage" element={<MyPage />} />
                     <Route path="/main" element={<MainPage />} />
                     <Route path="/main" element={<MainDetailPage />} />
                     <Route path="/create" element={<CreatePage />} />
                     <Route path="/room" element={<RoomPage />} />
-                    </Route>
+                </Route>
             </Routes>
         </BrowserRouter>
     )
