@@ -317,6 +317,7 @@ const navigate = useNavigate()
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
         onKeyPress={handleKeyPress}
+        maxLength={500}
         style={{
           width:'250px',
           border:'none',
