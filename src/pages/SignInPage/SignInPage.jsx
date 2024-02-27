@@ -82,7 +82,7 @@ function SignInPage() {
     console.log(auth)
 
     // 전역으로 로그인 상태 관리
-    const {accessState, setAccessState, setWithExpire} = useOutletContext();
+    const {setAccessState, setWithExpire} = useOutletContext();
 
     // 토큰 어떻게 들어오는지 보기
     // Authorization: Bearer <token>
