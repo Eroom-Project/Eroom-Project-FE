@@ -1,5 +1,20 @@
 import api from "./api";
 
+//------------------signpage-------------------
+const postVerificationEmail = async(email) => {
+    const res = await api.post(`/emails/verification-requests?email=${email}`)
+    console.log(res)
+    return res.data
+}
+const getVerificationEmail = async(emailcode) => {
+    const res = await api.get(`/emails/verifications?email=${emailcode.email}&code=${emailcode.code}`)
+    return res.data
+}
+
+
+
+
+//-------------------mypage-------------------
 const getProfile = async() => {
     const res = await api.get("/api/mypage")
     return res.data.data
@@ -28,7 +43,6 @@ const checkPassword = async(value) => {
     const res = await api.get("/api/member/password",{
         params:{password: value}
     })
-
 }
 // 프로필 수정 완료
 const changeProfileDatas = async (nameauthinput) => {
@@ -87,4 +101,4 @@ const changeProfileDatas = async (nameauthinput) => {
     }
 }
 
-export {getProfile, getChallengeDetail, deleteChallenge, checkPassword, changeProfileDatas}
+export {getProfile, getChallengeDetail, deleteChallenge, checkPassword, changeProfileDatas, postVerificationEmail, getVerificationEmail}

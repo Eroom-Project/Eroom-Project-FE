@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { getProfile } from '../../services/Query'
 import { useQuery } from 'react-query'
-import { MyPageModalPotal, MyPageRemovePotal } from './Potal'
+import { MyPageModalPotal, MyPageRemovePotal } from '../Common/Potal'
 import MyDetailPage from '../../pages/MyDetailPage/MyDetailPage'
 import ModalRemove from './ModalRemove'
 
@@ -12,7 +12,7 @@ function Chellange() {
     const chellangeData = useQuery('chellangeData', getProfile)
 
     if (chellangeData.data) {
-        console.log(chellangeData.data.challengeList)
+        // console.log(chellangeData.data.challengeList)
     }
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")
@@ -23,7 +23,8 @@ function Chellange() {
 
     const [chellangeState, setChellangeState] = useState({
         create: false,
-        finish: false
+        finish: false,
+        before: false
     })
 
     const [modalState, setModalState] = useState(false)
@@ -87,7 +88,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true && modalChallengeId === value.challengeId &&
@@ -103,9 +104,14 @@ function Chellange() {
                 return (
                     chellangeData.data.challengeList
                         .filter((value) => {
-                            let currunt = new Date();
+                            let current = new Date();
                             let limite = new Date(value.dueDate)
-                            return limite < currunt
+                            // console.log("value", value)
+                            // console.log("value.dueDate", value.dueDate)
+                            // console.log("limite", limite)
+                            // console.log("currunt", current)
+
+                            return current > limite
                         })
                         .map((value) => {
                             return (
@@ -137,7 +143,57 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState}/>
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
+                                        </MyPageModalPotal>
+                                    }
+                                    {modalRemoveState === true &&
+                                        <MyPageRemovePotal >
+                                            <ModalRemove />
+                                        </MyPageRemovePotal>
+                                    }
+                                </>
+                            )
+                        })
+                )
+            } else if (chellangeState.before === true) {
+                return (
+                    chellangeData.data.challengeList
+                        .filter((value) => {
+                            let current = new Date();
+                            let start = new Date(value.startDate)
+                            return start > current
+                        })
+                        .map((value) => {
+                            return (
+                                <>
+                                    <Contents key={value.challengeId}
+                                        onClick={() => { modalOpen(value.challengeId) }}
+                                    >
+                                        <ContentsTop>
+                                            <Img src={value.thumbnailImageUrl} alt="img" />
+                                            <CurrentUsers>
+                                                {value.currentAttendance}/{value.limitAttendance}명
+                                                <img src="/img/userIcon.png" alt="currentuser" />
+                                            </CurrentUsers>
+                                        </ContentsTop>
+                                        <ContentsBottom>
+                                            <Day>
+                                                {value.frequency}
+                                            </Day>
+                                            <Title>
+                                                {value.title}
+                                            </Title>
+                                            <NickNameBox>
+                                                <NickName>
+                                                    {value.creatorNickname}
+                                                </NickName>
+                                            </NickNameBox>
+                                        </ContentsBottom>
+                                    </Contents>
+                                    {
+                                        modalState === true && modalChallengeId === value.challengeId &&
+                                        <MyPageModalPotal>
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true &&
@@ -152,6 +208,12 @@ function Chellange() {
             } else {
                 return (
                     chellangeData.data.challengeList
+                        .filter((value) => {
+                            let current = new Date();
+                            let limite = new Date(value.dueDate)
+                            let start = new Date(value.startDate)
+                            return limite >= current && start < current
+                        })
                         .map((value) => {
                             return (
                                 <>
@@ -182,7 +244,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true &&
@@ -200,7 +262,7 @@ function Chellange() {
 
     // sort style
     const handleSort1 = () => {
-        return chellangeState.create === false && chellangeState.finish === false ? "1" : ".5"
+        return chellangeState.create === false && chellangeState.finish === false && chellangeState.before === false ? "1" : ".5"
     }
     const handleSort2 = () => {
         return chellangeState.create === true ? "1" : ".5"
@@ -208,13 +270,17 @@ function Chellange() {
     const handleSort3 = () => {
         return chellangeState.finish === true ? "1" : ".5"
     }
+    const handleSort4 = () => {
+        return chellangeState.before === true ? "1" : ".5"
+    }
 
     return (
         <>
             <SortBox>
-                <H3 opacity={handleSort1()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false }) }}>진행중 챌린지</H3>
-                <H3 opacity={handleSort2()} onClick={() => { setChellangeState({ ...chellangeState, create: true, finish: false }) }}>생성한 챌린지</H3>
-                <H3 opacity={handleSort3()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: true }) }}>종료된 챌린지</H3>
+                <H3 opacity={handleSort1()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false, before: false }) }}>진행중 챌린지</H3>
+                <H3 opacity={handleSort2()} onClick={() => { setChellangeState({ ...chellangeState, create: true, finish: false, before: false }) }}>생성한 챌린지</H3>
+                <H3 opacity={handleSort4()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false, before: true }) }}>예약된 챌린지</H3>
+                <H3 opacity={handleSort3()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: true, before: false }) }}>종료된 챌린지</H3>
             </SortBox>
             <ContentsBox>
                 <ContentsGrid>
