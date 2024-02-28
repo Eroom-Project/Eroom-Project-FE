@@ -4,13 +4,17 @@ import AuthResult from '../AuthResultPage/AuthResultPage';
 import Chat from './Chat';
 import { useLocation } from 'react-router-dom';
 import api from '../../services/api';
+import Brick from './Brick';
+import Brick2 from './Brick2';
+import BallCanvas from './BallCanvas';
+
 
 function RoomPage() {
     const [isChatOpen, setIsChatOpen] = useState(false); 
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isAuthResultOpen, setIsAuthResultOpen] = useState(false);
     const location = useLocation();
-    const { challengeId,  memberId, title } = location.state || {};
+    const { challengeId,  memberId, title, nickname } = location.state || {};
     
     
 
@@ -19,19 +23,30 @@ function RoomPage() {
             maxWidth: '1400px',
             margin: '0 auto',
             display: 'flex',
+            flexDirection:'row',
             justifyContent: 'center',
-            height: '80%'
+            height: '720px'
         }}>
+            
            <div style={{
-                backgroundImage:'url(img/RoomBackImg.png)',
-                width:'100vh',
-                height:'90vh',
+                display:'flex',
+                backgroundImage:'url(img/roomBack.png)',
+                width:'1000px',
+                height:'800px',
                 backgroundPosition:'center',
                 backgroundSize:'cover',
                 position:'relative',
-                
                 }}>
-                
+                   
+                    <div style={{display:'flex', overflow:'hidden'}}>
+                    <Brick />
+                    <Brick2 />
+                    </div>
+                    <div style={{ position: 'absolute' }}>
+                    <BallCanvas imageUrl='/img/smile.png' nickname={nickname} />
+                    </div>
+                    
+                                    
                 <div style={{
                 display: 'flex',
                 gap: '10px',
@@ -67,8 +82,8 @@ function RoomPage() {
                 </div>
                 <div style={{
                 position: 'absolute',
-                top: '9%', 
-                right: isChatOpen ? '500px' : '150px', 
+                top: '75px', 
+                right: isChatOpen ? '150px' : '150px', 
                 transform: 'translateY(-50%)', 
                 zIndex: 20, 
             }}>
@@ -98,7 +113,7 @@ function RoomPage() {
                     
                     right: '0', 
                     width: '380px', 
-                    height: '90vh', 
+                    height: '800px', 
                     backgroundColor: 'rgba(255, 255, 255, 0.8)',
                     // border: '1px solid #ccc', 
                     padding: '10px', 

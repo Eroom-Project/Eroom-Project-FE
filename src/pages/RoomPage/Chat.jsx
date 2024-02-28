@@ -74,8 +74,7 @@ const navigate = useNavigate()
                   
         client.subscribe(`/sub/chat/challenge/${challengeId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
-          console.log('bbbbbbbbbbbbbbbbbb',receivedMessage)
-         
+                   
           if(Array.isArray(receivedMessage)){
             const memberIdCount = receivedMessage.reduce((acc, member) => {
               acc[member.memberId] = (acc[member.memberId] || 0) + 1;
