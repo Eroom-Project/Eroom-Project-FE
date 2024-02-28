@@ -28,6 +28,8 @@ function CreatePage() {
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
+  const [previewUrl, setPreviewUrl] = useState(null);
+
 
   const [fieldErrors, setFieldErrors] = useState({
     title: false,
@@ -98,10 +100,12 @@ function CreatePage() {
     
     const isImageFile = file.type.match('image/(jpeg|png)');
     if (isImageFile) {
-      setImage(file);
-      setUploadedFileName(file.name);
+        setImage(file);
+        setUploadedFileName(file.name);
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url); 
     } else {
-      alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
+        alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
     }
   }, []);
   
@@ -110,6 +114,7 @@ function CreatePage() {
     event.stopPropagation();
     setImage(null);
     setUploadedFileName('');
+    setPreviewUrl(null);
   };
 
   const { getRootProps, getInputProps, isDragActive  } = useDropzone({ onDrop });
@@ -139,11 +144,15 @@ function CreatePage() {
 
   
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (new Date(startDate) > new Date(dueDate)) {
       alert('종료일은 시작일보다 이후여야 합니다.');
+      e.preventDefault();
       return;
+      
     }
-    e.preventDefault();
+    
+    
   
    
     if (!validateForm()) {
@@ -172,6 +181,7 @@ function CreatePage() {
     }
     
     mutate(form);
+    
     };
     
     
@@ -196,27 +206,25 @@ function CreatePage() {
     };
 
     useEffect(() => {
-      
       const savedData = JSON.parse(localStorage.getItem('challengeData'));
       if (savedData) {
-        
         const shouldLoadData = window.confirm('임시 저장된 챌린지가 있습니다. 불러오시겠습니까?');
         if (shouldLoadData) {
-          
-          handleTitleChange({ target: { value: savedData.title } });
-          handleCategoryChange({ target: { value: savedData.category } });
-          handleDescriptionChange({ target: { value: savedData.description } });
-          setSelectedFrequency(savedData.frequency);
-          handleLimitAttendanceChange({ target: { value: savedData.limitAttendance } });
-          handleAuthExplanationChange({ target: { value: savedData.authExplanation } });
-          handleStartDateChange({ target: { value: savedData.startDate } });
-          handleDueDateChange({ target: { value: savedData.dueDate } });
-        } else {
-          
-          clearLocalStorage();
+          handleTitleChange({ target: { value: savedData.title || '' } });
+          handleCategoryChange({ target: { value: savedData.category || '' } });
+          handleDescriptionChange({ target: { value: savedData.description || '' } });
+          setFrequency(savedData.frequency || '');
+          setSelectedFrequency(savedData.frequency || '');
+          handleLimitAttendanceChange({ target: { value: savedData.limitAttendance || '' } });
+          handleAuthExplanationChange({ target: { value: savedData.authExplanation || '' } });
+          handleStartDateChange({ target: { value: savedData.startDate || '' } });
+          handleDueDateChange({ target: { value: savedData.dueDate || '' } });
         }
       }
     }, []);
+
+   
+    
 
   return (
     <div>
@@ -255,7 +263,8 @@ function CreatePage() {
                 height: '44.95px',
                 fontStyle: 'normal',
                 fontWeight: '400',
-                fontSize: '14px'
+                fontSize: '14px',
+                padding:'0 10px'
               }}>
                 <option value="">주제를 선택하세요</option>
                 <option value="IT">IT</option>
@@ -278,6 +287,7 @@ function CreatePage() {
               fontStyle: 'normal',
               fontWeight: '400',
               fontSize: '14px',
+              padding:'0 10px'
             }} />
           </div>
           <div>
@@ -358,7 +368,8 @@ function CreatePage() {
   alignItems: 'center',
   justifyContent: 'center',
   width: '1200px',
-  height: '97px',
+  minheight: '150px',
+  maxHeight:'500',
   border: '2px dashed #C3C3C3',
   textAlign: 'center',
   borderRadius: '10px',
@@ -366,16 +377,16 @@ function CreatePage() {
   marginBottom: '20px'
 }}>
   <input {...getInputProps()} />
-  {uploadedFileName ? (
+  {previewUrl  ? (
     <div>
-      <p>{uploadedFileName} <button type="button" onClick={handleRemoveFile} style={{
+     <img src={previewUrl} style={{ maxWidth: '50%', maxHeight: '50%', padding:'10px 0' }} alt="Preview" /> <button type="button" onClick={handleRemoveFile} style={{
         marginLeft: '10px', cursor: 'pointer', borderRadius: '10px',
-      }}>X</button></p>
+      }}>X</button>
     </div>
   ) : isDragActive ? (
-    <p style={{ lineHeight: '1.5' }}>파일을 여기에 드롭하세요.</p>
+    <p style={{ display:'flex',alignItems:'center',lineHeight: '1.5', minHeight:'97px' }}>파일을 여기에 드롭하세요.</p>
   ) : (
-    <div>
+    <div style={{display:'flex',alignItems:'center', height:'97px'}}>
       <p style={{ lineHeight: '1.5' }}>
         여기에 파일을 끌어다주세요.<br />
         <span style={{ fontSize: '12px', color: 'grey' }}>최대 10MB</span><br />
@@ -466,6 +477,7 @@ const InputStyle = styled.input`
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
+  padding : 0 10px;
 `;
 
 const CountContainer = styled.div`
