@@ -101,6 +101,10 @@ function MyPage() {
         }
     }, [input.image])
 
+    const [checkCurrent, setcheckCurrent] = useState({
+        email: "",
+        nickname: "",
+    })
 
     // 중복확인 주소 확인하기
     // 이메일 중복확인
@@ -123,24 +127,24 @@ function MyPage() {
 
     // 닉네임 중복확인
     const nickNameCheck = async () => {
-        if (auth.nickname) {
-            try {
-                const res = await api.get("/api/signup/nickname", {
-                    params: { nickname: input.nickname }
-                })
-                console.log(res)
-                if (res.data.message === "사용 가능한 닉네임입니다.") {
-                    setCheck({ ...check, nickname: true })
-                    alert(res.data.message)
-                } else {
-                    alert("이미 존재하는 닉네임입니다.")
-                }
-
-            } catch (error) {
-                console.log(`서버 에러: ${error}`)
+        try {
+            const res = await api.get("/api/signup/nickname", {
+                params: { nickname: input.nickname }
+            })
+            setcheckCurrent({ ...checkCurrent, nickname: input.nickname })
+            console.log(res)
+            if (res.data.message === "사용 가능한 닉네임입니다.") {
+                setCheck({ ...check, nickname: true })
+                alert(res.data.message)
+            } else if (res.data.message === "닉네임은 3자 이상 10자 이하로 입력해 주세요.") {
+                setCheck({ ...check, nickname: false })
+                alert(res.data.message)
+            } else {
+                setCheck({ ...check, nickname: false })
+                alert(res.data.message)
             }
-        } else {
-            alert("형식이 올바르지 않습니다.")
+        } catch (error) {
+            console.log(`서버 에러: ${error}`)
         }
     }
 
@@ -325,12 +329,12 @@ function MyPage() {
             //         return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 이메일 양식을 입력해주세요. </Message>
             //     }
             case "nickname":
-                if (auth[name] && check.nickname) {
+                if (auth[name] && check.nickname && checkCurrent.nickname === input.nickname) {
                     return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "red" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 닉네임은 3~10글자입니다. </Message>
+                    return <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 닉네임 양식을 입력해주세요. </Message>
                 }
             case "password":
                 return (
@@ -341,9 +345,9 @@ function MyPage() {
                 return (
                     auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
                         :
-                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호를 확인해주세요 </Message>)
+                        <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 비밀번호가 일치하지 않습니다. </Message>)
             default:
-                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식에 맞게 입력해주세요. </Message>
+                <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 입력해주세요. </Message>
         }
     }
 
@@ -353,7 +357,7 @@ function MyPage() {
         if (auth.nickname) {
             if (check.email) {
                 return <Button type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button>
-            } else if (check.nickname) {
+            } else if (check.nickname && checkCurrent.nickname === input.nickname) {
                 return <Button type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button>
             } else {
                 return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>

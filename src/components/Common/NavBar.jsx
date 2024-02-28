@@ -1,43 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { getCookie, removeCookie } from '../../services/Cookie'
-import { Link, useNavigate } from 'react-router-dom'
-import api from '../../services/api'
-function NavBar() {
-
-    const navigate = useNavigate()
-
-    const [accessState, setAccessState] = useState(false)
-
-    const isCookie = async () => {
-        const localaccess = await window.localStorage.getItem("localaccess");
-        if (localaccess) {
-            setAccessState(true)
-        } else {
-            console.log("localaccess cookie not found");
-
-        }
-    }
-
-    useEffect(() => {
-        isCookie()
-    }, [])
-
-    const removeCookies = async () => {
-        console.log(accessState)
-        if (accessState === true) {
-            const resToken = await api.post(`/api/token`, {})
-            const res = await api.post('/api/logout', {})
-            alert("로그아웃 됐습니다.")
-            console.log(resToken)
-            console.log(res)
-            if (res.status === 200) {
-                window.localStorage.removeItem("localaccess")
-                setAccessState(false)
-                navigate("/")
-            }
-        }
-    }
+import { Link} from 'react-router-dom'
+function NavBar({accessState, removeCookies}) {
 
     return (
         <>
@@ -72,14 +36,14 @@ export default NavBar
 
 const Logo = styled.img`
     width: 130px;
-    margin-right: 20px;
+    margin-right: 40px;
 `
 const Sign = styled.img`
-    width: 20px;
+    width: 22px;
     cursor: pointer;
 `
 const User = styled.img`
-    width: 20px;
+    width: 22px;
     margin-right: 20px;
     cursor: pointer;
 `
@@ -90,6 +54,8 @@ const MainBox = styled.div`
     justify-content: center;
     position: sticky;
     top: 0px;
+    font-size: 16px;
+    font-weight: 700;
     width: 100%;
     z-index: 1000;
     background-color: white;
@@ -101,7 +67,7 @@ const Main = styled.div`
     justify-content: space-between;
     max-width: 1200px;
     width: 100%;
-    padding: 25px 0px;
+    height: 100px;
 `
 const Hr = styled.div`
     width: 100%;
@@ -120,6 +86,6 @@ const SignIn = styled.div`
 `
 
 const Span = styled.span`
-    margin: 0px 10px;
+    margin: 0px 15px;
     cursor: pointer;
 `
