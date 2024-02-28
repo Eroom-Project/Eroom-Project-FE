@@ -48,7 +48,6 @@ const postAuthStatus = async (authId, authStatus, challengeId) =>{
 
 const detailchallenge = async(challengeId) =>{
   const response = await api.get(`/api/challenge/${challengeId}`)
-  console.log(response.data.data)
   return response.data.data;
 }
 

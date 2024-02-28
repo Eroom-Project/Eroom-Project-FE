@@ -11,6 +11,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
   const [authVideoUrl, setAuthVideoUrl] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [authStatus,setAuthStatus] = useState('WAITING');
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -46,13 +47,14 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     
     const isImageFile = file.type.match('image/(jpeg|png)');
     if (isImageFile) {
-      setAuthImageUrl(file);
-      setUploadedFileName(file.name);
+        setAuthImageUrl(file);
+        setUploadedFileName(file.name);
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url); 
     } else {
-      alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
+        alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
     }
   }, []);
-   
    
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -95,6 +97,7 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
     event.stopPropagation();
     setAuthImageUrl(null);
     setUploadedFileName('');
+    setPreviewUrl(null);
   };
   const handleBackgroundClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -241,12 +244,12 @@ const AuthPage = ({ isOpen, onClose, challengeId  }) => {
 }}>
   <input {...getInputProps()} />
   {
-              uploadedFileName ?
+              previewUrl ?
                 (<div>
-                  <p>{uploadedFileName} <button type="button" onClick={handleRemoveFile} style={{
+                  <img src={previewUrl} style={{ maxWidth: '30%', maxHeight: '30%', padding:'10px 0' }} alt="Preview" /> <button type="button" onClick={handleRemoveFile} style={{
                     marginLeft: '10px', cursor: 'pointer', radius: '10px',
                   }}>X
-                  </button></p>
+                  </button>
                 </div>) :
                 (isDragActive ?
                   <p style={{ lineHeight: '1.5' }}>파일을 여기에 드롭하세요.</p>

@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
         &::-webkit-scrollbar {
         width: 14px;
         }
+        font-family: Arial, Helvetica, sans-serif;
         &::-webkit-scrollbar-thumb {
             border-radius: 10px;
             background-color: #dfdddd;

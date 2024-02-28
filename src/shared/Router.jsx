@@ -1,5 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+// 스크롤 상단
+import ScrollTop from '../components/Common/ScrollTop'
 // 레이아웃
 import Layout from '../components/Common/Layout'
 import LayoutAuth from '../components/Common/LayoutAuth'
@@ -17,9 +19,11 @@ import RoomPage from '../pages/RoomPage/RoomPage'
 
 
 
-function Router() {
+
+function    Router() {
     return (
         <BrowserRouter>
+        <ScrollTop/>
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/signin" element={<SignInPage />} />
