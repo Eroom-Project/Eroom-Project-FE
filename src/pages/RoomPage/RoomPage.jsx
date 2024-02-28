@@ -14,7 +14,7 @@ function RoomPage() {
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isAuthResultOpen, setIsAuthResultOpen] = useState(false);
     const location = useLocation();
-    const { challengeId,  memberId, title } = location.state || {};
+    const { challengeId,  memberId, title, nickname } = location.state || {};
     
     
 
@@ -43,7 +43,7 @@ function RoomPage() {
                     <Brick2 />
                     </div>
                     <div style={{ position: 'absolute' }}>
-                    <BallCanvas imageUrl='/img/smile.png' nickname="장난감" />
+                    <BallCanvas imageUrl='/img/smile.png' nickname={nickname} />
                     </div>
                     
                                     
