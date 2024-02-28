@@ -30,7 +30,11 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
     const isLoggedOut = challengeDetail?.loginMemberId === "No members logged in";
     
     const startDate = new Date(challengeDetail?.responseDto?.startDate);
+    const dueDate = new Date(challengeDetail?.responseDto?.dueDate);
+            dueDate.setDate(dueDate.getDate() + 1);
+            console.log('aaaaaaaaaa',dueDate);
     const now = new Date();
+    
     const butBack = startDate > now ? `#BBBBBB` : `#4f5aff`
     const butcolor = startDate > now ? `#000000` : `#ffffff`
 
@@ -43,7 +47,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
             />
             
             <div style={{ width:'430px'}}>
-                <div style={{ maxHeight:'150px',overflow:'auto',marginBottom:'5px'}}>
+                <StyledDiv style={{ maxHeight:'150px',overflow:'auto',marginBottom:'5px'}}>
                 <div style={{fontSize:'18px',fontWeight:'800', marginBottom:'5px', lineHeight:'1.2'}}>
                     {challengeDetail?.responseDto?.title}
                 </div>
@@ -54,7 +58,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                 <div style={{height:'90px', fontSize:'14px', marginBottom:'10px', lineHeight:'1.5', whiteSpace:'pre-wrap'}}>
                     {challengeDetail?.responseDto?.description}
                 </div>
-                </div>            
+                </StyledDiv>            
                 <div style={{height:'124px', backgroundColor:'#F2F2F2', display:'flex', alignItems:'center', padding:'0 20px',borderRadius:'4px',}}>
                     <div style={{marginRight:'20px', fontSize:'13px', fontWeight:'700'}}>
                         <div style={{marginBottom:'10px',}}>참여기간</div>
@@ -78,21 +82,25 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                   
                     if (startDate > now) {
                         alert("챌린지가 시작되기 이전입니다.");
+                    } else if(dueDate < now ){
+                        alert("이미 종료된 챌린지 입니다.")
                     } else {
                         navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title }});
                     }
                 }} 
-                backgroundColor = {butBack} color={butcolor}
-                >챌린지방 입장하기</StyledButton>
+                backgroundColor = {dueDate < now ? 'black': butBack} color={dueDate > now ? 'white': butcolor}
+                >{dueDate < now ? '챌린지가 종료되었습니다.':'챌린지 방 입장하기'}</StyledButton>
             ) : (
                 <StyledButton onClick={() => {
                     if (isLoggedOut) {
                         alert("로그인이 필요합니다.");
                         navigator('/signin');
+                    } else if(dueDate > now ){
+                        alert("이미 종료된 챌린지 입니다.")
                     } else {
                         applyForChallenge(challengeDetail?.responseDto?.challengeId);
                         }
-                }} backgroundColor= 'black' color='white'>참여 신청하기</StyledButton>
+                }} backgroundColor= 'black' color='white'>{dueDate < now ? '챌린지가 종료되었습니다.':'참여 신청하기'}</StyledButton>
             )}
 </div>
 
@@ -120,4 +128,18 @@ const StyledButton = styled.button`
    &:hover{
     background-color: ${props => props.backgroundColor}
    }
+`;
+
+const StyledDiv = styled.div`
+  max-height: 150px;
+  overflow: auto;
+  margin-bottom: 5px;
+
+  /* 웹킷 기반 브라우저용 스크롤 바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 파이어폭스용 스크롤 바 숨기기 */
+  scrollbar-width: none;
 `;

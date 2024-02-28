@@ -133,7 +133,7 @@ function MainPage() {
       <Line />
       <OptionsContainer style={{ justifyContent: 'flex-start',  cursor: 'pointer', marginBottom:'10px',marginTop:'10px' }}>
         {Object.keys(SortMap).map((option) => (
-          <div key={option} onClick={() => handleOptionChange(option)}>
+          <div style={{margin:'10px 0'}} key={option} onClick={() => handleOptionChange(option)}>
             {option}
           </div>
         ))}
