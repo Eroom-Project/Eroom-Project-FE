@@ -116,8 +116,7 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
         }
     });
 
-    console.log('이거 담겨있음',filteredData);
-    
+       
      //배경 선택 모달 닫힘. 
     const handleBackgroundClick = (event) => {
         if (event.target === event.currentTarget) {

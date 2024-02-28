@@ -32,9 +32,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
     const startDate = new Date(challengeDetail?.responseDto?.startDate);
     const dueDate = new Date(challengeDetail?.responseDto?.dueDate);
             dueDate.setDate(dueDate.getDate() + 1);
-            console.log('aaaaaaaaaa',dueDate);
     const now = new Date();
-    
     const butBack = startDate > now ? `#BBBBBB` : `#4f5aff`
     const butcolor = startDate > now ? `#000000` : `#ffffff`
 
@@ -85,7 +83,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     } else if(dueDate < now ){
                         alert("이미 종료된 챌린지 입니다.")
                     } else {
-                        navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title }});
+                        navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title, nickname:challengeDetail?.responseDto?.nickname }});
                     }
                 }} 
                 backgroundColor = {dueDate < now ? 'black': butBack} color={dueDate > now ? 'white': butcolor}
