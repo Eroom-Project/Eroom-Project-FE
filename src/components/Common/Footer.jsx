@@ -31,17 +31,30 @@ function Footer() {
     return (
         <Main>
             {window.location.href !== "https://www.eroom-challenge.com/room" && window.location.href !== "http://localhost:3000/room" &&
-            <Contents>
-                <img src="/img/NavBar/Logo.png" alt="logo" style={{width: "100px"}}/>
-                <Hr />
-                <div>
-                <Span onClick={() => { setTerms({ ...terms, a: true, b: false, c: false}) }} weight={terms.a && "700"}>이용목적</Span> | <Span onClick={() => { setTerms({ ...terms, a: false, b: true, c: false}) }}weight={terms.b&&"700"}>개인정보 수집</Span> | <Span onClick={() => { setTerms({ ...terms, a: false, b: false, c: true}) }}weight={terms.c&&"700"}>개인정보 파기</Span>
-                </div> 
-                {terms["a"] === false && terms["b"] === false && terms["c"] === false && handleTerms("a")}
-                {terms["a"] && handleTerms("a")}
-                {terms["b"] && handleTerms("b")}
-                {terms["c"] && handleTerms("c")}
-            </Contents>
+                <Contents>
+                    <Img src="/img/NavBar/Logo.png" alt="logo" />
+                    <Category><Span><a href="https://www.notion.so/E-ROOM-3a40455d6acb476580d3bcecf2992a9a">ABOUT</a></Span> | <Span><a href="https://github.com/Eroom-Project">GITHUB</a></Span> | <Span><a href="https://www.notion.so/E-ROOM-3a40455d6acb476580d3bcecf2992a9a">BROCHURE</a></Span> | <Span><a href="https://www.notion.so/f9cbfd07d6f243539399cd2440c16025">GUIDE</a></Span></Category>
+
+                    <Hr />
+                    <Category2>
+                        <Span2>개인정보처리방침 </Span2><Span onClick={() => { setTerms({ ...terms, a: true, b: false, c: false }) }} weight={terms.a && "700"}>이용목적</Span> | <Span onClick={() => { setTerms({ ...terms, a: false, b: true, c: false }) }} weight={terms.b && "700"}>개인정보 수집</Span> | <Span onClick={() => { setTerms({ ...terms, a: false, b: false, c: true }) }} weight={terms.c && "700"}>개인정보 파기</Span>
+                    </Category2>
+                    <Bottom>
+                        <BottomTop>
+                            {terms["a"] === false && terms["b"] === false && terms["c"] === false && handleTerms("a")}
+                            {terms["a"] && handleTerms("a")}
+                            {terms["b"] && handleTerms("b")}
+                            {terms["c"] && handleTerms("c")}
+                        </BottomTop>
+                        <div>
+                            <></>개발팀: 이신지 최우식 류은채 민경현 인재현 &nbsp;|&nbsp; 
+                            이메일: eroom.challenge@gmail.com &nbsp;|&nbsp; 
+                            ⓒ Eroom-Challenge. All Rights Reserved.
+                        </div>
+                    </Bottom>
+
+                </Contents>
+
             }
         </Main>
     )
@@ -50,16 +63,33 @@ function Footer() {
 export default Footer
 
 const Main = styled.div`
-    padding-top: 20px;
+    padding-top: 100px;
 `
 const Contents = styled.div`
     display: flex;
     flex-direction: column;
     line-height: 21px;
-    height: 250px;
-    padding: 40px 20px;
+    height: 300px;
+    padding: 50px 20px;
     background-color: #F2F2F2;
     gap: 10px;
+`
+const Img = styled.img`
+    width: 110px;
+    margin-bottom: 30px;
+`
+
+const Category = styled.div`
+    display: flex;
+    gap: 10px;
+    font-weight: 700;
+`
+const Category2 = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    
 `
 const Hr = styled.div`
     width: 100%;
@@ -67,12 +97,23 @@ const Hr = styled.div`
     border-bottom: 1px solid #c2c2c2;
 `
 const Span = styled.span`
-    font-weight: ${(props)=> props.weight};
+    font-weight: ${(props) => props.weight};
     cursor: pointer;
 `
+const Span2 = styled.span`
+font-weight: 700;
+`
 const P = styled.p`
-    font-size: 12px;
 `
 const B = styled.span`
     font-weight: 700;
+`
+
+const Bottom = styled.div`
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+`
+const BottomTop = styled.div`
+    height: 70px;
 `

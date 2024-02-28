@@ -3,7 +3,7 @@ import api from '../../services/api'
 import styled from 'styled-components'
 import { changeProfileDatas, checkPassword, getProfile } from '../../services/Query'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { MyPagePasswordPotal } from './Potal'
+import { MyPagePasswordPotal } from '../Common/Potal'
 import ModalPassword from './ModalPassword'
 
 function MyPage() {
