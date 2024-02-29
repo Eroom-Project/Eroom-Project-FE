@@ -2,6 +2,9 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import styled from 'styled-components'
 import { getProfile } from '../../services/Query'
+import MyBrickLeft from '../../pages/MyPage/MyBrickLeft'
+import MyBrickRight from '../../pages/MyPage/MyBrickRight'
+
 
 function Isometric() {
     const chellangeData = useQuery('chellangeData', getProfile)
@@ -18,7 +21,18 @@ function Isometric() {
         <MainBox>
             <H6>E-ROOM</H6>
             <MyRoom>
-                공사중입니다.
+                <div style={{
+                display:'flex',
+                backgroundImage:'url(img/roomBack.png)',
+                width:'100%',
+                height:'100%',
+                backgroundPosition:'center',
+                backgroundSize:'cover'
+                
+                }}> 
+                    <MyBrickLeft />
+                    <MyBrickRight />
+                    </div>
                 {/* <Img src={"/img/MyPage/BackGround.png"} alt="Room" /> */}
             </MyRoom>
             <H6>BRICK</H6>
