@@ -93,7 +93,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     if (isLoggedOut) {
                         alert("로그인이 필요합니다.");
                         navigator('/signin');
-                    } else if(dueDate > now ){
+                    } else if(dueDate < now ){
                         alert("이미 종료된 챌린지 입니다.")
                     } else {
                         applyForChallenge(challengeDetail?.responseDto?.challengeId);

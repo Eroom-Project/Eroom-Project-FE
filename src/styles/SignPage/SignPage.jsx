@@ -4,10 +4,11 @@ export const Message = styled.span`
     display: ${(props) => props.focus};
     font-size: 12px;
     margin-left: 5px;
-    
 `
+
 export const Background = styled.div`
     position: relative;
+    margin-top: -100px;
     width: 100%;
     height: 100vh;
     overflow: hidden;
@@ -19,9 +20,9 @@ export const ImgBack = styled.div`
 `
 export const Img = styled.img`
     position: absolute;
-    top: ${(props)=>props.top};
-    left: ${(props)=>props.left};
-    width: ${(props)=>props.width};
+    top: ${(props) => props.top};
+    left: ${(props) => props.left};
+    width: ${(props) => props.width};
 `
 
 export const SignBack = styled.div`
@@ -66,12 +67,15 @@ export const InnerBox = styled.div`
 `
 export const AuthButton = styled.button`
     width: 60px;
-    margin-left: 5px;
+    height: 48px;
+    margin-left: 10px;
     border: none;
+    box-sizing: border-box;
     border-radius: 6px;
     color: #1C1C1C;
+    background-color: #FFFF;
+    border: 1px solid #1C1C1C;
     font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 400;
     cursor: pointer;
     &:hover{
         background-color: #1C1C1C;
@@ -98,17 +102,22 @@ export const H6 = styled.div`
 export const Input = styled.input`
     width: 100%;
     height: 48px;
-    border: none;
+    border: ${(props) => props.border};
     box-sizing: border-box;
     border-radius: 10px;
     background-color: #F2F2F2;
-    transition: background-color 5000s ease-in-out 0s;
-    &:focus{outline: none;}
+    &:focus,
+    &:autofill{
+    box-shadow: 0 0 0 1000px #F2F2F2 inset; // 배경색 변경
+    }
+    &:focus{
+        box-shadow: 0 0 0 1000px #FFFF inset;
+        outline: none;
+    }
 `
 export const Button = styled.button`
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 500;
-    font-size: 14px;
     width: 100%;
     height: 48px;
     border: none;
@@ -139,7 +148,50 @@ export const SignUp = styled.div`
 
 export const Bold = styled.span`
     margin-left: 8px;
-    font-size: 14px;
     font-weight: 700;
     color: #1C1C1C;
+`
+
+/// 이메일 인증
+export const EmailForm = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+`
+export const EmailTitle = styled.div`
+    display: flex;
+    width: 100%;
+    margin-bottom: 40px;
+`
+export const EmailImg = styled.img`
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+`
+export const EmailButtonBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin: 50px 0px 10px auto;
+`
+export const EmailButton = styled.button`
+    width: 113px;
+    height: 48px;
+    margin-left: 10px;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 6px;
+    color: #1C1C1C;
+    background-color: #FFFF;
+    border: 1px solid #1C1C1C;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    &:hover{
+        background-color: #1C1C1C;
+        color: #FFFF;
+    }
+`
+export const EmailContents = styled.div`
+    font-size: 12px;
+    width: 100%;
+    margin-bottom: 20px;
 `
