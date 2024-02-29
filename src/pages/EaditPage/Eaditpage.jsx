@@ -34,12 +34,11 @@ function Eaditpage() {
   const location = useLocation();
   const { challengeId } = location.state || {};
   
-    
- 
-    const challengeDetailData = useQuery(
+  const challengeDetailData = useQuery(
         ['challengeDetailData', challengeId],
         () => getChallengeDetail(challengeId),)
- 
+        
+    
   const [fieldErrors, setFieldErrors] = useState({
     title: false,
     category: false,
@@ -185,19 +184,21 @@ function Eaditpage() {
     
   
     useEffect(() => {
-      const savedData = challengeDetailData?.data?.responseDto;
-      handleTitleChange({ target: { value: savedData?.title || '' } });
-      handleCategoryChange({ target: { value: savedData?.category || '' } });
-      handleDescriptionChange({ target: { value: savedData?.description || '' } });
-      setFrequency(savedData?.frequency || '');
-      setSelectedFrequency(savedData?.frequency || '');
-      handleLimitAttendanceChange({ target: { value: savedData?.limitAttendance || '' } });
-      handleAuthExplanationChange({ target: { value: savedData?.authExplanation || '' } });
-      handleStartDateChange({ target: { value: savedData?.startDate || '' } });
-      handleDueDateChange({ target: { value: savedData?.dueDate || '' } });
-      setImage(savedData?.thumbnailImageUrl || '');
-      setPreviewUrl(savedData?.thumbnailImageUrl || '');
-      }, [challengeDetailData]);
+        if(challengeDetailData.data) {
+            const savedData = challengeDetailData.data.responseDto;
+            handleTitleChange({ target: { value: savedData.title || '' } });
+            handleCategoryChange({ target: { value: savedData.category || '' } });
+            handleDescriptionChange({ target: { value: savedData.description || '' } });
+            setFrequency(savedData.frequency || '');
+            setSelectedFrequency(savedData.frequency || '');
+            handleLimitAttendanceChange({ target: { value: savedData.limitAttendance || '' } });
+            handleAuthExplanationChange({ target: { value: savedData.authExplanation || '' } });
+            handleStartDateChange({ target: { value: savedData.startDate || '' } });
+            handleDueDateChange({ target: { value: savedData.dueDate || '' } });
+            setImage(savedData.thumbnailImageUrl || '');
+            setPreviewUrl(savedData.thumbnailImageUrl || '');
+        }
+      }, [challengeDetailData.data]);
 
    
     
