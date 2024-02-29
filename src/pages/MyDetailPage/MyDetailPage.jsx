@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { getChallengeDetail } from '../../services/Query'
 import { useNavigate } from 'react-router-dom'
 
-function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate }) {
+function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate, imiteDate }) {
     const challengeDetailData = useQuery(
         ['challengeDetailData', challengeId],
         () => getChallengeDetail(challengeId),)
@@ -34,17 +34,21 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate }) {
     const translatedCategory = categoryMap[challengeDetailData?.data?.responseDto?.category] || ''
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title, nickname:challengeDetailData?.data.responseDto.nickname } })
+        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title, nickname: challengeDetailData?.data.responseDto.nickname } })
     }
 
     // 버튼 스테이트 만들기
     const myDetailButton = () => {
-        let currunt = new Date();
+        let current = new Date();
         let start = new Date(startDate)
+        start.setHours(start.getHours() - 9);
+        let limite = new Date(imiteDate)
+        limite.setDate(limite.getDate() + 1);
+        limite.setHours(limite.getHours() - 9);
 
-        if (chellangeState.finish === true) {
+        if (current > limite) {
             return <Button bcolor={"#1C1C1C"} color={"#FFFF"}>종료된 챌린지입니다.</Button>
-        } else if (start > currunt) {
+        } else if (start > current) {
             return <Button bcolor={"#1C1C1C"} color={"#FFFF"}>예약된 챌린지입니다.</Button>
         } else {
             return <Button onClick={roomIn} bcolor={"#45b850;"} color={"#FFFF"}>챌린지방 입장하기</Button>
@@ -207,8 +211,8 @@ const Button = styled.button`
     height: 48px;
     border: none;
     border-radius: 10px;
-    color: ${(props)=>props.color};
-    background-color: ${(props)=>props.bcolor};
+    color: ${(props) => props.color};
+    background-color: ${(props) => props.bcolor};
     cursor: pointer;
     transition: 1s;
 `

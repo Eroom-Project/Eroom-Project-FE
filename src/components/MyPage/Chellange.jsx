@@ -5,10 +5,11 @@ import { useQuery } from 'react-query'
 import { MyPageModalPotal, MyPageRemovePotal } from '../Common/Potal'
 import MyDetailPage from '../../pages/MyDetailPage/MyDetailPage'
 import ModalRemove from './ModalRemove'
+import { useNavigate } from 'react-router-dom'
 
 function Chellange() {
 
-
+    const navigate = useNavigate(null)
     const chellangeData = useQuery('chellangeData', getProfile)
 
     if (chellangeData.data) {
@@ -45,6 +46,11 @@ function Chellange() {
             modalRemoveState ? setmodalRemoveState(false) : setmodalRemoveState(true)
         )
     }
+    const editOpen = (challengeId,e) => {
+        e.stopPropagation();
+        // setModalChallengeId(challengeId)
+        navigate("/edit", challengeId)
+    }
 
 
     const chellange = () => {
@@ -80,6 +86,7 @@ function Chellange() {
                                                     {value.creatorNickname}
                                                 </NickName>
                                                 <IconBox>
+                                                    <Icon src='/img/MyPage/edit.png' alt='remove' onClick={editOpen} />
                                                     <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={(e) => { modalRemoveOpen(value.challengeId, e) }} />
                                                 </IconBox>
                                             </NickNameBox>
@@ -88,7 +95,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} imiteDate={value.dueDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true && modalChallengeId === value.challengeId &&
@@ -106,6 +113,8 @@ function Chellange() {
                         .filter((value) => {
                             let current = new Date();
                             let limite = new Date(value.dueDate)
+                            limite.setDate(limite.getDate() + 1);
+                            limite.setHours(limite.getHours() - 9);
                             // console.log("value", value)
                             // console.log("value.dueDate", value.dueDate)
                             // console.log("limite", limite)
@@ -137,13 +146,17 @@ function Chellange() {
                                                 <NickName>
                                                     {value.creatorNickname}
                                                 </NickName>
+                                                <IconBox>
+                                                    <Icon src='/img/MyPage/edit.png' alt='remove' onClick={""} />
+                                                    <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={(e) => { modalRemoveOpen(value.challengeId, e) }} />
+                                                </IconBox>
                                             </NickNameBox>
                                         </ContentsBottom>
                                     </Contents>
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} imiteDate={value.dueDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true &&
@@ -161,6 +174,10 @@ function Chellange() {
                         .filter((value) => {
                             let current = new Date();
                             let start = new Date(value.startDate)
+                            start.setHours(start.getHours() - 9);
+                            // console.log(value)
+                            // console.log(value.startDate)
+                            // console.log(start)
                             return start > current
                         })
                         .map((value) => {
@@ -193,7 +210,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} imiteDate={value.dueDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true &&
@@ -211,8 +228,12 @@ function Chellange() {
                         .filter((value) => {
                             let current = new Date();
                             let limite = new Date(value.dueDate)
+                            limite.setDate(limite.getDate() + 1);
+                            limite.setHours(limite.getHours() - 9);
+
                             let start = new Date(value.startDate)
-                            return limite >= current && start < current
+                            start.setHours(start.getHours() - 9);
+                            return limite > current && start < current
                         })
                         .map((value) => {
                             return (
@@ -244,7 +265,7 @@ function Chellange() {
                                     {
                                         modalState === true && modalChallengeId === value.challengeId &&
                                         <MyPageModalPotal>
-                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} />
+                                            <MyDetailPage challengeId={value.challengeId} modalOpen={modalOpen} chellangeState={chellangeState} startDate={value.startDate} imiteDate={value.dueDate} />
                                         </MyPageModalPotal>
                                     }
                                     {modalRemoveState === true &&
@@ -387,6 +408,7 @@ const IconBox = styled.div`
     flex-direction: row;
     align-items: center;
     margin-left: auto;
+    gap: 6px;
 `
 const Icon = styled.img`
     width: 23px;
