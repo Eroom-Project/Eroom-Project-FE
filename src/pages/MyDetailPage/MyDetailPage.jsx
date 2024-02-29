@@ -34,7 +34,7 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState }) {
     const translatedCategory = categoryMap[challengeDetailData?.data?.responseDto?.category] || ''
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId , title: challengeDetailData?.data.responseDto.title, nickname:challengeDetailData?.data.responseDto.nickname} })
+        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId , title: challengeDetailData?.data.responseDto.title, ngit ickname:challengeDetailData?.data.responseDto.nickname} })
     }
     return (
         <>
