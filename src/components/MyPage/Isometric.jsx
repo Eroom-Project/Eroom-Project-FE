@@ -2,6 +2,9 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import styled from 'styled-components'
 import { getProfile } from '../../services/Query'
+import MyBrickLeft from '../../pages/MyPage/MyBrickLeft'
+import MyBrickRight from '../../pages/MyPage/MyBrickRight'
+
 
 function Isometric() {
     const chellangeData = useQuery('chellangeData', getProfile)
@@ -18,14 +21,25 @@ function Isometric() {
         <MainBox>
             <H6>E-ROOM</H6>
             <MyRoom>
-                공사중입니다.
-                {/* <Img src={"/img/MyPage/BackGround.png"} alt="Room" /> */}
+                <div style={{
+                display:'flex',
+                backgroundImage:'url(img/roomBack.png)',
+                width:'100%',
+                height:'100%',
+                backgroundPosition:'center',
+                backgroundSize:'cover'
+                
+                }}> 
+                    <MyBrickLeft />
+                    <MyBrickRight />
+                    </div>
             </MyRoom>
             <H6>BRICK</H6>
-            <Brick>
-                공사중입니다.
-                {/* <Img src={"/img/characters.png"} alt="" /> */}
-            </Brick>
+            <BrickBox>
+                <Brick>
+                    <Img src='/img/brick (1).png'/>
+                </Brick>
+            </BrickBox>
         </MainBox>
     )
 }
@@ -54,7 +68,7 @@ const MyRoom = styled.div`
     overflow: hidden;
 `
 
-const Brick = styled.div`
+const BrickBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -66,6 +80,9 @@ const Brick = styled.div`
     border-radius: 8px;
     overflow: hidden;
     background-color: #F2F2F2;
+`
+const Brick =styled.div`
+    height: 100%;
 `
 const Img = styled.img`
     object-fit: cover;

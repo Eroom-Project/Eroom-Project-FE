@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useMutation } from 'react-query';
-import { createChallenge } from '../../services/mainaxios';
+import { useMutation, useQuery } from 'react-query';
+import { eaditChallenge } from '../../services/mainaxios';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getChallengeDetail } from '../../services/Query';
 
 
 
@@ -11,12 +12,14 @@ function useInput(initialValue) {
   const [value, setValue] = useState(initialValue);
   const handleChange = (e) => setValue(e.target.value);
   const reset = () => setValue('');
-  const set = (newValue) => setValue(newValue); 
+  const set = (newValue) => setValue(newValue);
   return [value, handleChange, reset, set];
 }
 
 
-function CreatePage() {
+
+
+function EditPage() {
   const [title, handleTitleChange, resetTitle] = useInput('');
   const [category, handleCategoryChange, resetCategory] = useInput('');
   const [description, handleDescriptionChange, resetDescription] = useInput('');
@@ -28,7 +31,14 @@ function CreatePage() {
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
   const [previewUrl, setPreviewUrl] = useState(null);
+  const location = useLocation();
+  const { challengeId } = location.state || {};
 
+
+
+  const challengeDetailData = useQuery(
+    ['challengeDetailData', challengeId],
+    () => getChallengeDetail(challengeId),)
 
   const [fieldErrors, setFieldErrors] = useState({
     title: false,
@@ -60,7 +70,7 @@ function CreatePage() {
   };
 
   const navigate = useNavigate();
-  
+
   const countMap = {
     '매일': '매일',
     '평일 매일': '평일 매일',
@@ -77,35 +87,35 @@ function CreatePage() {
     event.preventDefault();
     setFrequency(option);
     setSelectedFrequency(option);
-    };
+  };
 
   const resetImage = () => {
     setImage(null);
-    };
+  };
 
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length === 0) {
       return;
     }
-  
+
     const file = acceptedFiles[0];
     const maxFileSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxFileSize) {
       alert('파일 크기가 10MB를 초과할 수 없습니다.');
       return;
     }
-  
-    
+
+
     const isImageFile = file.type.match('image/(jpeg|png)');
     if (isImageFile) {
-        setImage(file);
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url); 
+      setImage(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
     } else {
-        alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
+      alert('JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.');
     }
   }, []);
-  
+
 
   const handleRemoveFile = (event) => {
     event.stopPropagation();
@@ -113,13 +123,13 @@ function CreatePage() {
     setPreviewUrl(null);
   };
 
-  const { getRootProps, getInputProps, isDragActive  } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const today = new Date().toISOString().split('T')[0];
 
-  const { mutate } = useMutation(createChallenge, {
+  const { mutate } = useMutation(eaditChallenge, {
     onSuccess: () => {
-      alert('챌린지 이룸 생성 성공');
+      alert('챌린지 수정 성공');
       resetTitle();
       resetCategory();
       resetDescription();
@@ -130,34 +140,29 @@ function CreatePage() {
       resetDueDate();
       resetImage();
       setSelectedFrequency();
-      clearLocalStorage();
-      navigate('/main');
+      navigate(-1);
     },
     onError: () => {
-      alert('챌린지 생성에 실패했습니다.');
+      alert('챌린지 수정에 실패했습니다.');
     },
   });
 
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (new Date(startDate) > new Date(dueDate)) {
       alert('종료일은 시작일보다 이후여야 합니다.');
       e.preventDefault();
       return;
-      
     }
-    
-    
-  
-   
+
     if (!validateForm()) {
       alert('모든 내용을 작성해주세요.');
       return;
     }
-    
-    
-    const challengeCreateData = {
+
+
+    const ChallengeUpdateData = {
       title,
       category,
       description,
@@ -167,78 +172,56 @@ function CreatePage() {
       startDate,
       dueDate,
     };
-  
+
     const form = new FormData();
-  
-    form.append('challengeCreateData', new Blob([JSON.stringify(challengeCreateData)], { type: "application/json" }));
-  
-    if (thumbnailImageUrl) {
-      form.append('thumbnailImageUrl', thumbnailImageUrl);
-    }
-    
-    mutate(form);
-    
-    };
-    
-    
-    const saveToLocalStorage = () => {
-      const challengeData = {
-        title,
-        category,
-        description,
-        frequency,
-        limitAttendance,
-        authExplanation,
-        startDate,
-        dueDate,
-      };
-      localStorage.setItem('challengeData', JSON.stringify(challengeData));
-      alert('챌린지가 임시 저장되었습니다.');
-    };
-    
-    
-    const clearLocalStorage = () => {
-      localStorage.removeItem('challengeData');
-    };
 
-    useEffect(() => {
-      const savedData = JSON.parse(localStorage.getItem('challengeData'));
-      if (savedData) {
-        const shouldLoadData = window.confirm('임시 저장된 챌린지가 있습니다. 불러오시겠습니까?');
-        if (shouldLoadData) {
-          handleTitleChange({ target: { value: savedData.title || '' } });
-          handleCategoryChange({ target: { value: savedData.category || '' } });
-          handleDescriptionChange({ target: { value: savedData.description || '' } });
-          setFrequency(savedData.frequency || '');
-          setSelectedFrequency(savedData.frequency || '');
-          handleLimitAttendanceChange({ target: { value: savedData.limitAttendance || '' } });
-          handleAuthExplanationChange({ target: { value: savedData.authExplanation || '' } });
-          handleStartDateChange({ target: { value: savedData.startDate || '' } });
-          handleDueDateChange({ target: { value: savedData.dueDate || '' } });
-        }
-      }
-    }, []);
+    form.append('ChallengeUpdateData', new Blob([JSON.stringify(ChallengeUpdateData)], { type: "application/json" }));
+    form.append('thumbnailImageUrl', thumbnailImageUrl);
 
-   
-    
+
+    mutate({ form: form, challengeId: challengeId });
+  };
+
+
+  useEffect(() => {
+      const savedData = challengeDetailData?.data?.responseDto;
+      console.log("savedData=>",savedData)
+      handleTitleChange({ target: { value: savedData?.title || '' } });
+      handleCategoryChange({ target: { value: savedData?.category || '' } });
+      handleDescriptionChange({ target: { value: savedData?.description || '' } });
+      setFrequency(savedData?.frequency || '');
+      setSelectedFrequency(savedData?.frequency || '');
+      handleLimitAttendanceChange({ target: { value: savedData?.limitAttendance || '' } });
+      handleAuthExplanationChange({ target: { value: savedData?.authExplanation || '' } });
+      handleStartDateChange({ target: { value: savedData?.startDate || '' } });
+      handleDueDateChange({ target: { value: savedData?.dueDate || '' } });
+      setImage(savedData?.thumbnailImageUrl || '');
+      setPreviewUrl(savedData?.thumbnailImageUrl || '');
+  }, [challengeDetailData.data]);
+
+
+  
+
+
+
 
   return (
     <div>
       <div style={{
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundImage: 'URL(/img/CreateHeaderImg.png)',
-        backgroundSize:'cover',
-        backgroundPosition:'center',
-        width:'100%',
-        height:'300px',
-        marginBottom:'60px'
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        width: '100%',
+        height: '300px',
+        marginBottom: '60px'
       }}>
-       <div style={{
-          fontSize:'40px',
-          fontWeight:'900'
-        }}>챌린지를 만들어 주세요</div>
+        <div style={{
+          fontSize: '40px',
+          fontWeight: '900'
+        }}>챌린지를 수정해 주세요</div>
       </div>
       <FormContainer>
         <Form onSubmit={handleSubmit}>
@@ -248,7 +231,7 @@ function CreatePage() {
           }}>
             <div>
               <TitleText>챌린지 이름</TitleText>
-              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={23} placeholder='챌린지 이름을 입력해주세요(20글자 이내)' fieldError={fieldErrors.title}/>
+              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={23} placeholder='챌린지 이름을 입력해주세요(20글자 이내)' fieldError={fieldErrors.title} />
             </div>
             <div>
               <TitleText>챌린지 주제</TitleText>
@@ -260,7 +243,7 @@ function CreatePage() {
                 fontStyle: 'normal',
                 fontWeight: '400',
                 fontSize: '14px',
-                padding:'0 10px'
+                padding: '0 10px'
               }}>
                 <option value="">주제를 선택하세요</option>
                 <option value="IT">IT</option>
@@ -283,7 +266,7 @@ function CreatePage() {
               fontStyle: 'normal',
               fontWeight: '400',
               fontSize: '14px',
-              padding:'0 10px'
+              padding: '0 10px'
             }} />
           </div>
           <div>
@@ -294,7 +277,7 @@ function CreatePage() {
                   key={option}
                   onClick={(event) => handleFrequencyChange(event, option)}
                   style={{
-                    fontFamily:'Noto Sans KR, sans-serif',
+                    fontFamily: 'Noto Sans KR, sans-serif',
                     width: '105px',
                     height: '48px',
                     backgroundColor: selectedFrequency === option ? 'black' : '#FFFFFF',
@@ -312,11 +295,11 @@ function CreatePage() {
           </div>
           <div>
             <TitleText>인증 방법</TitleText>
-            <InputStyle type="text" value={authExplanation} onChange={handleAuthExplanationChange} maxLength={25} placeholder='인증방식을 간단히 설명해주세요(25자 이내)' 
+            <InputStyle type="text" value={authExplanation} onChange={handleAuthExplanationChange} maxLength={25} placeholder='인증방식을 간단히 설명해주세요(25자 이내)'
               fieldError={fieldErrors.authExplanation}
               style={{
-              width: '1200px'
-            }} />
+                width: '1200px'
+              }} />
           </div>
 
           <div style={{
@@ -327,11 +310,11 @@ function CreatePage() {
             <div>
               <TitleText>참여 인원</TitleText>
               <InputStyle type="number" value={limitAttendance} onChange={handleLimitAttendanceChange} min='0' max="50" fieldError={fieldErrors.limitAttendance}
-              onInput={(e) => {
-              if (e.target.value.length > e.target.maxLength)
-              e.target.value = e.target.value.slice(0, e.target.maxLength);
-              }} maxLength={2}
-              style={{width: '300px'}}
+                onInput={(e) => {
+                  if (e.target.value.length > e.target.maxLength)
+                    e.target.value = e.target.value.slice(0, e.target.maxLength);
+                }} maxLength={2}
+                style={{ width: '300px' }}
               />
             </div>
 
@@ -340,89 +323,76 @@ function CreatePage() {
               marginBottom: '20px',
             }}>
               <TitleText>시작일</TitleText>
-              <InputStyle type="date" value={startDate} onChange={handleStartDateChange} min={today} 
+              <InputStyle type="date" value={startDate} onChange={handleStartDateChange} min={today}
                 fieldError={fieldErrors.startDate}
-              style={{
-                width: '312px',
-                padding: '0 10px'
-              }} />
+                style={{
+                  width: '312px',
+                  padding: '0 10px'
+                }} />
             </div>
             <div>
               <TitleText>종료일</TitleText>
-              <InputStyle type="date" value={dueDate} onChange={handleDueDateChange} min={today} 
-              fieldError={fieldErrors.dueDate}
-              style={{
-                width: '312px',
-                padding: '0 10px'
-              }}
+              <InputStyle type="date" value={dueDate} onChange={handleDueDateChange} min={today}
+                fieldError={fieldErrors.dueDate}
+                style={{
+                  width: '312px',
+                  padding: '0 10px'
+                }}
               />
             </div>
           </div>
 
           <div {...getRootProps()} style={{
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '1200px',
-  minheight: '150px',
-  maxHeight:'500',
-  border: '2px dashed #C3C3C3',
-  textAlign: 'center',
-  borderRadius: '10px',
-  backgroundColor: '#F9F9F9',
-  marginBottom: '20px'
-}}>
-  <input {...getInputProps()} />
-  {previewUrl  ? (
-    <div>
-     <img src={previewUrl} style={{ maxWidth: '50%', maxHeight: '50%', padding:'10px 0' }} alt="Preview" /> <button type="button" onClick={handleRemoveFile} style={{
-        marginLeft: '10px', cursor: 'pointer', borderRadius: '10px',
-      }}>X</button>
-    </div>
-  ) : isDragActive ? (
-    <p style={{ display:'flex',alignItems:'center',lineHeight: '1.5', minHeight:'97px' }}>파일을 여기에 드롭하세요.</p>
-  ) : (
-    <div style={{display:'flex',alignItems:'center', height:'97px'}}>
-      <p style={{ lineHeight: '1.5' }}>
-        여기에 파일을 끌어다주세요.<br />
-        <span style={{ fontSize: '12px', color: 'grey' }}>최대 10MB</span><br />
-        <span style={{ textDecoration: 'underline' }}>또는 클릭하여 파일을 선택하세요.</span>
-      </p>
-    </div>
-  )}
- 
-</div>
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '1200px',
+            minheight: '150px',
+            maxHeight: '500',
+            border: '2px dashed #C3C3C3',
+            textAlign: 'center',
+            borderRadius: '10px',
+            backgroundColor: '#F9F9F9',
+            marginBottom: '20px'
+          }}>
+            <input {...getInputProps()} />
+            {previewUrl ? (
+              <div style={{height: '200px', overflow: 'hidden'}}>
+                <img src={previewUrl} style={{ width: '80%', height: '80%', padding: '10px 0' }} alt="Preview" /> <button type="button" onClick={handleRemoveFile} style={{
+                  marginLeft: '10px', cursor: 'pointer', borderRadius: '10px',
+                }}>X</button>
+              </div>
+            ) : isDragActive ? (
+              <p style={{ display: 'flex', alignItems: 'center', lineHeight: '1.5', minHeight: '97px' }}>파일을 여기에 드롭하세요.</p>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', height: '97px' }}>
+                <p style={{ lineHeight: '1.5' }}>
+                  여기에 파일을 끌어다주세요.<br />
+                  <span style={{ fontSize: '12px', color: 'grey' }}>최대 10MB</span><br />
+                  <span style={{ textDecoration: 'underline' }}>또는 클릭하여 파일을 선택하세요.</span>
+                </p>
+              </div>
+            )}
+
+          </div>
 
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            gap:'20px'
+            gap: '20px'
           }}>
-            <button type="button" 
-              onClick={saveToLocalStorage}
-              style={{
-              fontFamily:'Noto Sans KR, sans-serif',
-              width: '344px',
-              height: '48px',
-              borderRadius:'6px',
-              backgroundColor: 'white',
-              color: ' #000000',
-              fontWeight: '700',
-              fontSize: '15px',
-              cursor:'pointer'
-            }}>임시저장하기</button>
 
-<button type="submit" style={{
-              fontFamily:'Noto Sans KR, sans-serif',
+            <button type="submit" style={{
+              fontFamily: 'Noto Sans KR, sans-serif',
               width: '344px',
               height: '48px',
-              borderRadius:'6px',
+              borderRadius: '6px',
               backgroundColor: 'black',
               color: ' #ffffff',
               fontWeight: '700',
               fontSize: '15px',
-              cursor:'pointer'
-            }}>저장하기</button>
+              cursor: 'pointer'
+            }}>수정하기</button>
           </div>
 
         </Form>
@@ -431,7 +401,7 @@ function CreatePage() {
   );
 }
 
-export default CreatePage;
+export default EditPage;
 
 
 // 스타일 컴포넌트

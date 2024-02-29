@@ -65,27 +65,27 @@ function SignUpPage() {
 
     // 중복확인 주소 확인하기
     // 이메일 중복확인
-    const emailCheck = async () => {
-        try {
-            const res = await api.get("/api/signup/email", {
-                params: { email: input.email }
-            })
-            setcheckCurrent({ ...checkCurrent, email: input.email })
-            console.log(res)
-            if (res.data.message === "사용 가능한 email입니다.") {
-                setCheck({ ...check, email: true })
-                alert(res.data.message)
-            } else if (res.data.message === "유효하지 않은 이메일 형식입니다.") {
-                setCheck({ ...check, email: false })
-                alert(res.data.message)
-            } else {
-                setCheck({ ...check, email: false })
-                alert(res.data.message)
-            }
-        } catch (error) {
-            console.log(`서버 에러: ${error}`)
-        }
-    }
+    // const emailCheck = async () => {
+    //     try {
+    //         const res = await api.get("/api/signup/email", {
+    //             params: { email: input.email }
+    //         })
+    //         setcheckCurrent({ ...checkCurrent, email: input.email })
+    //         console.log(res)
+    //         if (res.data.message === "사용 가능한 email입니다.") {
+    //             setCheck({ ...check, email: true })
+    //             alert(res.data.message)
+    //         } else if (res.data.message === "유효하지 않은 이메일 형식입니다.") {
+    //             setCheck({ ...check, email: false })
+    //             alert(res.data.message)
+    //         } else {
+    //             setCheck({ ...check, email: false })
+    //             alert(res.data.message)
+    //         }
+    //     } catch (error) {
+    //         console.log(`서버 에러: ${error}`)
+    //     }
+    // }
 
     // 닉네임 중복확인
     const nickNameCheck = async () => {
