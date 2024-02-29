@@ -5,12 +5,15 @@ import { useQuery } from 'react-query'
 import { MyPageModalPotal, MyPageRemovePotal } from '../Common/Potal'
 import MyDetailPage from '../../pages/MyDetailPage/MyDetailPage'
 import ModalRemove from './ModalRemove'
+import { useNavigate } from 'react-router-dom'
+
 
 function Chellange() {
-
+    
 
     const chellangeData = useQuery('chellangeData', getProfile)
-
+    console.log('데티터타!!', chellangeData)
+    
     if (chellangeData.data) {
         // console.log(chellangeData.data.challengeList)
     }
@@ -45,7 +48,11 @@ function Chellange() {
             modalRemoveState ? setmodalRemoveState(false) : setmodalRemoveState(true)
         )
     }
-
+    const navigate = useNavigate('')
+    const eaditPage = (challengeId,e) =>{
+        e.stopPropagation();
+        navigate('/eadit', { state: {challengeId:challengeId } })
+    }
 
     const chellange = () => {
         console.log(chellangeData.data.challengeList.length)
@@ -80,6 +87,7 @@ function Chellange() {
                                                     {value.creatorNickname}
                                                 </NickName>
                                                 <IconBox>
+                                                    <button onClick={(e) =>eaditPage(value.challengeId, e)}>수정</button>
                                                     <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={(e) => { modalRemoveOpen(value.challengeId, e) }} />
                                                 </IconBox>
                                             </NickNameBox>
@@ -106,7 +114,7 @@ function Chellange() {
                         .filter((value) => {
                             let current = new Date();
                             let limite = new Date(value.dueDate)
-                            // console.log("value", value)
+                            // console.log("value", value.dueDate)
                             // console.log("value.dueDate", value.dueDate)
                             // console.log("limite", limite)
                             // console.log("currunt", current)

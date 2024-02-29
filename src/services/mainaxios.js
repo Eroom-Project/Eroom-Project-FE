@@ -63,4 +63,12 @@ const deleteAuthStatus = async ({challengeId, authId}) => {
   return response.data;
 };
 
-export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus };
+const eaditChallenge = async ({challengeId, form}) => {
+  const resToken = await api.post(`/api/token`,{})
+  const response = await api.put(`/api/challenge/${challengeId}`, form);
+  return response.data;
+};
+
+
+
+export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus, eaditChallenge };
