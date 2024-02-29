@@ -34,7 +34,7 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate }) {
     const translatedCategory = categoryMap[challengeDetailData?.data?.responseDto?.category] || ''
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title } })
+        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title, nickname:challengeDetailData?.data.responseDto.nickname } })
     }
 
     // 버튼 스테이트 만들기
@@ -49,6 +49,7 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate }) {
         } else {
             return <Button onClick={roomIn} bcolor={"#45b850;"} color={"#FFFF"}>챌린지방 입장하기</Button>
         }
+
     }
     return (
         <>
