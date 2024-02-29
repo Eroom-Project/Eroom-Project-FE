@@ -49,7 +49,7 @@ const CanvasBall = ({ imageUrl, nickname }) => {
         ctx.drawImage(ballImage, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
         // 닉네임 표시
         ctx.fillStyle = 'black';
-        ctx.font = '14px Arial';
+        ctx.font = '700 20px Noto Sans KR';
         ctx.fillText(nickname, this.x - ctx.measureText(nickname).width / 2, this.y + this.size + 20);
       }
     }
