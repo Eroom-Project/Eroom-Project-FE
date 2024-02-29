@@ -11,7 +11,7 @@ function Chellange() {
 
     const navigate = useNavigate(null)
     const chellangeData = useQuery('chellangeData', getProfile)
-
+    
     if (chellangeData.data) {
         // console.log(chellangeData.data.challengeList)
     }
@@ -46,12 +46,11 @@ function Chellange() {
             modalRemoveState ? setmodalRemoveState(false) : setmodalRemoveState(true)
         )
     }
-    const editOpen = (challengeId,e) => {
+    
+    const eaditPage = (challengeId,e) =>{
         e.stopPropagation();
-        // setModalChallengeId(challengeId)
-        navigate("/edit", challengeId)
+        navigate('/edit', { state: {challengeId:challengeId } })
     }
-
 
     const chellange = () => {
         console.log(chellangeData.data.challengeList.length)
@@ -86,7 +85,7 @@ function Chellange() {
                                                     {value.creatorNickname}
                                                 </NickName>
                                                 <IconBox>
-                                                    <Icon src='/img/MyPage/edit.png' alt='remove' onClick={editOpen} />
+                                                    <Icon src='/img/MyPage/edit.png' alt='remove' onClick={(e)=>eaditPage(value.challengeId, e)} />
                                                     <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={(e) => { modalRemoveOpen(value.challengeId, e) }} />
                                                 </IconBox>
                                             </NickNameBox>

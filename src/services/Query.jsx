@@ -11,9 +11,6 @@ const getVerificationEmail = async(emailcode) => {
     return res.data
 }
 
-
-
-
 //-------------------mypage-------------------
 const getProfile = async() => {
     const res = await api.get("/api/mypage")
@@ -27,15 +24,8 @@ const getChallengeDetail = async(challengeId) => {
 
 /// 챌린지 삭제 완료
 const deleteChallenge = async(challengeId) => {
-    
-    try{
         const resToken = await api.post(`/api/token`,{})
         const res = await api.delete(`/api/challenge/${challengeId}`)
-        console.log("챌린지 삭제 서버 통신 연결")
-        console.log(res)
-    }catch(error){
-        console.log("챌린지 삭제 서버 통신 에러")
-    }
 }
 
 /// 비밀번호 확인
@@ -71,7 +61,7 @@ const changeProfileDatas = async (nameauthinput) => {
         // ; charset=utf-8
         case "nickname":
             if (nameauthinput.auth.nickname) {
-                console.log('nnnnnnnnn',nameauthinput)
+                // console.log('nnnnnnnnn',nameauthinput)
                 const formDataNickname = new FormData();
                 formDataNickname.append('profileNickname', new Blob([JSON.stringify(nameauthinput.input.nickname)], { type: 'application/json' }))
                 const resNickname = await api.put(`/api/member/profile/nickname?profileNickname=${nameauthinput.input.nickname}`, nameauthinput.input.nickname)
@@ -84,7 +74,7 @@ const changeProfileDatas = async (nameauthinput) => {
             }
         case "password":
             if (nameauthinput.auth.password && nameauthinput.auth.checkPassword) {
-                console.log('ppppppp',nameauthinput)
+                // console.log('ppppppp',nameauthinput)
                 // const updatePassword = new FormData();
                 // updatePassword.append('profilePassword', nameauthinput.input.password)
                 const resPassword = await api.put("/api/member/profile/password", {password: nameauthinput.input.password})
