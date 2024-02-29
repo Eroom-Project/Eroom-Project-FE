@@ -52,6 +52,9 @@ const navigate = useNavigate()
     const client = new Client({
       brokerURL: `ws://api.eroom-challenge.com/ws-stomp`,
       webSocketFactory: () => socket,
+      connectHeaders:{
+        challengeId: String(challengeId),
+      },
      
       debug: function (str) {
         console.log('이벤트', str);
