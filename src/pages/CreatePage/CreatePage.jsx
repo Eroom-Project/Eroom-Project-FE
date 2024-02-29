@@ -25,7 +25,6 @@ function CreatePage() {
   const [startDate, handleStartDateChange, resetStartDate] = useInput('');
   const [dueDate, handleDueDateChange, resetDueDate] = useInput('');
   const [thumbnailImageUrl, setImage] = useState(null);
-  const [uploadedFileName, setUploadedFileName] = useState('');
   const [frequency, setFrequency] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -82,8 +81,7 @@ function CreatePage() {
 
   const resetImage = () => {
     setImage(null);
-    setUploadedFileName('');
-  };
+    };
 
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length === 0) {
@@ -101,7 +99,6 @@ function CreatePage() {
     const isImageFile = file.type.match('image/(jpeg|png)');
     if (isImageFile) {
         setImage(file);
-        setUploadedFileName(file.name);
         const url = URL.createObjectURL(file);
         setPreviewUrl(url); 
     } else {
@@ -113,7 +110,6 @@ function CreatePage() {
   const handleRemoveFile = (event) => {
     event.stopPropagation();
     setImage(null);
-    setUploadedFileName('');
     setPreviewUrl(null);
   };
 
