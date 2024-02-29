@@ -16,7 +16,7 @@ import MainPage from '../pages/MainPage/MainPage'
 import MainDetailPage from '../pages/MainDetailPage/MainDetailPage'
 import CreatePage from '../pages/CreatePage/CreatePage'
 import RoomPage from '../pages/RoomPage/RoomPage'
-import Eaditpage from '../pages/EaditPage/Eaditpage'
+import EditPage from '../pages/EditPage/EditPage'
 
 
 
@@ -36,7 +36,7 @@ function    Router() {
                         <Route path="/main" element={<MainDetailPage />} />
                         <Route element={<LayoutAuth />}>
                             <Route path="/mypage" element={<MyPage />} />
-                            <Route path="/eadit" element={<Eaditpage />} />
+                            <Route path="/edit" element={<EditPage />} />
                             <Route path="/create" element={<CreatePage />} />
                             <Route path="/room" element={<RoomPage />} />
                         </Route>

@@ -32,6 +32,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
     const startDate = new Date(challengeDetail?.responseDto?.startDate);
     const dueDate = new Date(challengeDetail?.responseDto?.dueDate);
             dueDate.setDate(dueDate.getDate() + 1);
+            dueDate.setHours(dueDate.getHours() - 9);
     const now = new Date();
     const butBack = startDate > now ? `#BBBBBB` : `#4f5aff`
     const butcolor = startDate > now ? `#000000` : `#ffffff`

@@ -10,7 +10,10 @@ function ModalRemove({ modalRemoveOpen, challengeId }) {
     const mutation = useMutation(deleteChallenge, {
         onSuccess: () => {
             queryClient.invalidateQueries("chellangeData")
-            console.log("챌린지가 삭제됐습니다.")
+            console.log("챌린지가 삭제 성공")
+        },
+        onError: () => {
+            console.log("챌린지가 삭제 오류")
         }
     })
 

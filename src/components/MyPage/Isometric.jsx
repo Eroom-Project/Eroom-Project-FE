@@ -33,13 +33,13 @@ function Isometric() {
                     <MyBrickLeft />
                     <MyBrickRight />
                     </div>
-                {/* <Img src={"/img/MyPage/BackGround.png"} alt="Room" /> */}
             </MyRoom>
             <H6>BRICK</H6>
-            <Brick>
-                공사중입니다.
-                {/* <Img src={"/img/characters.png"} alt="" /> */}
-            </Brick>
+            <BrickBox>
+                <Brick>
+                    <Img src='/img/brick (1).png'/>
+                </Brick>
+            </BrickBox>
         </MainBox>
     )
 }
@@ -68,7 +68,7 @@ const MyRoom = styled.div`
     overflow: hidden;
 `
 
-const Brick = styled.div`
+const BrickBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -80,6 +80,9 @@ const Brick = styled.div`
     border-radius: 8px;
     overflow: hidden;
     background-color: #F2F2F2;
+`
+const Brick =styled.div`
+    height: 100%;
 `
 const Img = styled.img`
     object-fit: cover;
