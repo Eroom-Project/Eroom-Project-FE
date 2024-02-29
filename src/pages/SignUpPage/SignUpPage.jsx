@@ -228,7 +228,7 @@ function SignUpPage() {
                 } else if (auth[name]) {
                     return <Message focus={"block"} style={{ color: "#74c3ff" }}> 중복확인이 필요합니다. </Message>
                 } else {
-                    return <Message focus={focusState[name] ? "block" : "block"} style={{ color: "#ff7575" }}> 닉네임를 입력해주세요. </Message>
+                    return <Message focus={focusState[name] ? "block" : "block"} style={{ color: "#ff7575" }}> 닉네임을 입력해주세요. </Message>
                 }
             case "password":
                 return (
