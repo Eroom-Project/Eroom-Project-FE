@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { getChallengeDetail } from '../../services/Query'
 import { useNavigate } from 'react-router-dom'
 
-function MyDetailPage({ challengeId, modalOpen, chellangeState }) {
+function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate }) {
     const challengeDetailData = useQuery(
         ['challengeDetailData', challengeId],
         () => getChallengeDetail(challengeId),)
@@ -34,7 +34,22 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState }) {
     const translatedCategory = categoryMap[challengeDetailData?.data?.responseDto?.category] || ''
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId , title: challengeDetailData?.data.responseDto.title, nickname:challengeDetailData?.data.responseDto.nickname} })
+        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title, nickname:challengeDetailData?.data.responseDto.nickname } })
+    }
+
+    // 버튼 스테이트 만들기
+    const myDetailButton = () => {
+        let currunt = new Date();
+        let start = new Date(startDate)
+
+        if (chellangeState.finish === true) {
+            return <Button bcolor={"#1C1C1C"} color={"#FFFF"}>종료된 챌린지입니다.</Button>
+        } else if (start > currunt) {
+            return <Button bcolor={"#1C1C1C"} color={"#FFFF"}>예약된 챌린지입니다.</Button>
+        } else {
+            return <Button onClick={roomIn} bcolor={"#45b850;"} color={"#FFFF"}>챌린지방 입장하기</Button>
+        }
+
     }
     return (
         <>
@@ -42,7 +57,7 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState }) {
             </Back>
             <MainBox>
                 <ContentsBox>
-                        <X src="/img/x.png" alt="close" onClick={modalOpen}/>
+                    <X src="/img/x.png" alt="close" onClick={modalOpen} />
                     {
                         challengeDetailData.data &&
                         <>
@@ -76,12 +91,7 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState }) {
                             </InfoBox>
                         </>
                     }
-                    {
-                        chellangeState.finish === true ?
-                            <Button>종료된 챌린지</Button>
-                            :
-                            <Button onClick={roomIn}>챌린지방 입장하기</Button>
-                    }
+                    {myDetailButton()}
                 </ContentsBox>
             </MainBox>
         </>
@@ -197,11 +207,8 @@ const Button = styled.button`
     height: 48px;
     border: none;
     border-radius: 10px;
-    color: white;
-    background-color: #45b850;
+    color: ${(props)=>props.color};
+    background-color: ${(props)=>props.bcolor};
     cursor: pointer;
     transition: 1s;
-    &:hover{
-        background-color: #52C75E;
-    }
 `

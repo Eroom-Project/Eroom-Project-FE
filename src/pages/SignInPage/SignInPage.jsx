@@ -82,7 +82,7 @@ function SignInPage() {
     console.log(auth)
 
     // 전역으로 로그인 상태 관리
-    const {setAccessState, setWithExpire} = useOutletContext();
+    const { setAccessState, setWithExpire } = useOutletContext();
 
     // 토큰 어떻게 들어오는지 보기
     // Authorization: Bearer <token>
@@ -96,25 +96,35 @@ function SignInPage() {
                     password: input.password
                 }
                 const res = await api.post("/api/login", newUser)
-                console.log(res.status)
+                console.log(res)
                 if (res.status === 200) {
                     setWithExpire("localRefresh", true, 10080)
                     setAccessState(true)
                     navigate("/")
                 }
             } catch (error) {
-                alert("로그인 에러")
+                alert("존재하지 않는 정보입니다.")
                 console.log("E-ROOM Login failed:", error)
             }
         }
     }
 
     const message = (name) => {
-
-        return (auth[name] ?
-            <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
-            :
-            <Message focus={focusState[name] ? "block" : "none"} style={{ color: "red" }}> 양식을 입력해주세요. </Message>)
+        switch (name) {
+            case "email":
+                if (auth[name]) {
+                    return <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+                } else {
+                    return <Message focus={focusState[name] ? "none" : "block"} style={{ color: "#ff7575" }}> 이메일을 입력해주세요. </Message>
+                }
+            case "password":
+                return (
+                    auth[name] ? <Message focus={"block"} style={{ color: "#5EC75E" }}> 확인됐습니다. </Message>
+                        :
+                        <Message focus={focusState[name] ? "none" : "block"} style={{ color: "#ff7575" }}> 비밀번호를 입력해주세요. </Message>)
+            default:
+                <Message focus={focusState[name] ? "none" : "block"} style={{ color: "#ff7575" }}> 정보를 입력해주세요. </Message>
+        }
     }
 
 
@@ -122,7 +132,7 @@ function SignInPage() {
         return (auth.email && auth.password ?
             <Button color={"#5EC75E"} type='button' onClick={signIn}>로그인</Button>
             :
-            <Button color={"#1C1C1C"} type='button'>양식을 입력해주세요.</Button>)
+            <Button color={"#1C1C1C"} type='button'>정보를 입력해주세요.</Button>)
     }
 
     const handleOnKey = (e) => {
@@ -133,7 +143,7 @@ function SignInPage() {
 
     return (
         <Background>
-            <SignBacks/>
+            <SignBacks />
             <SignBack>
                 <MainForm>
                     <Form>
@@ -149,6 +159,8 @@ function SignInPage() {
                                 onChange={(e) => { handleInputChange(e) }}
                                 placeholder='example@naver.com'
                                 onKeyDown={handleOnKey}
+                                border={focusState.email ? "1px solid #1C1C1C" : "none"}
+                                bcolor={focusState.email ? "transparent" : "#F2F2F2"}
                             />
                         </InputBox>
                         <InputBox>
@@ -162,6 +174,8 @@ function SignInPage() {
                                 onChange={(e) => { handleInputChange(e) }}
                                 placeholder='********'
                                 onKeyDown={handleOnKey}
+                                border={focusState.password ? "1px solid #1C1C1C" : "none"}
+                                bcolor={focusState.password ? "transparent" : "#F2F2F2"}
                             />
                         </InputBox>
                         {button()}
