@@ -12,16 +12,17 @@ function Chat({ challengeId, memberId, title }) {
   const [messageCount, setMessageCount] = useState(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   
-  const formatDateTime = (receivedMessage) => {
-    const utcDate = new Date(receivedMessage.time); 
-    const koreanDate = new Date(utcDate.getTime() + (9 * 60 * 60 * 1000)); 
-    const year = koreanDate.getFullYear();
-    const month = String(koreanDate.getMonth() + 1).padStart(2, '0');
-    const day = String(koreanDate.getDate()).padStart(2, '0');
-    const hours = String(koreanDate.getHours()).padStart(2, '0');
-    const minutes = String(koreanDate.getMinutes()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-};
+  const formatDateTime = (message) => {
+    const date = new Date(message.time); // 메시지 타임을 Date 객체로 변환
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}`; // 포맷에 맞게 반환
+  };
+  
 
 
 const navigate = useNavigate()
@@ -80,15 +81,23 @@ const navigate = useNavigate()
             const history = JSON.parse(message.body);
             console.log('이건 히스토리', history);
             console.log('이건 히스토리 메시지', message);
-        
-            // 이전 대화 내역을 처리하여 messages 상태에 추가
-            const formattedHistory = history.map(message => ({
-                ...message,
-                time: formatDateTime(message) // 시간 포맷 변경
-            }));
-        
-            setMessages(formattedHistory); // 이전 대화 내역으로 messages 상태 업데이트
-        });
+          
+            // 배열 데이터 처리
+            if (Array.isArray(history)) {
+              const newMessages = history.map(item => {
+                if (item.type === 'JOIN') {
+                  return { message: `${item.sender}님이 입장하셨습니다.` };
+                } else if (item.type === 'LEAVE') {
+                  return { message: `${item.sender}님이 나가셨습니다.` };
+                } else if (item.type === 'CHAT') {
+                  return { memberId:item.memberId, message: item.message, profileImageUrl :item.profileImageUrl, sender: item.sender, time: item.time, type:item.type}; // CHAT 타입의 경우 sender와 time도 포함시킬 수 있습니다.
+                }
+                return null; // 해당되지 않는 타입의 경우 null 반환
+              }).filter(item => item !== null); // null 제거
+          
+              setMessages(prevMessages => [...prevMessages, ...newMessages]);
+            }
+          });
         
         
           
