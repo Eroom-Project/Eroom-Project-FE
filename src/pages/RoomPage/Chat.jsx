@@ -132,7 +132,7 @@ const navigate = useNavigate()
           
 
           // "JOIN" 메시지 타입 처리
-          if (receivedMessage.type === 'JOIN') {
+          if (receivedMessage.type === 'JOIN' && memberId !== receivedMessage.memberId) {
             setMessages((prevMessages) => [
               ...prevMessages,
               { message: `${receivedMessage.sender}님이 입장하셨습니다.` },
