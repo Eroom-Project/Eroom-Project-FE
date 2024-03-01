@@ -41,7 +41,7 @@ function RoomPage() {
                     <Brick />
                     <Brick2 />
                     </div>
-                    <div style={{ position: 'absolute' }}>
+                    <div style={{ position: 'absolute'}}>
                     <BallCanvas imageUrl={profileImageUrl} nickname={nickname} />
                     </div>
                     
