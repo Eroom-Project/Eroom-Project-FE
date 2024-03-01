@@ -31,22 +31,28 @@ const CanvasBall = ({ imageUrl, nickname }) => {
           this.vy += 0.5; // 중력 효과
           this.vx *= 0.99;
           this.vy *= 0.99;
-
+      
           // 벽에 부딪히면 반사
           if (this.y + this.size > canvas.height) {
             this.vy *= -0.9;
             this.y = canvas.height - this.size;
-        } else if (this.y - this.size < 0) {
+            // 속도가 매우 낮으면 멈춤
+            if (Math.abs(this.vy) < 4.3) {
+              this.vy = 0;
+              this.vx *= 0.9; // 바닥에 닿았을 때 수평 속도 감소
+            }
+          } else if (this.y - this.size < 0) {
             this.vy *= -0.9;
-            this.y = this.size; // 상단 벽에 부딪히면 공의 위치를 상단 벽 바로 아래로 조정
-        }
-        
+            this.y = this.size; 
+          }
+          
           if (this.x + this.size > canvas.width || this.x - this.size < 0) {
             this.vx *= -0.9;
             this.x += this.vx;
           }
         }
       }
+      
 
       draw() {
         ctx.save(); // 현재 상태 저장
