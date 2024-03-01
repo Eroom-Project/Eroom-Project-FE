@@ -80,7 +80,6 @@ function SignInPage() {
         email: false,
         password: false,
     })
-    console.log(auth)
 
     // 전역으로 로그인 상태 관리
     const { setAccessState, setWithExpire } = useOutletContext();
