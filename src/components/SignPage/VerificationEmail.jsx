@@ -6,6 +6,7 @@ import {
     InputBox,
     InnerBox,
     Input,
+    Logo,
     // 이메일
     EmailForm,
     EmailTitle,
@@ -14,10 +15,10 @@ import {
     EmailButton,
     EmailContents,
 } from '../../styles/SignPage/SignPage'
-import { useMutation} from 'react-query'
+import { useMutation } from 'react-query'
 import { getVerificationEmail, postVerificationEmail } from '../../services/Query'
 
-function VerificationEmail({ setVerificationEmail, email, setCheck, check}) {
+function VerificationEmail({ setVerificationEmail, email, setCheck, check }) {
 
     // 이메일 인증 보내기
     const mutationEmailPost = useMutation(postVerificationEmail, {
@@ -32,9 +33,9 @@ function VerificationEmail({ setVerificationEmail, email, setCheck, check}) {
     const mutationEmailGet = useMutation(getVerificationEmail, {
         onSuccess: (data) => {
             console.log(data)
-            if(data.message === "인증이 완료되었습니다."){
+            if (data.message === "인증이 완료되었습니다.") {
                 alert(data.message)
-                setCheck({...check, email: true})
+                setCheck({ ...check, email: true })
                 setVerificationEmail(false)
             } else {
                 alert(data.message)
@@ -44,7 +45,7 @@ function VerificationEmail({ setVerificationEmail, email, setCheck, check}) {
             alert("이메일 확인 통신에 문제가 있습니다.")
         }
     })
-    
+
     const heandleEmailPost = () => {
         mutationEmailPost.mutate(email)
     }

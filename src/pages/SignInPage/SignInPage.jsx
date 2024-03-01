@@ -8,6 +8,7 @@ import {
     Background,
     SignBack,
     MainForm,
+    Logo,
     Form,
     H1,
     InputBox,
@@ -146,8 +147,9 @@ function SignInPage() {
             <SignBacks />
             <SignBack>
                 <MainForm>
-                    <Form>
+                        <Logo src="/img/Logo.png" alt="logo" />
                         <H1>로그인</H1>
+                    <Form>
                         <InputBox>
                             <H6>이메일: {message("email")}</H6>
                             <Input
