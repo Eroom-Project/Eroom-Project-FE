@@ -68,7 +68,7 @@ function Layout() {
     return (
         <>
             <NavBar accessState={accessState} setAccessState={setAccessState} removeCookies={removeCookies} />
-            <Outlet context={{ accessState, setAccessState, setWithExpire, getWithExpire}} />
+            <Outlet context={{ accessState, setAccessState, setWithExpire, getWithExpire}}/>
         </>
     )
 }
