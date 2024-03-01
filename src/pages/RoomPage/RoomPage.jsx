@@ -3,7 +3,6 @@ import AuthPage from '../AuthPage/AuthPage';
 import AuthResult from '../AuthResultPage/AuthResultPage';
 import Chat from './Chat';
 import { useLocation } from 'react-router-dom';
-import api from '../../services/api';
 import Brick from './Brick';
 import Brick2 from './Brick2';
 import BallCanvas from './BallCanvas';
