@@ -84,7 +84,7 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
                     } else if(dueDate < now ){
                         alert("이미 종료된 챌린지 입니다.")
                     } else {
-                        navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title, nickname:challengeDetail?.responseDto?.nickname }});
+                        navigator('/room',{state:{challengeId: selectedItem?.challengeId, memberId: challengeDetail?.loginMemberId, title:challengeDetail?.responseDto?.title, nickname:challengeDetail?.loginMemberNickname, profileImageUrl:challengeDetail?.loginMemberProfileImageUrl }});
                     }
                 }} 
                 backgroundColor = {dueDate < now ? 'black': butBack} color={dueDate > now ? 'white': butcolor}
