@@ -52,6 +52,9 @@ const navigate = useNavigate()
     const client = new Client({
       brokerURL: `ws://api.eroom-challenge.com/ws-stomp`,
       webSocketFactory: () => socket,
+      connectHeaders:{
+        challengeId: String(challengeId),
+      },
      
       debug: function (str) {
         console.log('이벤트', str);
@@ -72,15 +75,36 @@ const navigate = useNavigate()
           body: JSON.stringify(joinMessage),
           });
                   
+        
+          client.subscribe(`/sub/chat/challenge/${challengeId}/history`, (message) => {
+            const history = JSON.parse(message.body);
+            console.log('이건 히스토리', history);
+            console.log('이건 히스토리 메시지', message);
+        
+            // 이전 대화 내역을 처리하여 messages 상태에 추가
+            const formattedHistory = history.map(message => ({
+                ...message,
+                time: formatDateTime(message) // 시간 포맷 변경
+            }));
+        
+            setMessages(formattedHistory); // 이전 대화 내역으로 messages 상태 업데이트
+        });
+        
+        
+          
         client.subscribe(`/sub/chat/challenge/${challengeId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
+
+          console.log('리시브메세지', receivedMessage)
+          console.log('이건 채팅', message)
+  
                    
           if(Array.isArray(receivedMessage)){
             const memberIdCount = receivedMessage.reduce((acc, member) => {
               acc[member.memberId] = (acc[member.memberId] || 0) + 1;
               return acc;
           }, {});
-  
+         
           if(memberIdCount[memberId] > 1){
           alert('중복된 접속입니다.');
           navigate('/main');
@@ -96,6 +120,8 @@ const navigate = useNavigate()
             setChatList(updatedChatList);
           }
           
+          
+
           // "JOIN" 메시지 타입 처리
           if (receivedMessage.type === 'JOIN') {
             setMessages((prevMessages) => [
