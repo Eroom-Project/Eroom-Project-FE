@@ -19,7 +19,7 @@ const CanvasBall = ({ imageUrl, nickname }) => {
       constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 50; // 공의 크기를 30px로 조정
+        this.size = 45; // 공의 크기를 30px로 조정
         this.vx = 0;
         this.vy = 0;
       }
@@ -45,13 +45,38 @@ const CanvasBall = ({ imageUrl, nickname }) => {
       }
 
       draw() {
-        // 공 그리기
+        ctx.save(); // 현재 상태 저장
+        ctx.beginPath();
+        // 배경색이 될 원 그리기
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = '#FBF4B6'; // 배경색을 흰색으로 설정
+        ctx.fill(); // 원의 내부를 흰색으로 채움
+      
+        // 원형 클리핑 경로 생성: Ball의 중심에서 시작, Ball의 size를 반지름으로 사용
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.clip(); // 클리핑 영역 설정
+      
+        // 클리핑 영역 내에 이미지 그리기
         ctx.drawImage(ballImage, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+      
+        ctx.restore(); // 이전 상태로 복원하여 클리핑 영역 해제
+      
         // 닉네임 표시
         ctx.fillStyle = 'black';
         ctx.font = '700 20px Noto Sans KR';
         ctx.fillText(nickname, this.x - ctx.measureText(nickname).width / 2, this.y + this.size + 20);
+      
+        // 공의 테두리 추가
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); // 동일한 원 그리기
+        ctx.strokeStyle = 'white'; // 테두리 색상을 흰색으로 설정
+        ctx.lineWidth = 1; // 테두리 두께를 2px로 설정
+        ctx.stroke(); // 테두리 그리기
       }
+      
+      
+      
     }
 
     function init() {

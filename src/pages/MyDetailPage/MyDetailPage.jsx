@@ -34,7 +34,7 @@ function MyDetailPage({ challengeId, modalOpen, chellangeState, startDate, imite
     const translatedCategory = categoryMap[challengeDetailData?.data?.responseDto?.category] || ''
     const navigate = useNavigate("")
     const roomIn = () => {
-        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title, nickname: challengeDetailData?.data.responseDto.nickname } })
+        navigate("/room", { state: { challengeId: challengeDetailData?.data.responseDto.challengeId, memberId: challengeDetailData?.data.loginMemberId, title: challengeDetailData?.data.responseDto.title, nickname: challengeDetailData?.data.loginMemberNickname, profileImageUrl:challengeDetailData?.data.loginMemberProfileImageUrl  } })
     }
 
     // 버튼 스테이트 만들기
