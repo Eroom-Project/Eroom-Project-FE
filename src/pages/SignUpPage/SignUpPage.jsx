@@ -8,6 +8,7 @@ import {
     Background,
     SignBack,
     MainForm,
+    Logo,
     Form,
     H1,
     InputBox,
@@ -264,6 +265,7 @@ function SignUpPage() {
                 <SignBack>
                     {verificationEmail === false ?
                         <MainForm >
+                            <Logo src="/img/Logo.png" alt="logo" />
                             <H1>회원가입</H1>
                             <Form>
                                 <InputBox>

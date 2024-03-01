@@ -56,6 +56,9 @@ const MainBox = styled.div`
 `
 const ProfileBox = styled.div`
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
     width: 100%;
     max-width: 1200px;
     gap: 60px;

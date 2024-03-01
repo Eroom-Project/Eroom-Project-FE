@@ -14,7 +14,7 @@ function RoomPage() {
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isAuthResultOpen, setIsAuthResultOpen] = useState(false);
     const location = useLocation();
-    const { challengeId,  memberId, title, nickname } = location.state || {};
+    const { challengeId, memberId, title, nickname, profileImageUrl } = location.state || {};
     
     
 
@@ -43,7 +43,7 @@ function RoomPage() {
                     <Brick2 />
                     </div>
                     <div style={{ position: 'absolute' }}>
-                    <BallCanvas imageUrl='/img/smile.png' nickname={nickname} />
+                    <BallCanvas imageUrl={profileImageUrl} nickname={nickname} />
                     </div>
                     
                                     
@@ -120,7 +120,7 @@ function RoomPage() {
                     boxShadow: '-2px 3px rgba(0,0,0,0.1)',
                     display: isChatOpen ? 'block' : 'none', 
 }}>
-                    <Chat challengeId={challengeId} memberId ={memberId} title={title} />
+                    <Chat challengeId={challengeId} memberId ={memberId} title={title}  />
                 </div>
             </div>
                 

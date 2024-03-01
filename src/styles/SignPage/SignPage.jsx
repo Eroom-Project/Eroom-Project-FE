@@ -45,14 +45,19 @@ export const MainForm = styled.div`
     padding: 34px 32px;
     border-radius: 10px;
 `
-
+export const Logo = styled.img`
+    width: 200px;
+    height: 38px;
+    margin: 0px auto;
+    margin-bottom: 30px;
+`
 export const Form = styled.div`
     width: 440px;
 `
 export const H1 = styled.div`
     margin-right: auto;
-    margin-bottom: 20px;
-    font-size: 28px;
+    margin-bottom: 4px;
+    font-size: 20px;
     font-weight: 600;
 `
 

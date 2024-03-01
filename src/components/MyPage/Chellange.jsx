@@ -387,6 +387,7 @@ const ContentsBottom = styled.div`
     gap: 8px;
 `
 const Title = styled.div`
+    padding-top : 1px;
     font-size: 18px;
     font-weight: 700;
     overflow: hidden;

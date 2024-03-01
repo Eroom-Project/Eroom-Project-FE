@@ -9,7 +9,14 @@ import { useNavigate } from 'react-router-dom';
 
 function useInput(initialValue) {
   const [value, setValue] = useState(initialValue);
-  const handleChange = (e) => setValue(e.target.value);
+
+  const handleChange = (e) => {
+    const trimmedValue = e.target.value.trim(); 
+    if (trimmedValue !== '' || e.target.value === '') {
+      setValue(e.target.value);
+    }
+  };
+
   const reset = () => setValue('');
   const set = (newValue) => setValue(newValue); 
   return [value, handleChange, reset, set];
@@ -248,7 +255,7 @@ function CreatePage() {
           }}>
             <div>
               <TitleText>챌린지 이름</TitleText>
-              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={23} placeholder='챌린지 이름을 입력해주세요(20글자 이내)' fieldError={fieldErrors.title}/>
+              <InputStyle type="text" value={title} onChange={handleTitleChange} maxLength={50} placeholder='챌린지 이름을 입력해주세요(50글자 이내)' fieldError={fieldErrors.title}/>
             </div>
             <div>
               <TitleText>챌린지 주제</TitleText>

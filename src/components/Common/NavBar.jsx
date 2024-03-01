@@ -8,9 +8,9 @@ function NavBar({accessState, removeCookies}) {
             <MainBox>
                 <Main>
                     <Info>
-                        <Link to="/"><Logo src="/img/NavBar/Logo.png" alt="logo" /></Link>
-                        <a href="/main"><Span> E-Room 리스트</Span></a>
-                        {accessState === true && <Link to="/create"><Span> E-Room 생성하기</Span></Link>
+                        <Link to="/"><Logo src="/img/Logo.png" alt="logo" /></Link>
+                        <a href="/main"><Span> 이룸 리스트</Span></a>
+                        {accessState === true && <Link to="/create"><Span> 이룸 생성하기</Span></Link>
 }
                     </Info>
                     {
