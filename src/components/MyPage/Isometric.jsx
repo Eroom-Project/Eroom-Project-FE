@@ -8,16 +8,30 @@ import MyBrickRight from '../../pages/MyPage/MyBrickRight'
 
 function Isometric() {
     const chellangeData = useQuery('chellangeData', getProfile)
-    if (chellangeData.data) {
-        // console.log(chellangeData.data.myroomInfo.floor)
-    }
     if (chellangeData.isLoading) {
         console.log("로딩중입니다.")
     }
     if (chellangeData.isError) {
         console.log("에러!")
     }
-    let count = "123"
+
+    const brick = ["#fffa9f89", "#FFD07589", "#CDFFB589", "#9AD4FF89", "#FFC3C389", "#C7B9FF89"]
+    const countBrick = () => {
+        if (chellangeData.data) {
+            let count = String(chellangeData.data.memberInfo.bricksCount)
+            return(
+                brick.map((value, index) => {
+                    return (
+                        <Brick bcolor={value} key={chellangeData.data.memberInfo.memberId}>
+                            <Count border={"#FFC24C"} color={"#FFC24C"}>{count[index]?count[index]:0}</Count>
+                            <Img src={`/img/brick (${index+1}).png`} />
+                        </Brick>
+                    )
+                })
+            )
+        }
+    }
+
     return (
         <MainBox>
             <H6>E-ROOM</H6>
@@ -29,7 +43,6 @@ function Isometric() {
                     height: '100%',
                     backgroundPosition: 'center',
                     backgroundSize: 'cover'
-
                 }}>
                     <MyBrickLeft />
                     <MyBrickRight />
@@ -37,35 +50,7 @@ function Isometric() {
             </MyRoom>
             <H6>BRICK</H6>
             <BrickBox>
-                <Brick bcolor={"#fffa9f89"}>
-                    <Count border={"#FFC24C"} color={"#FFC24C"}>{count[0]?count[0]:0}</Count>
-                    <Img src='/img/brick (1).png' />
-                </Brick>
-                <Brick bcolor={"#FFD07589"}>
-                    <Count border={"#FFC24C"} color={"#FFC24C"}>{count[1]?count[1]:0}</Count>
-
-                    <Img src='/img/brick (2).png' />
-                </Brick>
-                <Brick bcolor={"#CDFFB589"}>
-                    <Count border={"#FFC24C"} color={"#FFC24C"}>{count[2]?count[2]:0}</Count>
-
-                    <Img src='/img/brick (3).png' />
-                </Brick>
-                <Brick bcolor={"#9AD4FF89"}>
-                    <Count border={"#FFC24C"} color={"#FFC24C"}>{count[3]?count[3]:0}</Count>
-
-                    <Img src='/img/brick (4).png' />
-                </Brick>
-                <Brick bcolor={"#FFC3C389"}>
-                    <Count border={"#FFC24C"} color={"#FFC24C"}>{count[4]?count[4]:0}</Count>
-
-                    <Img src='/img/brick (5).png' />
-                </Brick>
-                <Brick bcolor={"#C7B9FF89"}>
-                    <Count border={"#FFC24C"} color={"#FFC24C"}>{count[5]?count[5]:0}</Count>
-
-                    <Img src='/img/brick (6).png' />
-                </Brick>
+                {countBrick()}
             </BrickBox>
         </MainBox>
     )
