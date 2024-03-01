@@ -55,7 +55,7 @@ const navigate = useNavigate()
       webSocketFactory: () => socket,
       connectHeaders:{
         challengeId: String(challengeId),
-      },
+        },
      
       debug: function (str) {
         console.log('이벤트', str);
@@ -76,8 +76,8 @@ const navigate = useNavigate()
           body: JSON.stringify(joinMessage),
           });
                   
-        
-          client.subscribe(`/sub/chat/challenge/${challengeId}/history`, (message) => {
+        // 저 채널에는 자신만 있따. 그러니까 저기로 온 메신저는 자기만 받을 수 있다. 
+          client.subscribe(`/sub/chat/challenge/${challengeId}/history/${memberId}`, (message) => {
             const history = JSON.parse(message.body);
             console.log('이건 히스토리', history);
             console.log('이건 히스토리 메시지', message);
