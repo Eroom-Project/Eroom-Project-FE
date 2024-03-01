@@ -34,7 +34,7 @@ function MyPage() {
                 checkPassword: false
             })
             alert("수정 완료됐습니다.")
-            setopenChangeState({...openChangeState, nickname: false, password: false})
+            setopenChangeState({ ...openChangeState, nickname: false, password: false })
         }
     })
     // img state
@@ -362,7 +362,7 @@ function MyPage() {
             } else {
                 return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
             }
-        } else if(openChangeState?.nickname === true){
+        } else if (openChangeState?.nickname === true) {
             return <Button type='button' onClick={() => { openChange(name) }}>취소하기</Button>
         } else {
             return <Button type='button' onClick={() => { openChange(name) }}>수정하기</Button>
@@ -372,9 +372,9 @@ function MyPage() {
     const buttonPassword = (name) => {
         if (auth.password && auth.checkPassword) {
             return <Button2 type='button' onClick={() => { mutation.mutate({ name, auth, input }) }}>수정완료</Button2>
-        } else if(openChangeState.password) {
+        } else if (openChangeState.password) {
             return <Button2 type='button' onClick={() => { openChange(name) }}>취소하기</Button2>
-        }else {
+        } else {
             return <Button2 type='button' onClick={() => { openChange(name) }}>수정하기</Button2>
         }
     }
@@ -403,7 +403,6 @@ function MyPage() {
                             수정하기
                         </ImgLabel>
                     </ProfileImgBox>
-
                     <Form>
                         <ImgBox>
                             {
@@ -455,9 +454,9 @@ function MyPage() {
                                     {buttonNickname("nickname")}
                                 </InnerBox>
                             </InputBox>
-                                    { 
-                                        openChangeState.password? <H6>새 비밀번호: {message("password")}</H6> : <H6>비밀번호: {message("password")}</H6> 
-                                    }
+                            {
+                                openChangeState.password ? <H6>새 비밀번호: {message("password")}</H6> : <H6>비밀번호: {message("password")}</H6>
+                            }
                             {
                                 openChangeState.password === true ?
                                     <>
@@ -521,8 +520,7 @@ const Profile = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
-    
+    width: 50%;
 `
 const ImgHeader = styled.img`
     position: absolute;
