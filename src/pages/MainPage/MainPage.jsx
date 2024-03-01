@@ -272,6 +272,7 @@ const TitleText = styled.div`
   font-weight: 700;
   margin-bottom: 10px;
   margin-top: 10px;
+  padding-top: 1px;
   white-space: nowrap;    
   text-overflow: ellipsis;
   overflow:hidden;
