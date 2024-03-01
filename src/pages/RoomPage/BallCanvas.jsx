@@ -28,17 +28,21 @@ const CanvasBall = ({ imageUrl, nickname }) => {
         if (!isDragging) {
           this.x += this.vx;
           this.y += this.vy;
-          this.vy += 0.1; // 중력 효과
+          this.vy += 0.5; // 중력 효과
           this.vx *= 0.99;
           this.vy *= 0.99;
 
           // 벽에 부딪히면 반사
-          if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-            this.vy *= -0.8;
-            this.y += this.vy;
-          }
+          if (this.y + this.size > canvas.height) {
+            this.vy *= -0.9;
+            this.y = canvas.height - this.size;
+        } else if (this.y - this.size < 0) {
+            this.vy *= -0.9;
+            this.y = this.size; // 상단 벽에 부딪히면 공의 위치를 상단 벽 바로 아래로 조정
+        }
+        
           if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-            this.vx *= -0.8;
+            this.vx *= -0.9;
             this.x += this.vx;
           }
         }
@@ -46,7 +50,7 @@ const CanvasBall = ({ imageUrl, nickname }) => {
 
       draw() {
         ctx.save(); // 현재 상태 저장
-        ctx.beginPath();
+        ctx.beginPath(); //그리기 시작
         // 배경색이 될 원 그리기
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
         ctx.fillStyle = '#FBF4B6'; // 배경색을 흰색으로 설정
