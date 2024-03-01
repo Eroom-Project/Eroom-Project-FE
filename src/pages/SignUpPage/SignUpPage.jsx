@@ -95,7 +95,6 @@ function SignUpPage() {
                 params: { nickname: input.nickname }
             })
             setcheckCurrent({ ...checkCurrent, nickname: input.nickname })
-            console.log(res)
             if (res.data.message === "사용 가능한 닉네임입니다.") {
                 setCheck({ ...check, nickname: true })
                 alert(res.data.message)
@@ -116,7 +115,6 @@ function SignUpPage() {
         email: false,
         nickname: false
     })
-    console.log(check)
 
     // massage state
     const navigate = useNavigate();
