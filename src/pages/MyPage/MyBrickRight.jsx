@@ -1,13 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 
-const MyBrickRight = () => {
+const MyBrickLeft = ({brickCounts}) => {
+    
+    const digits = brickCounts > 0 ? String(brickCounts).split('').reverse().map(Number) : [0];
     const canvasRef = useRef(null);
     const bricks = []; // 벽돌들을 저장할 배열
     let animationFrameId;
     let nextFloorHeight = 320; // 다음 벽돌이 닿을 바닥 높이 시작 값
     let nextXPosition = 0; // 다음 벽돌이 시작할 x 위치
     let baseFloorHeight = 320; // 바닥 높이의 초기값
-    let brickCount = 0;
 
     // 이미지 로드
     const brickImages = [
@@ -17,7 +18,6 @@ const MyBrickRight = () => {
         'img/brickR (4).png',
         'img/brickR (5).png',
         'img/brickR (6).png',
-        // 추가 이미지 경로를 여기에 넣으세요.
     ].map(src => {
         const img = new Image();
         img.src = src;
@@ -25,15 +25,14 @@ const MyBrickRight = () => {
     });
 
     // 초기 벽돌 생성
-    const createBrick = () => {
+    const createBrick = (type) => {
         if (bricks.length % 5 === 0 && bricks.length > 0) {
             nextXPosition = 0; // 초기 x 위치로 리셋
             baseFloorHeight -= 50; // 바닥 높이 증가
             nextFloorHeight = baseFloorHeight; // 다음 바닥 높이 업데이트
         }
 
-        const imageIndex = Math.floor(Math.random() * brickImages.length);
-        const brickImage = brickImages[imageIndex];
+        const brickImage = brickImages[type];
 
         const x = nextXPosition;
         const y = 0;
@@ -43,7 +42,6 @@ const MyBrickRight = () => {
 
         nextFloorHeight += 30;
         nextXPosition += 55;
-        brickCount++; 
 
         return { x, y, width: 100, height: 100, dy, bounce, floorHeight, brickImage };
     };
@@ -69,14 +67,6 @@ const MyBrickRight = () => {
                     brick.bounce = false;
                     brick.dy = 0;
                     brick.y = brick.floorHeight - brick.height; // 바닥에 정확히 위치하도록 조정
-
-                    // 새로운 벽돌 추가 조건을 여기에 배치
-                    if (bricks.length < 25 && index === bricks.length - 1) { 
-                        setTimeout(() => {
-                            bricks.push(createBrick())
-                        }, 500);
-                        
-                    }
                 }
             }
         });
@@ -84,10 +74,16 @@ const MyBrickRight = () => {
         animationFrameId = requestAnimationFrame(() => updateAnimation(ctx));
     };
 
+    // 모든 브릭 추가
     const addBricks = () => {
-        if (brickCount < 25) {
-            bricks.push(createBrick()); // 새 벽돌 추가
-            setTimeout(addBricks, 100); // 0.5초 후 다음 벽돌 추가
+        if (digits.every(digit => digit === 0)) { // 모든 자릿수가 0인 경우, 적어도 한 개의 브릭을 생성
+            bricks.push(createBrick(0)); // 기본 브릭 추가
+        } else {
+            digits.forEach((count, index) => {
+                for (let i = 0; i < count; i++) {
+                    bricks.push(createBrick(index)); // 해당 타입의 벽돌 추가
+                }
+            });
         }
     };
 
@@ -101,9 +97,9 @@ const MyBrickRight = () => {
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [brickCounts]);
 
-    return <canvas ref={canvasRef} width='287' height='355' />;
+    return <canvas ref={canvasRef} width='285' height='355' />;
 };
 
-export default MyBrickRight;
+export default MyBrickLeft;
