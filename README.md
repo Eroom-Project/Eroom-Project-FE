@@ -18,11 +18,6 @@
 ![309607138-0f38cd5e-be2a-4ab1-ad7b-6cecef60272c](https://github.com/Eroom-Project/Eroom-Project-FE/assets/39895634/fd38f765-582b-4859-a69a-5f7c6905741f)
 
 
-- **나만의 챌린지를 만들어 운영해요**
-  
-![309607217-6482d2bf-ae86-49a0-943f-bd9361c4fdaf](https://github.com/Eroom-Project/Eroom-Project-FE/assets/39895634/a397f212-b842-4854-91d5-f7dd5692e39a)
-
-
 - **도란도란 채팅으로 배움의 즐거움과 어려움을 나눠요**
   
 ![309607246-362ed942-a452-4095-9a55-ae7fe9eda85f](https://github.com/Eroom-Project/Eroom-Project-FE/assets/39895634/497635bd-fa1b-4d9b-b8f1-778819515fda)
@@ -31,7 +26,6 @@
 - **챌린지의 꽃은 인증! 리더의 승인이 떨어져야 진정한 인증이 완성돼요**
   
 ![309607328-f5eec78c-b4f6-4038-a931-bc6b89eab4d3](https://github.com/Eroom-Project/Eroom-Project-FE/assets/39895634/510c8be6-7976-40f3-81fc-845e04978b64)
-
 
 
 ## 귀여운 캐릭터 인터랙션으로 서비스 경험 UP!
