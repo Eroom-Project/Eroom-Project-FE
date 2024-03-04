@@ -43,23 +43,23 @@
   
 # 5. 개발자 소개(블로그, 프로필)
 
-[팀장 이신지 👑] Back-End 
+[팀장 이신지 👑] Back-End(Spring)
   - GitHub : https://github.com/kuma0112
   - 기술블로그 : https://kmcp.tistory.com/
     
-[부팀장 최우식 👑]
+[부팀장 최우식 👑] Front-End(React)
   - GitHub : https://github.com/W00SIK
   - 기술블로그 : https://w00sik.github.io/
 
-[팀원 인재현]
+[팀원 인재현] Front-End(React)
   - GitHub : https://github.com/injaehyun
   - 기술블로그 : https://url.kr/qvs56w
     
-[팀원 류은채]
+[팀원 류은채] Back-End(Spring)
   - GitHub : https://github.com/eunchaelyu
   - 기술블로그 : https://eunchaelyu.github.io/
     
-[팀원 민경현]
+[팀원 민경현] Back-End(Spring)
   - GitHub : https://github.com/mingang211
   - 기술블로그 : https://a989977.tistory.com/
     
