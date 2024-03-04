@@ -12,7 +12,7 @@ function HomePage() {
     const [scroll, setScroll] = useState(0)
     // useCallback 이나 useMemo로 최적화 하기
     const handleScroll = () => {
-        console.log(window.scrollY)
+        // console.log(window.scrollY)
         setScroll(window.scrollY)
     };
 

@@ -18,7 +18,7 @@ function ModalRemove({ modalRemoveOpen, challengeId }) {
     })
 
     const remove = (e) => {
-        console.log('aaaaaaa',challengeId)
+        // console.log('aaaaaaa',challengeId)
         mutation.mutate(challengeId)
         modalRemoveOpen(challengeId, e)
         alert("챌린지가 삭제됐습니다.")
