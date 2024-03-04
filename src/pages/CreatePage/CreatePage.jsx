@@ -198,7 +198,7 @@ function CreatePage() {
         authExplanation,
         startDate,
         dueDate,
-      };
+        };
       localStorage.setItem('challengeData', JSON.stringify(challengeData));
       alert('챌린지가 임시 저장되었습니다.');
     };

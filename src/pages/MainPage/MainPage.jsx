@@ -16,7 +16,7 @@ function MainPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [visibleItems, setVisibleItems] = useState(12); // 초기에 보이는 아이템 수 (4개 * 3줄)
+  const [visibleItems, setVisibleItems] = useState(12); 
 
 
   const queryClient = useQueryClient();
