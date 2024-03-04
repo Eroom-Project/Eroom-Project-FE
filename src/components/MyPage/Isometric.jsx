@@ -14,7 +14,7 @@ function Isometric() {
     if (chellangeData.isError) {
         console.log("에러!")
     }
-
+    
     const brick = ["#fffa9f89", "#FFD07589", "#CDFFB589", "#9AD4FF89", "#FFC3C389", "#C7B9FF89"]
     const countBrick = () => {
         if (chellangeData.data) {
@@ -24,14 +24,14 @@ function Isometric() {
                     return (
                         <Brick bcolor={value} key={chellangeData.data.memberInfo.memberId}>
                             <Count border={"#FFC24C"} color={"#FFC24C"}>{count[index]?count[index]:0}</Count>
-                            <Img src={`/img/brick (${index+1}).png`} />
+                            <Img src={`/img/brick (${index+1}).png`}/>
                         </Brick>
                     )
                 })
             )
         }
     }
-
+    console.log('aaaaaa',chellangeData?.data?.memberInfo?.bricksCount)
     return (
         <MainBox>
             <H6>E-ROOM</H6>
@@ -44,8 +44,20 @@ function Isometric() {
                     backgroundPosition: 'center',
                     backgroundSize: 'cover'
                 }}>
-                    <MyBrickLeft />
-                    <MyBrickRight />
+                  {
+  !chellangeData.isLoading && (
+    chellangeData?.data?.memberInfo?.bricksCount <= 997 ? 
+      <MyBrickLeft brickCounts={chellangeData?.data?.memberInfo?.bricksCount} /> :
+      <>
+        <MyBrickLeft brickCounts={chellangeData?.data?.memberInfo?.bricksCount} />
+        <MyBrickRight brickCounts={((chellangeData?.data?.memberInfo?.bricksCount) - 997)} />
+      </>
+  )
+}
+
+
+
+
                 </div>
             </MyRoom>
             <H6>BRICK</H6>

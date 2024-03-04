@@ -57,6 +57,7 @@ const MainBox = styled.div`
     font-size: 16px;
     font-weight: 700;
     width: 100%;
+    height: 80px;
     z-index: 1000;
     background-color: white;
 `
@@ -67,7 +68,7 @@ const Main = styled.div`
     justify-content: space-between;
     max-width: 1200px;
     width: 100%;
-    height: 100px;
+    height: 80px;
 `
 const Hr = styled.div`
     width: 100%;

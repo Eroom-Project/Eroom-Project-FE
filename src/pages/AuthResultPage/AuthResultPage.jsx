@@ -242,7 +242,8 @@ const AuthResult = ({ isOpen, onClose, challengeId }) => {
       >
       {option}
     </FilterButton>
-  ))}</div>
+    ))}</div>
+    <div style={{fontSize:'11px', color:'gray'}}> ※리더가 아닌 경우 승인된 챌린지만 확인 할 수 있습니다.</div>
                 {isLoading && <FeedbackContainer> <img src='img/icon (5).png' alt='로딩이미지' /> 로딩중입니다.</FeedbackContainer>}
                 {error && <FeedbackContainer> <img src='img/icon (6).png' alt='에러이미지' /> 오류가 발생했습니다.</FeedbackContainer>}
                 {!isLoading && !error && data?.authResponseDtoList?.length === 0 && (<FeedbackContainer> <img src='img/icon (4).png' alt='에러이미지' /> <br /> 인증 내용이 없습니다.</FeedbackContainer>)}
