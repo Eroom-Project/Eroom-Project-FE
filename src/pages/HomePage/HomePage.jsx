@@ -158,7 +158,7 @@ function HomePage() {
             {/* 네 번째 섹션: 커뮤니티 소개 */}
             <Box4>
                 <Box1Title4>각자의 방에서 시작해서 서로의 방을 방문하며<br /> 더 넓은 곳으로 나아가는</Box1Title4>
-                <div><img src='/img/HomePage/LogoFlag.png' /></div>
+                <div><img src='/img/HomePage/LogoFlag.png' alt='logoflag'/></div>
                 <Box1Title5>
                     스터디 챌린지 커뮤니티<span style={{ fontWeight: "700", fontSize: "45px", marginTop: "12px" }}>'이룸'</span>
                 </Box1Title5>
@@ -167,9 +167,9 @@ function HomePage() {
             {/* 다섯 번째 섹션: 챌린지 이미지 */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div style={{ display: 'flex', gap: '20px', marginBottom: '100px' }}>
-                    <img src='img/Homepage/4Example1.png' />
-                    <img src='img/Homepage/4Example3.png' />
-                    <img src='img/Homepage/4Example2.png' />
+                    <img src='/img/Homepage/4Example1.png' alt='example'/>
+                    <img src='/img/Homepage/4Example3.png' alt='example'/>
+                    <img src='/img/Homepage/4Example2.png' alt='example'/>
 
                 </div>
             </div>
@@ -185,12 +185,12 @@ function HomePage() {
                 marginBottom: '100px'
             }}>
                 <JumpImgBox>
-                    <JumpImg1 src='img/HomePage/icon (1).png' />
-                    <JumpImg2 src='img/HomePage/icon (2).png' />
-                    <JumpImg3 src='img/HomePage/icon (3).png' />
-                    <JumpImg4 src='img/HomePage/icon (4).png' />
-                    <JumpImg5 src='img/HomePage/icon (5).png' />
-                    <JumpImg6 src='img/HomePage/icon (6).png' />
+                    <JumpImg1 src='/img/HomePage/icon1.png' alt='icon'/>
+                    <JumpImg2 src='/img/HomePage/icon2.png' alt='icon'/>
+                    <JumpImg3 src='/img/HomePage/icon3.png' alt='icon'/>
+                    <JumpImg4 src='/img/HomePage/icon4.png' alt='icon'/>
+                    <JumpImg5 src='/img/HomePage/icon5.png' alt='icon'/>
+                    <JumpImg6 src='/img/HomePage/icon6.png' alt='icon'/>
                 </JumpImgBox>
                 <div style={{ fontSize: "48px", fontWeight: '700', marginBottom: '10px', lineHeight: '1.5' }}>
                     당신의 꿈을 이뤄보시겠어요?
