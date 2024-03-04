@@ -53,8 +53,6 @@ function Chellange() {
     }
 
     const chellange = () => {
-        console.log(chellangeData.data.challengeList.length)
-        // console.log(currunt)
         if (chellangeData.data) {
             if (chellangeState.create === true) {
                 return (
@@ -145,10 +143,6 @@ function Chellange() {
                                                 <NickName>
                                                     {value.creatorNickname}
                                                 </NickName>
-                                                <IconBox>
-                                                    <Icon src='/img/MyPage/edit.png' alt='remove' onClick={""} />
-                                                    <Icon src='/img/MyPage/trash-2.png' alt='remove' onClick={(e) => { modalRemoveOpen(value.challengeId, e) }} />
-                                                </IconBox>
                                             </NickNameBox>
                                         </ContentsBottom>
                                     </Contents>
@@ -302,6 +296,7 @@ function Chellange() {
                 <H3 opacity={handleSort4()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: false, before: true }) }}>예약된 챌린지</H3>
                 <H3 opacity={handleSort3()} onClick={() => { setChellangeState({ ...chellangeState, create: false, finish: true, before: false }) }}>종료된 챌린지</H3>
             </SortBox>
+            
             <ContentsBox>
                 <ContentsGrid>
                     {chellangeData.data && chellange()}

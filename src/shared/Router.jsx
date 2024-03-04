@@ -21,10 +21,10 @@ import EditPage from '../pages/EditPage/EditPage'
 
 
 
-function    Router() {
+function Router() {
     return (
         <BrowserRouter>
-        <ScrollTop/>
+            <ScrollTop />
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/signin" element={<SignInPage />} />

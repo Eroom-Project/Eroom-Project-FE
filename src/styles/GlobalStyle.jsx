@@ -1,10 +1,12 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+    
     body {
         font-family: 'Noto Sans KR', sans-serif;
         font-size: 14px;
         color: #1C1C1C;
+
         &::-webkit-scrollbar {
         width: 14px;
         }
@@ -14,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
             background-color: #dfdddd;
             background-clip: padding-box;
             /* border: 3px solid transparent; */
+            
         }
         &::-webkit-scrollbar-track {
             background-color: #F2F2F2;
@@ -26,6 +29,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     div{
+        
         box-sizing: border-box;
     }
 `

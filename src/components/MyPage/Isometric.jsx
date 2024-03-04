@@ -24,7 +24,7 @@ function Isometric() {
                     return (
                         <Brick bcolor={value} key={chellangeData.data.memberInfo.memberId}>
                             <Count border={"#FFC24C"} color={"#FFC24C"}>{count[index]?count[index]:0}</Count>
-                            <Img src={`/img/brick (${index+1}).png`} />
+                            <Img src={`/img/brick (${index+1}).png`}/>
                         </Brick>
                     )
                 })

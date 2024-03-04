@@ -27,13 +27,12 @@ function Footer() {
         }
     }
 
-    console.log(terms["a"])
     return (
         <Main>
             {window.location.href !== "https://www.eroom-challenge.com/room" && window.location.href !== "http://localhost:3000/room" &&
                 <Contents>
                     <Img src="/img/Logo.png" alt="logo" />
-                    <Category><Span><a href="https://www.notion.so/E-ROOM-3a40455d6acb476580d3bcecf2992a9a">ABOUT</a></Span> | <Span><a href="https://github.com/Eroom-Project">GITHUB</a></Span> | <Span><a href="https://www.notion.so/E-ROOM-3a40455d6acb476580d3bcecf2992a9a">BROCHURE</a></Span> | <Span><a href="https://www.notion.so/f9cbfd07d6f243539399cd2440c16025">GUIDE</a></Span></Category>
+                    <Category><Span><a href="https://www.notion.so/E-ROOM-3a40455d6acb476580d3bcecf2992a9a">ABOUT</a></Span> | <Span><a href="https://github.com/Eroom-Project">GITHUB</a></Span> | <Span><a href="https://www.notion.so/1c00642995884d68958627a7bd3dd8a2">BROCHURE</a></Span> | <Span><a href="https://www.notion.so/f9cbfd07d6f243539399cd2440c16025">GUIDE</a></Span></Category>
 
                     <Hr />
                     <Category2>
