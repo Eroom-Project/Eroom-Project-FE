@@ -167,9 +167,9 @@ function HomePage() {
             {/* 다섯 번째 섹션: 챌린지 이미지 */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div style={{ display: 'flex', gap: '20px', marginBottom: '100px' }}>
-                    <img src='/img//4Example1.png' alt='example'/>
-                    <img src='/img//4Example3.png' alt='example'/>
-                    <img src='/img//4Example2.png' alt='example'/>
+                    <img src='/img/HomePage/4Example1.png' alt='example'/>
+                    <img src='/img/HomePage/4Example3.png' alt='example'/>
+                    <img src='/img/HomePage/4Example2.png' alt='example'/>
                 </div>
             </div>
 
