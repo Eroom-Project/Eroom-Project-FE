@@ -33,11 +33,6 @@
 ![309607328-f5eec78c-b4f6-4038-a931-bc6b89eab4d3](https://github.com/Eroom-Project/Eroom-Project-FE/assets/39895634/510c8be6-7976-40f3-81fc-845e04978b64)
 
 
-- **마이페이지에서 모든 챌린지와 프로필까지 편하게 관리해요**
-  
-![309607357-c2c966c5-3ef6-4952-a4a7-62d7ccaa053d](https://github.com/Eroom-Project/Eroom-Project-FE/assets/39895634/90d9ba76-5d61-41b7-906a-a37fac36a760)
-
-
 
 ## 귀여운 캐릭터 인터랙션으로 서비스 경험 UP!
  - **마이페이지에 도착하면 벽돌이 와르르 쏟아져요!**
