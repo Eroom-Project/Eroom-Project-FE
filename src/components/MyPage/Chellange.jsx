@@ -19,7 +19,7 @@ function Chellange() {
         console.log("로딩중입니다.")
     }
     if (chellangeData.isError) {
-        console.log("에러!")
+        console.log("챌린지 불러오기 에러!")
     }
 
     const [chellangeState, setChellangeState] = useState({

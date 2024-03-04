@@ -12,14 +12,14 @@ function MyPage() {
     const profileData = useQuery('profileData', getProfile)
 
     if (profileData.data) {
-        console.log(profileData.data.memberInfo)
+        // console.log(profileData.data.memberInfo)
     }
 
     if (profileData.isLoading) {
         console.log("로딩중입니다.")
     }
     if (profileData.isError) {
-        console.log("에러!")
+        console.log("마이페이지 불러오기 에러!")
     }
 
     const queryClient = useQueryClient()

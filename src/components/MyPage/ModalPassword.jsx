@@ -28,7 +28,7 @@ function ModalPassword({ setPasswordModal, openChangeState, setopenChangeState }
         },
         onError: () => {
             alert("현재 비밀번호와 일치하지 않습니다.")
-            console.log("현재 비밀번호와 일치하지 않습니다.")
+            // console.log("현재 비밀번호와 일치하지 않습니다.")
         }
     })
     const handlePassword = () => {
