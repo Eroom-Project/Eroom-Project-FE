@@ -297,6 +297,8 @@ const Box1BackHill = styled.img`
 const Box1BackHill2 = styled.img`
     position: absolute;
     top: 243px;
+    width: 100%;
+    height: 100px;
     z-index: 1;
     animation: backgroundup1 1s ease-in-out forwards;
     transform: translateZ(-1px);
@@ -304,6 +306,8 @@ const Box1BackHill2 = styled.img`
 const Box1BackHill3 = styled.img`
     position: absolute;
     top: 243px;
+    width: 100%;
+    height: 100px;
     animation: backgroundup1 2s ease-in-out forwards;
     transform: translateZ(2px);
 `
