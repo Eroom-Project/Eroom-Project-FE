@@ -14,8 +14,11 @@ const getChallenge = async (show, searchQuery,pageNumver) => {
   if (pageNumver) {
     url += `?page=${pageNumver}`;
   }
+  
   const response = await api.get(url);
-  return response.data.data;
+  console.log('이거시 악시오스',response.data.data.content );
+  return response.data.data.content;
+  
   };
 
 const entryChallenge = async (challengeId) => {
