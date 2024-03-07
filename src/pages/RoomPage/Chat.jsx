@@ -41,9 +41,17 @@ function Chat({ challengeId, memberId, title }) {
   });
 
   const handleDeleteMessage = (messageId) => {
-    deleteChatMutation({ challengeId, messageId });
+    
+    deleteChatMutation({ challengeId, messageId }, {
+      onSuccess: () => {
+      setMessages(currentMessages => currentMessages.filter(m => m.messageId !== messageId));
+      },
+      onError: (error) => {
+        console.error('메시지 삭제 중 오류 발생', error);
+      },
+    });
   };
-
+  
 
 const navigate = useNavigate()
 
@@ -64,8 +72,13 @@ const navigate = useNavigate()
 
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+  
+    scrollToBottom();
+  }, [messages]); 
+  
 
 
   useEffect(() => {
@@ -99,8 +112,7 @@ const navigate = useNavigate()
         
           client.subscribe(`/sub/chat/challenge/${challengeId}/history/${memberId}`, (message) => {
             const history = JSON.parse(message.body);
-            console.log('aaaaaaaaa',history)
-          
+            
             // 배열 데이터 처리
             if (Array.isArray(history)) {
               const newMessages = history.map(item => {
@@ -181,7 +193,7 @@ const navigate = useNavigate()
         client.deactivate();
       }
     };
-  }, [challengeId, memberId]);
+  }, [challengeId, memberId ]);
 
   const sendMessage = () => {
    

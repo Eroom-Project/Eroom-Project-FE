@@ -1,6 +1,6 @@
 import api from './api';
 
-const getChallenge = async (show, searchQuery) => {
+const getChallenge = async (show, searchQuery,pageNumver) => {
   let url = '/api/challenge';
   if (['IT', 'FOREIGN_LANGUAGE', 'MATH', 'SCIENCE', 'HUMANITIES', 'ARTS_AND_PHYSICAL_EDUCATION', 'ETC'].includes(show)) {
     url += `?category=${show}`;
@@ -10,6 +10,9 @@ const getChallenge = async (show, searchQuery) => {
   }
   if (searchQuery) {
     url += `?query=${searchQuery}`;
+  }
+  if (pageNumver) {
+    url += `?page=${pageNumver}`;
   }
   const response = await api.get(url);
   return response.data.data;
