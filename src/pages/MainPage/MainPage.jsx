@@ -151,7 +151,7 @@ function MainPage() {
 )}
 
       <CardsContainer>
-      {Array.isArray(data) && data?.slice(0, visibleItems).map((item, challengeId) => (
+      {Array.isArray(data) && data?.map((item, challengeId) => (
   <Card key={challengeId} onClick={() => openModal(item)}>
     <CardImage src={item.thumbnailImageUrl} alt={item.title} />
     
@@ -167,7 +167,7 @@ function MainPage() {
 ))}
       </CardsContainer>
 
-      {visibleItems < data?.length && (
+      {visibleItems <= data?.length && (
         <MoreButton onClick={handleShowMore}>더보기</MoreButton>
       )}
 
