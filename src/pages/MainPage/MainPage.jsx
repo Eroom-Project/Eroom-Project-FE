@@ -157,7 +157,7 @@ function MainPage() {
         <img src='img/icon (6).png' alt='에러이미지'/>
         오류가 발생했습니다.</FeedbackContainer>}
       
-        {!isLoading && !isError && data?.length === 0 && (
+        {!isLoading && !isError && data?.content.length === 0 && (
         <FeedbackContainer>
            <img src='img/icon (4).png' alt='에러이미지' /> <br />"{searchQuery}" 검색 결과가 없습니다.
         </FeedbackContainer>
