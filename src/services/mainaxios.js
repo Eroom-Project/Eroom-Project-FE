@@ -1,6 +1,7 @@
 import api from './api';
 
-const getChallenge = async (show, searchQuery,pageNumver) => {
+const getChallenge = async (show, searchQuery,pageNumber) => {
+  console.log('악시오스페이지 넘버',pageNumber)
   let url = '/api/challenge';
   if (['IT', 'FOREIGN_LANGUAGE', 'MATH', 'SCIENCE', 'HUMANITIES', 'ARTS_AND_PHYSICAL_EDUCATION', 'ETC'].includes(show)) {
     url += `?category=${show}`;
@@ -11,13 +12,12 @@ const getChallenge = async (show, searchQuery,pageNumver) => {
   if (searchQuery) {
     url += `?query=${searchQuery}`;
   }
-  if (pageNumver) {
-    url += `?page=${pageNumver}`;
-  }
-  
+  if (pageNumber) {
+    url += show || searchQuery? `&page=${pageNumber}` : `?page=${pageNumber}`;
+    }
+    
   const response = await api.get(url);
-  console.log('이거시 악시오스',response.data.data.content );
-  return response.data.data.content;
+  return response.data.data;
   
   };
 
