@@ -20,14 +20,14 @@ function Chat({ challengeId, memberId, title }) {
   const [chatEdit, setChatEdit] = useState(false);
   
   const formatDateTime = (message) => {
-    const date = new Date(message.time); // 메시지 타임을 Date 객체로 변환
+    const date = new Date(message.time); 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const day = String(date.getDate()).padStart(2, '0');
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
   
-    return `${year}-${month}-${day} ${hours}:${minutes}`; // 포맷에 맞게 반환
+    return `${year}-${month}-${day} ${hours}:${minutes}`; 
   };
   
   const { mutate: deleteChatMutation } = useMutation(deleteChat, {
@@ -176,6 +176,8 @@ const navigate = useNavigate()
               ...prevMessages,
               receivedMessage,
             ]);
+          } else if(receivedMessage.type === 'DELETE'){
+            setMessages(currentMessages => currentMessages.filter(m => m.messageId !== receivedMessage.messageId));
           }
         });
       },
