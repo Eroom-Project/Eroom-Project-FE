@@ -78,7 +78,6 @@ function MainDetailPage({ selectedItem, isOpen, onClose, applyForChallenge }) {
     
             {isParticipating ? (
                 <StyledButton onClick={() => {
-                  
                     if (startDate > now) {
                         alert("챌린지가 시작되기 이전입니다.");
                     } else if(dueDate < now ){
