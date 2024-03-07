@@ -69,6 +69,12 @@ const eaditChallenge = async ({challengeId, form}) => {
   return response.data;
 };
 
+const deleteChat = async ({challengeId, messageId}) => {
+  const resToken = await api.post(`/api/token`,{})
+  const response = await api.delete(`/api/chat/${challengeId}/${messageId}`);
+  return response.data;
+};
 
 
-export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus, eaditChallenge };
+
+export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus, eaditChallenge,deleteChat };

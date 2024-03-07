@@ -70,7 +70,6 @@ function MainPage() {
   const handleSearch = () => {
     setSearchQuery(input);
     setShow('');
-    
   };
 
   const openModal = (item) => {
