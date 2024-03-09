@@ -8,7 +8,7 @@ function Redirection() {
     // window.location.href현재 페이지 url에서 searchParams params를 추적 
     // .get('code') code를 빼온다.
     let code = new URL(window.location.href).searchParams.get('code')
-
+    
     // 카카오 코드 주는 주소 백에서 알려달라하기 api수정할 수도..
     // 토큰 어떻게 들어오는지 보기
     // Authorization: Bearer <token>
