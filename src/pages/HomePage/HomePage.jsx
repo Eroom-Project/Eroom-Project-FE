@@ -10,19 +10,21 @@ function HomePage() {
     };
 
     const [scroll, setScroll] = useState(0)
-    // useCallback 이나 useMemo로 최적화 하기
-    const handleScroll = () => {
-        // console.log(window.scrollY)
-        setScroll(window.scrollY)
-    };
 
     useEffect(() => {
+        let animationFrame
         const scrollHandler = () => {
-            requestAnimationFrame(handleScroll);
+            if (animationFrame) return
+            animationFrame = requestAnimationFrame(() => {
+                // console.log(window.scrollY)
+                setScroll(window.scrollY)
+                animationFrame = null;
+            });
         };
         window.addEventListener('scroll', scrollHandler, { passive: true });
         return () => {
             window.removeEventListener('scroll', scrollHandler);
+            cancelAnimationFrame(animationFrame);
         };
     }, []);
 
@@ -44,12 +46,12 @@ function HomePage() {
                         <Box1Animation />
                         <Box1CloudBox>
                             <Box1CloudBoxInner>
-                                <Box1Cloud src='/img/HomePage/1RoroCloud1.png' alt='cloud' top={"50%"} left={"20%"} width={"200px"} />
-                                <Box1Cloud src='/img/HomePage/1RoroCloud2.png' alt='cloud' top={"60%"} left={"70%"} width={"200px"} />
+                                <Box1Cloud src='/img/HomePage/1RoroCloud1.png' alt='cloud' top={"50%"} left={"20%"} />
+                                <Box1Cloud src='/img/HomePage/1RoroCloud2.png' alt='cloud' top={"60%"} left={"70%"} />
                             </Box1CloudBoxInner>
                             <Box1CloudBoxInner2>
-                                <Box1Cloud src='/img/HomePage/1RoroCloud1.png' alt='cloud' top={"50%"} left={"20%"} width={"200px"} />
-                                <Box1Cloud src='/img/HomePage/1RoroCloud2.png' alt='cloud' top={"60%"} left={"70%"} width={"200px"} />
+                                <Box1Cloud src='/img/HomePage/1RoroCloud1.png' alt='cloud' top={"50%"} left={"20%"} />
+                                <Box1Cloud src='/img/HomePage/1RoroCloud2.png' alt='cloud' top={"60%"} left={"70%"} />
                             </Box1CloudBoxInner2>
                         </Box1CloudBox>
 
@@ -74,25 +76,26 @@ function HomePage() {
                                 <RoroBack src='img/HomePage/1RoroBack.png' rotate={0} top={"100%"} left={"-15%"} />
                                 <RoroBack src='img/HomePage/1RoroBack.png' rotate={-30} top={"87%"} left={"0%"} />
                                 <RoroBack src='img/HomePage/1RoroBack.png' rotate={+10} top={"105%"} left={"5%"} />
-                                <div>
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={+5} top={"82%"} left={"25%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={+0} top={"80%"} left={"38%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={-10} top={"82%"} left={"52%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={+3} top={"84%"} left={"70%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={-10} top={"93%"} left={"22%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={+5} top={"88%"} left={"34%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={+0} top={"91%"} left={"44%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={+3} top={"91%"} left={"59%"} />
-                                    <RoroBack src='img/HomePage/1RoroBack.png' rotate={-20} top={"95%"} left={"44%"} />
-                                </div>
+
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={+5} top={"82%"} left={"25%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={+0} top={"80%"} left={"38%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={-10} top={"82%"} left={"52%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={+3} top={"84%"} left={"70%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={-10} top={"93%"} left={"22%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={+5} top={"88%"} left={"34%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={+0} top={"91%"} left={"44%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={+3} top={"91%"} left={"59%"} />
+                                <RoroBack src='img/HomePage/1RoroBack.png' rotate={-20} top={"95%"} left={"44%"} />
+
                                 <RoroHidden>
                                     <Roro>
-                                        <MainImg src="img/HomePage/1RoroBody.png" alt="mainimg" top={"78%"} left={"70%"} width={"5vh"} />
+                                        <MainImg src="img/HomePage/1RoroBody.png" alt="mainimg" top={"78%"} left={"70%"} width={"45px"} />
                                         <RoroBack2 src='img/HomePage/1RoroBack0.png' rotate={"-5"} top={"66%"} left={"77%"} />
-                                        <MainImg2 src="img/HomePage/1RoroHand.png" alt="mainimg" top={"55%"} left={"70%"} width={"8vh"} />
+                                        <MainImg2 src="img/HomePage/1RoroHand.png" alt="mainimg" top={"55%"} left={"70%"} width={"70px"} />
                                         <MainImg src="img/HomePage/1Roro.png" alt="mainimg" top={"50%"} left={"50%"} width={"260px"} />
                                     </Roro>
                                 </RoroHidden>
+
                                 <RoroBack src='img/HomePage/1RoroBack.png' rotate={"5"} top={"95%"} left={"90%"} />
                                 <RoroBack src='img/HomePage/1RoroBack.png' rotate={"0"} top={"90%"} left={"107%"} />
                                 <RoroBack src='img/HomePage/1RoroBack.png' rotate={"-20"} top={"93%"} left={"127%"} />
@@ -132,33 +135,33 @@ function HomePage() {
             </Box2>
             {/* 세 번째 섹션: 대화를 통한 학습 */}
             <Box3>
-                {scroll >=500 && scroll <=2200 &&<>
-                        <Box3Animation />
-                        <Box3Back>
-                            <Box3MonguBack1 src="/img/HomePage/3MonguBack.png" />
-                            <Box3MonguBack2 src="/img/HomePage/3MonguBack.png" />
-                        </Box3Back>
-                        <Box3MaxForm>
-                            <Box3Contents style={{ display: 'flex', flexDirection: 'column' }}>
-                                <Box1Title1>
-                                    학습을 위한 대화 <img src="/img/HomePage/3MonguDot.png" alt="dot" />
-                                </Box1Title1>
-                                <Box1Title3>
-                                    내가 알고 있는 것을 설명하고 다른 사람의<br />눈으로 같은 것을 다르게 바라볼 때<br />학습의 세계는 <span style={{ fontWeight: '700' }}>더욱 넓어져요.</span>
-                                </Box1Title3>
-                            </Box3Contents>
-                            <Box3MonguBox>
-                                <Mongu1 src='/img/HomePage/3Mongu1.png' alt='mongu' width={"320px"} />
-                                <Mongu2 src='/img/HomePage/3Mongu2.png' alt='mongu' width={"320px"} />
-                            </Box3MonguBox>
-                        </Box3MaxForm>
-                    </>}
+                {scroll >= 500 && scroll <= 2200 && <>
+                    <Box3Animation />
+                    <Box3Back>
+                        <Box3MonguBack1 src="/img/HomePage/3MonguBack.png" />
+                        <Box3MonguBack2 src="/img/HomePage/3MonguBack.png" />
+                    </Box3Back>
+                    <Box3MaxForm>
+                        <Box3Contents style={{ display: 'flex', flexDirection: 'column' }}>
+                            <Box1Title1>
+                                학습을 위한 대화 <img src="/img/HomePage/3MonguDot.png" alt="dot" />
+                            </Box1Title1>
+                            <Box1Title3>
+                                내가 알고 있는 것을 설명하고 다른 사람의<br />눈으로 같은 것을 다르게 바라볼 때<br />학습의 세계는 <span style={{ fontWeight: '700' }}>더욱 넓어져요.</span>
+                            </Box1Title3>
+                        </Box3Contents>
+                        <Box3MonguBox>
+                            <Mongu1 src='/img/HomePage/3Mongu1.png' alt='mongu' width={"320px"} />
+                            <Mongu2 src='/img/HomePage/3Mongu2.png' alt='mongu' width={"320px"} />
+                        </Box3MonguBox>
+                    </Box3MaxForm>
+                </>}
             </Box3>
 
             {/* 네 번째 섹션: 커뮤니티 소개 */}
             <Box4>
                 <Box1Title4>각자의 방에서 시작해서 서로의 방을 방문하며<br /> 더 넓은 곳으로 나아가는</Box1Title4>
-                <div><img src='/img/HomePage/LogoFlag.png' alt='logoflag'/></div>
+                <div><img src='/img/HomePage/LogoFlag.png' alt='logoflag' /></div>
                 <Box1Title5>
                     스터디 챌린지 커뮤니티<span style={{ fontWeight: "700", fontSize: "45px", marginTop: "12px" }}>'이룸'</span>
                 </Box1Title5>
@@ -167,9 +170,9 @@ function HomePage() {
             {/* 다섯 번째 섹션: 챌린지 이미지 */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div style={{ display: 'flex', gap: '20px', marginBottom: '100px' }}>
-                    <img src='/img/HomePage/4Example1.png' alt='example'/>
-                    <img src='/img/HomePage/4Example3.png' alt='example'/>
-                    <img src='/img/HomePage/4Example2.png' alt='example'/>
+                    <img src='/img/HomePage/4Example1.png' alt='example' />
+                    <img src='/img/HomePage/4Example3.png' alt='example' />
+                    <img src='/img/HomePage/4Example2.png' alt='example' />
                 </div>
             </div>
 
@@ -184,12 +187,12 @@ function HomePage() {
                 marginBottom: '100px'
             }}>
                 <JumpImgBox>
-                    <JumpImg1 src='/img/HomePage/icon1.png' alt='icon'/>
-                    <JumpImg2 src='/img/HomePage/icon2.png' alt='icon'/>
-                    <JumpImg3 src='/img/HomePage/icon3.png' alt='icon'/>
-                    <JumpImg4 src='/img/HomePage/icon4.png' alt='icon'/>
-                    <JumpImg5 src='/img/HomePage/icon5.png' alt='icon'/>
-                    <JumpImg6 src='/img/HomePage/icon6.png' alt='icon'/>
+                    <JumpImg1 src='/img/HomePage/icon1.png' alt='icon' />
+                    <JumpImg2 src='/img/HomePage/icon2.png' alt='icon' />
+                    <JumpImg3 src='/img/HomePage/icon3.png' alt='icon' />
+                    <JumpImg4 src='/img/HomePage/icon4.png' alt='icon' />
+                    <JumpImg5 src='/img/HomePage/icon5.png' alt='icon' />
+                    <JumpImg6 src='/img/HomePage/icon6.png' alt='icon' />
                 </JumpImgBox>
                 <div style={{ fontSize: "48px", fontWeight: '700', marginBottom: '10px', lineHeight: '1.5' }}>
                     당신의 꿈을 이뤄보시겠어요?
@@ -235,7 +238,8 @@ const Box1CloudBox = styled.div`
     flex-direction: row;
     align-items: center;
     width: 100%;
-    height: 130px;
+    min-height: 80px;
+    padding: 3.4%;
 `
 
 const Box1CloudBoxInner = styled.div`
@@ -245,7 +249,7 @@ const Box1CloudBoxInner = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    height: 100px;
+    height: 100%;
     animation: backgroundslide 50s linear infinite;
 `
 const Box1CloudBoxInner2 = styled.div`
@@ -255,7 +259,7 @@ const Box1CloudBoxInner2 = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    height: 100px;
+    height: 100%;
     animation: backgroundslide2 50s linear infinite;
 `
 
@@ -265,7 +269,8 @@ const Box1Cloud = styled.img`
     top: ${(props) => props.top};
     left: ${(props) => props.left};
     right: ${(props) => props.right};
-    width: ${(props) => props.width};;
+    width: 11%;
+    min-width: 150px;
 `
 const Box1Tree = styled.img`
     position: absolute;
@@ -326,8 +331,8 @@ const ContentsBox = styled.div`
 
 const MainImgBox = styled.div`
     position: relative;
-    width: 50vh;
-    height: 50vh;
+    width: 450px;
+    height: 450px;
 `
 
 const RoroHidden = styled.div`
@@ -342,7 +347,6 @@ const Roro = styled.div`
     height: 100%;
     animation: roroup 2s forwards;
     z-index: 1;
-    perspective: 1px;
 `
 
 const MainImg = styled.img`

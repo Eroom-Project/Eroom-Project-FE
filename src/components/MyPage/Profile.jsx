@@ -600,7 +600,7 @@ const ImgBox2 = styled.div`
     }
 `
 const Img = styled.img`
-    height: 100%;
+    width: 100%;
     object-fit: cover;
 `
 
