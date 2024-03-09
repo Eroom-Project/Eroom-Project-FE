@@ -2,28 +2,56 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from 'react-query';
+import { deleteChat } from '../../services/mainaxios';
+
 
 
 function Chat({ challengeId, memberId, title }) {
+  const queryClient = useQueryClient();
+
+
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [chatList, setChatList] = useState([]);
   const [messageCount, setMessageCount] = useState(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [chatEdit, setChatEdit] = useState(false);
   
   const formatDateTime = (message) => {
-    const date = new Date(message.time); // 메시지 타임을 Date 객체로 변환
+    const date = new Date(message.time); 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const day = String(date.getDate()).padStart(2, '0');
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
   
-    return `${year}-${month}-${day} ${hours}:${minutes}`; // 포맷에 맞게 반환
+    return `${year}-${month}-${day} ${hours}:${minutes}`; 
   };
   
+  const { mutate: deleteChatMutation } = useMutation(deleteChat, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['deleteChat', challengeId]);
+    },
+    onError: (error) => {
+      
+      console.error('메시지 삭제 중 오류 발생', error);
+    },
+  });
 
+  const handleDeleteMessage = (messageId) => {
+    
+    deleteChatMutation({ challengeId, messageId }, {
+      onSuccess: () => {
+      setMessages(currentMessages => currentMessages.filter(m => m.messageId !== messageId));
+      },
+      onError: (error) => {
+        console.error('메시지 삭제 중 오류 발생', error);
+      },
+    });
+  };
+  
 
 const navigate = useNavigate()
 
@@ -44,8 +72,13 @@ const navigate = useNavigate()
 
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+  
+    scrollToBottom();
+  }, [messages]); 
+  
 
 
   useEffect(() => {
@@ -76,12 +109,10 @@ const navigate = useNavigate()
           body: JSON.stringify(joinMessage),
           });
                   
-        // 저 채널에는 자신만 있따. 그러니까 저기로 온 메신저는 자기만 받을 수 있다. 
+        
           client.subscribe(`/sub/chat/challenge/${challengeId}/history/${memberId}`, (message) => {
             const history = JSON.parse(message.body);
-            console.log('이건 히스토리', history);
-            console.log('이건 히스토리 메시지', message);
-          
+            
             // 배열 데이터 처리
             if (Array.isArray(history)) {
               const newMessages = history.map(item => {
@@ -90,7 +121,7 @@ const navigate = useNavigate()
                 } else if (item.type === 'LEAVE') {
                   return { message: `${item.sender}님이 나가셨습니다.` };
                 } else if (item.type === 'CHAT') {
-                  return { memberId:item.memberId, message: item.message, profileImageUrl :item.profileImageUrl, sender: item.sender, time: item.time, type:item.type}; // CHAT 타입의 경우 sender와 time도 포함시킬 수 있습니다.
+                  return {messageId:item.messageId , memberId:item.memberId, message: item.message, profileImageUrl :item.profileImageUrl, sender: item.sender, time: item.time, type:item.type}; // CHAT 타입의 경우 sender와 time도 포함시킬 수 있습니다.
                 }
                 return null; // 해당되지 않는 타입의 경우 null 반환
               }).filter(item => item !== null); // null 제거
@@ -103,11 +134,8 @@ const navigate = useNavigate()
           
         client.subscribe(`/sub/chat/challenge/${challengeId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
-
-          console.log('리시브메세지', receivedMessage)
-          console.log('이건 채팅', message)
-  
-                   
+          console.log('bbbbbb',receivedMessage)
+                           
           if(Array.isArray(receivedMessage)){
             const memberIdCount = receivedMessage.reduce((acc, member) => {
               acc[member.memberId] = (acc[member.memberId] || 0) + 1;
@@ -116,7 +144,7 @@ const navigate = useNavigate()
          
           if(memberIdCount[memberId] > 1){
           alert('중복된 접속입니다.');
-          navigate('/main');
+          navigate(-1);
           return; 
       }}
           
@@ -130,7 +158,6 @@ const navigate = useNavigate()
           }
           
           
-
           // "JOIN" 메시지 타입 처리
           if (receivedMessage.type === 'JOIN' && memberId !== receivedMessage.memberId) {
             setMessages((prevMessages) => [
@@ -149,6 +176,8 @@ const navigate = useNavigate()
               ...prevMessages,
               receivedMessage,
             ]);
+          } else if(receivedMessage.type === 'DELETE'){
+            setMessages(currentMessages => currentMessages.filter(m => m.messageId !== receivedMessage.messageId));
           }
         });
       },
@@ -166,7 +195,7 @@ const navigate = useNavigate()
         client.deactivate();
       }
     };
-  }, [challengeId, memberId]);
+  }, [challengeId, memberId ]);
 
   const sendMessage = () => {
    
@@ -280,6 +309,20 @@ const navigate = useNavigate()
         maxWidth: '70%',
       }}
     >
+       {memberId === message.memberId && (
+        <button
+          onClick={() => handleDeleteMessage(message.messageId)}
+          style={{
+            border: 'none',
+            backgroundColor: 'transparent',
+            cursor: 'pointer',
+            padding: '0 5px',
+          }}
+        >
+          {chatEdit && <img src={'img/MyPage/trash-2.png'} style={{ width: '15px', height: '15px' }} alt="삭제"/>}
+          
+        </button>
+      )}
       
       {memberId !== message.memberId && message.type === 'CHAT' && (
         <div style={{
@@ -369,6 +412,18 @@ const navigate = useNavigate()
         height:'15px',
         display:'flex'
         }}/></button>
+
+      <button style={{
+        border:'1px solid gray',
+        backgroundColor:'white',
+        cursor:'pointer',
+        width:'50px',
+        borderRadius:'50px'
+      }}
+      onClick={() => setChatEdit(prev => !prev)}
+      >
+        {chatEdit ? '완료' : '삭제'}
+      </button>
       </div>
       
     </div>

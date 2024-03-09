@@ -16,24 +16,28 @@ function MainPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [visibleItems, setVisibleItems] = useState(12); 
-
-
+  const [challengeList, setChallengeList] = useState([])
+  const [pageNumber, setPageNumber] = useState(0)
   const queryClient = useQueryClient();
 
 
   const { isLoading, isError, data } = useQuery(
-    ['challenge', show, searchQuery],
-    () => getChallenge(show, searchQuery),
-    { refetchOnWindowFocus: false }
+    ['challenge', show, searchQuery, pageNumber],
+    () => getChallenge(show, searchQuery, pageNumber),
+    { refetchOnWindowFocus: false,
+    onSuccess:(data) =>{
+      setChallengeList((prevList) => [...prevList, ...data.content]);
+      setPageNumber(data.number)
+    }}
   );
+
+  
 
     const mutation = useMutation(
     (challengeId) => entryChallenge(challengeId),
     {
       onSuccess: (data) => {const successMessage = data?.message || '챌린지 신청 성공!';
       alert(successMessage);
-      queryClient.invalidateQueries('challenge'); 
       },
       
       onError: (error) => {
@@ -58,19 +62,26 @@ function MainPage() {
     '최신순': 'LATEST',
   };
 
+  const showMore = pageNumber+1 >= data?.totalPages
+  
+
   // 이벤트 핸들러
-  const applyForChallenge = (challengeId) => mutation.mutate(challengeId);
+  const applyForChallenge = (challengeId) => {mutation.mutate(challengeId)};
 
   const handleOptionChange = (value) => {
     const keyword = categoryMap[value] || SortMap[value];
     setShow(keyword);
     setSearchQuery(''); 
+    setChallengeList([])
+    setPageNumber(0)
+    setInput('')
   };
 
   const handleSearch = () => {
     setSearchQuery(input);
     setShow('');
-    
+    setChallengeList([]);
+    setPageNumber(0);
   };
 
   const openModal = (item) => {
@@ -79,7 +90,8 @@ function MainPage() {
   };
 
   const handleShowMore = () => {
-    setVisibleItems((prev) => prev + 12);
+    setPageNumber((prev) => prev + 1);
+    
   };
 
   return (
@@ -145,14 +157,14 @@ function MainPage() {
         <img src='img/icon (6).png' alt='에러이미지'/>
         오류가 발생했습니다.</FeedbackContainer>}
       
-        {!isLoading && !isError && data?.length === 0 && (
+        {!isLoading && !isError && data?.content.length === 0 && (
         <FeedbackContainer>
            <img src='img/icon (4).png' alt='에러이미지' /> <br />"{searchQuery}" 검색 결과가 없습니다.
         </FeedbackContainer>
 )}
 
       <CardsContainer>
-      {Array.isArray(data) && data?.slice(0, visibleItems).map((item, challengeId) => (
+      {Array.isArray(challengeList) && challengeList.map((item, challengeId) => (
   <Card key={challengeId} onClick={() => openModal(item)}>
     <CardImage src={item.thumbnailImageUrl} alt={item.title} />
     
@@ -168,7 +180,7 @@ function MainPage() {
 ))}
       </CardsContainer>
 
-      {visibleItems < data?.length && (
+      {!showMore && !isError && !isLoading && (
         <MoreButton onClick={handleShowMore}>더보기</MoreButton>
       )}
 

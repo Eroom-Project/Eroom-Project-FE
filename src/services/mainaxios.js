@@ -1,6 +1,7 @@
 import api from './api';
 
-const getChallenge = async (show, searchQuery) => {
+const getChallenge = async (show, searchQuery,pageNumber) => {
+  console.log('악시오스페이지 넘버',pageNumber)
   let url = '/api/challenge';
   if (['IT', 'FOREIGN_LANGUAGE', 'MATH', 'SCIENCE', 'HUMANITIES', 'ARTS_AND_PHYSICAL_EDUCATION', 'ETC'].includes(show)) {
     url += `?category=${show}`;
@@ -11,8 +12,13 @@ const getChallenge = async (show, searchQuery) => {
   if (searchQuery) {
     url += `?query=${searchQuery}`;
   }
+  if (pageNumber) {
+    url += show || searchQuery? `&page=${pageNumber}` : `?page=${pageNumber}`;
+    }
+    
   const response = await api.get(url);
   return response.data.data;
+  
   };
 
 const entryChallenge = async (challengeId) => {
@@ -69,6 +75,12 @@ const eaditChallenge = async ({challengeId, form}) => {
   return response.data;
 };
 
+const deleteChat = async ({challengeId, messageId}) => {
+  const resToken = await api.post(`/api/token`,{})
+  const response = await api.delete(`/api/chat/${challengeId}/${messageId}`);
+  return response.data;
+};
 
 
-export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus, eaditChallenge };
+
+export { getChallenge, entryChallenge, createChallenge, challengeAuth, authResult, postAuthStatus, detailchallenge, updateAuthStatus, deleteAuthStatus, eaditChallenge,deleteChat };
